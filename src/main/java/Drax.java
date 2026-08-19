@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class Drax {
     public static void main(String[] args) {
-        ArrayList<String> tasks = new ArrayList<String>();
+        ArrayList<Task> tasks = new ArrayList<>();
         String banner = """
                 ██████╗ ██████╗  █████╗ ██╗  ██╗
                 ██╔══██╗██╔══██╗██╔══██╗╚██╗██╔╝
@@ -25,17 +25,34 @@ public class Drax {
             }
             else if (n.equals("list")) {
                 int count = 1;
-                for (String task : tasks) {
-                    System.out.println(count + ". " + task);
+                for (Task task : tasks) {
+                    System.out.println(count + "." + "[" + task.getStatusIcon() + "] "+ task.getTask());
                     count++;
                 }
             }
+
+            else if (n.startsWith("mark ")) {
+                String taskNumber = n.substring(5).trim();
+                int index = Integer.parseInt(taskNumber) - 1;
+                Task task = tasks.get(index);
+                task.markAsDone();
+                System.out.println("I've marked this task as done:");
+                System.out.println("[X] " + task.getTask());
+            }
+
+            else if (n.startsWith("unmark ")) {
+                String taskNumber = n.substring(7).trim();
+                int index = Integer.parseInt(taskNumber) - 1;
+                Task task = tasks.get(index);
+                task.unmarkAsDone();
+                System.out.println("I've marked this task as not done:");
+                System.out.println("[ ] " + task.getTask());
+            }
             else {
-                tasks.add(n);
+                tasks.add(new Task(n));
                 System.out.println("added: " + n);
             }
         }
         reader.close();
     }
 }
-

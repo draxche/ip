@@ -11,10 +11,6 @@ public class Task {
         return this.task;
     }
 
-    public void setTask(String task) {
-        this.task = task;
-    }
-
     public String getStatusIcon() {
         return (this.isDone ? "X" : " ");
     }

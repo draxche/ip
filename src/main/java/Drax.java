@@ -25,8 +25,9 @@ public class Drax {
             }
             else if (n.equals("list")) {
                 int count = 1;
+                System.out.println("Here are the tasks in your list!");
                 for (Task task : tasks) {
-                    System.out.println(count + "." + "[" + task.getStatusIcon() + "] "+ task.getTask());
+                    System.out.printf("%d.%s%n", count, task);
                     count++;
                 }
             }
@@ -37,7 +38,7 @@ public class Drax {
                 Task task = tasks.get(index);
                 task.markAsDone();
                 System.out.println("I've marked this task as done:");
-                System.out.println("[X] " + task.getTask());
+                System.out.println(task);
             }
 
             else if (n.startsWith("unmark ")) {
@@ -46,11 +47,56 @@ public class Drax {
                 Task task = tasks.get(index);
                 task.unmarkAsDone();
                 System.out.println("I've marked this task as not done:");
-                System.out.println("[ ] " + task.getTask());
+                System.out.println(task);
             }
+
+            else if (n.startsWith("todo ")) {
+                String newTask = n.substring(5).trim();
+                Todo newTodo = new Todo(newTask);
+                tasks.add(newTodo);
+                System.out.println("I've added this task");
+                System.out.println(newTodo);
+                if (tasks.size() == 1) {
+                    System.out.println("Now you have 1 task!");
+                } else {
+                    System.out.println("Now you have " + tasks.size() + " tasks!");
+                }
+            }
+
+            else if (n.startsWith("deadline ")) {
+                int split = n.indexOf(" /by ");
+                String newTask = n.substring(9, split).trim();
+                String deadline = n.substring(split + 5).trim();
+                Deadline newDeadline= new Deadline(newTask, deadline);
+                tasks.add(newDeadline);
+                System.out.println("I've added this task");
+                System.out.println(newDeadline);
+                if (tasks.size() == 1) {
+                    System.out.println("Now you have 1 task!");
+                } else {
+                    System.out.println("Now you have " + tasks.size() + " tasks!");
+                }
+            }
+
+            else if (n.startsWith("event ")) {
+                int fromIndex = n.indexOf(" /from ");
+                int toIndex = n.indexOf(" /to ");
+                String newTask = n.substring(6, fromIndex).trim();
+                String from = n.substring(fromIndex + 7, toIndex).trim();
+                String to = n.substring(toIndex + 5).trim();
+                Event newEvent = new Event(newTask, from, to);
+                tasks.add(newEvent);
+                System.out.println("I've added this task");
+                System.out.println(newEvent);
+                if (tasks.size() == 1) {
+                    System.out.println("Now you have 1 task!");
+                } else {
+                    System.out.println("Now you have " + tasks.size() + " tasks!");
+                }
+            }
+
             else {
-                tasks.add(new Task(n));
-                System.out.println("added: " + n);
+                System.out.println("Sorry! But that's not a function I can do :(");
             }
         }
         reader.close();

@@ -146,6 +146,28 @@ public class Drax {
                 }
             }
 
+            else if (n.startsWith("delete ")) {
+                try {
+                    String taskNumber = n.substring(7).trim();
+                    int index = Integer.parseInt(taskNumber) - 1;
+                    if (index >= tasks.size() || index < 0) {
+                        throw new DraxException("This task does not exist. You don't have that many tasks!");
+                    }
+                    System.out.println("I've deleted this task");
+                    System.out.println(tasks.get(index));
+                    tasks.remove(index);
+                    if (tasks.size() == 1) {
+                        System.out.println("Now you have 1 task!");
+                    } else {
+                        System.out.println("Now you have " + tasks.size() + " tasks!");
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Please enter a valid number!");
+                } catch (DraxException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+
             else {
                 System.out.println("Sorry! But that's not a function I can do :(");
             }

@@ -17,6 +17,7 @@ public class Drax {
         System.out.println("What's on your mind today?");
         Scanner reader = new Scanner(System.in);
         String n;
+
         while(reader.hasNextLine()) {
             n = reader.nextLine();
             if (n.equals("bye")) {
@@ -25,7 +26,11 @@ public class Drax {
             }
             else if (n.equals("list")) {
                 int count = 1;
-                System.out.println("Here are the tasks in your list!");
+                if (tasks.isEmpty()) {
+                    System.out.println("Oops! You currently have no tasks.");
+                } else {
+                    System.out.println("Here are the tasks in your list!");
+                }
                 for (Task task : tasks) {
                     System.out.printf("%d.%s%n", count, task);
                     count++;
@@ -33,65 +38,111 @@ public class Drax {
             }
 
             else if (n.startsWith("mark ")) {
-                String taskNumber = n.substring(5).trim();
-                int index = Integer.parseInt(taskNumber) - 1;
-                Task task = tasks.get(index);
-                task.markAsDone();
-                System.out.println("I've marked this task as done:");
-                System.out.println(task);
+                try {
+                    String taskNumber = n.substring(5).trim();
+                    int index = Integer.parseInt(taskNumber) - 1;
+                    if (index >= tasks.size() ||  index < 0) {
+                        throw new DraxException("This task doesn't exist. You don't have that many tasks!");
+                    }
+                    Task task = tasks.get(index);
+                    task.markAsDone();
+                    System.out.println("I've marked this task as done:");
+                    System.out.println(task);
+                } catch (DraxException e) {
+                    System.out.println(e.getMessage());
+                } catch (NumberFormatException e) {
+                    System.out.println("Please enter a valid number!");
+                }
             }
 
             else if (n.startsWith("unmark ")) {
-                String taskNumber = n.substring(7).trim();
-                int index = Integer.parseInt(taskNumber) - 1;
-                Task task = tasks.get(index);
-                task.unmarkAsDone();
-                System.out.println("I've marked this task as not done:");
-                System.out.println(task);
+                try {
+                    String taskNumber = n.substring(7).trim();
+                    int index = Integer.parseInt(taskNumber) - 1;
+                    if (index >= tasks.size() ||   index < 0) {
+                        throw new DraxException("This task does not exist. You don't have that many tasks!");
+                    }
+                    Task task = tasks.get(index);
+                    task.unmarkAsDone();
+                    System.out.println("I've marked this task as not done:");
+                    System.out.println(task);
+                } catch (DraxException e) {
+                    System.out.println(e.getMessage());
+                } catch (NumberFormatException e) {
+                    System.out.println("Please enter a valid number!");
+                }
             }
 
             else if (n.startsWith("todo ")) {
-                String newTask = n.substring(5).trim();
-                Todo newTodo = new Todo(newTask);
-                tasks.add(newTodo);
-                System.out.println("I've added this task");
-                System.out.println(newTodo);
-                if (tasks.size() == 1) {
-                    System.out.println("Now you have 1 task!");
-                } else {
-                    System.out.println("Now you have " + tasks.size() + " tasks!");
+                try {
+                    String newTask = n.substring(5).trim();
+                    if (newTask.isEmpty()) {
+                        throw new DraxException("You didn't provide a task!?");
+                    }
+                    Todo newTodo = new Todo(newTask);
+                    tasks.add(newTodo);
+                    System.out.println("I've added this task");
+                    System.out.println(newTodo);
+                    if (tasks.size() == 1) {
+                        System.out.println("Now you have 1 task!");
+                    } else {
+                        System.out.println("Now you have " + tasks.size() + " tasks!");
+                    }
+                } catch (DraxException e) {
+                    System.out.println(e.getMessage());
                 }
             }
 
             else if (n.startsWith("deadline ")) {
-                int split = n.indexOf(" /by ");
-                String newTask = n.substring(9, split).trim();
-                String deadline = n.substring(split + 5).trim();
-                Deadline newDeadline= new Deadline(newTask, deadline);
-                tasks.add(newDeadline);
-                System.out.println("I've added this task");
-                System.out.println(newDeadline);
-                if (tasks.size() == 1) {
-                    System.out.println("Now you have 1 task!");
-                } else {
-                    System.out.println("Now you have " + tasks.size() + " tasks!");
+                try {
+                    int split = n.indexOf(" /by ");
+                    if (split == -1) {
+                        throw new DraxException("You didn't provide a end date! Use /by [deadline]");
+                    }
+                    String newTask = n.substring(9, split).trim();
+                    if (newTask.isEmpty()) {
+                        throw new DraxException("You didn't provide a task!?");
+                    }
+                    String deadline = n.substring(split + 5).trim();
+                    Deadline newDeadline = new Deadline(newTask, deadline);
+                    tasks.add(newDeadline);
+                    System.out.println("I've added this task");
+                    System.out.println(newDeadline);
+                    if (tasks.size() == 1) {
+                        System.out.println("Now you have 1 task!");
+                    } else {
+                        System.out.println("Now you have " + tasks.size() + " tasks!");
+                    }
+                } catch (DraxException e) {
+                    System.out.println(e.getMessage());
                 }
             }
 
             else if (n.startsWith("event ")) {
-                int fromIndex = n.indexOf(" /from ");
-                int toIndex = n.indexOf(" /to ");
-                String newTask = n.substring(6, fromIndex).trim();
-                String from = n.substring(fromIndex + 7, toIndex).trim();
-                String to = n.substring(toIndex + 5).trim();
-                Event newEvent = new Event(newTask, from, to);
-                tasks.add(newEvent);
-                System.out.println("I've added this task");
-                System.out.println(newEvent);
-                if (tasks.size() == 1) {
-                    System.out.println("Now you have 1 task!");
-                } else {
-                    System.out.println("Now you have " + tasks.size() + " tasks!");
+                try {
+                    int fromIndex = n.indexOf(" /from ");
+                    int toIndex = n.indexOf(" /to ");
+                    if (fromIndex == -1 || toIndex == -1) {
+                        throw new DraxException("You didn't provide when this event is happening! " +
+                                "Use /from [date] /to [date]");
+                    }
+                    String newTask = n.substring(6, fromIndex).trim();
+                    if (newTask.isEmpty()) {
+                        throw new DraxException("You didn't provide a task!?");
+                    }
+                    String from = n.substring(fromIndex + 7, toIndex).trim();
+                    String to = n.substring(toIndex + 5).trim();
+                    Event newEvent = new Event(newTask, from, to);
+                    tasks.add(newEvent);
+                    System.out.println("I've added this task");
+                    System.out.println(newEvent);
+                    if (tasks.size() == 1) {
+                        System.out.println("Now you have 1 task!");
+                    } else {
+                        System.out.println("Now you have " + tasks.size() + " tasks!");
+                    }
+                } catch (DraxException e) {
+                    System.out.println(e.getMessage());
                 }
             }
 
@@ -99,6 +150,7 @@ public class Drax {
                 System.out.println("Sorry! But that's not a function I can do :(");
             }
         }
+
         reader.close();
     }
 }

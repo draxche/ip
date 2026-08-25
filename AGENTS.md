@@ -28,6 +28,17 @@ Unless the user says otherwise, assume that you are assisting a student working 
 
 Ensure that Java 25 is used when running the application or build tasks. On macOS, use `sdk use java 25.0.3.fx-zulu` to switch to Java 25 if needed.
 
+## Testing after code changes
+
+After every code update, review `test/ui-test-plan.md` and update it whenever the
+changed behavior requires new or revised UI coverage. Then invoke the `test-ui`
+skill by running `python3 skills/test-ui/scripts/run_ui_tests.py`. Do not report
+the code update as complete until the UI tests pass, or clearly state the failing
+case and why it is unresolved.
+
+Run the tests in a temporary working directory when they create or read runtime
+data, so they do not modify a user's `data/drax.txt` save file.
+
 ## Git
 
 Use lightweight tags unless the user requests an annotated tag.

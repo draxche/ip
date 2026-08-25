@@ -1,9 +1,11 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Drax {
     public static void main(String[] args) {
-        ArrayList<Task> tasks = new ArrayList<>();
+        TaskStorage.LoadResult loadResult = loadTasks();
+        ArrayList<Task> tasks = loadResult.tasks();
         String banner = """
                 ██████╗ ██████╗  █████╗ ██╗  ██╗
                 ██╔══██╗██╔══██╗██╔══██╗╚██╗██╔╝
@@ -15,6 +17,9 @@ public class Drax {
         System.out.println(banner);
         System.out.println("Infinite Salutations! I'm Drax!");
         System.out.println("What's on your mind today?");
+        for (String warning : loadResult.warnings()) {
+            System.out.println(warning);
+        }
         Scanner reader = new Scanner(System.in);
         String n;
 
@@ -46,6 +51,7 @@ public class Drax {
                     }
                     Task task = tasks.get(index);
                     task.markAsDone();
+                    saveTasks(tasks);
                     System.out.println("I've marked this task as done:");
                     System.out.println(task);
                 } catch (DraxException e) {
@@ -64,6 +70,7 @@ public class Drax {
                     }
                     Task task = tasks.get(index);
                     task.unmarkAsDone();
+                    saveTasks(tasks);
                     System.out.println("I've marked this task as not done:");
                     System.out.println(task);
                 } catch (DraxException e) {
@@ -81,6 +88,7 @@ public class Drax {
                     }
                     Todo newTodo = new Todo(newTask);
                     tasks.add(newTodo);
+                    saveTasks(tasks);
                     System.out.println("I've added this task");
                     System.out.println(newTodo);
                     if (tasks.size() == 1) {
@@ -106,6 +114,7 @@ public class Drax {
                     String deadline = n.substring(split + 5).trim();
                     Deadline newDeadline = new Deadline(newTask, deadline);
                     tasks.add(newDeadline);
+                    saveTasks(tasks);
                     System.out.println("I've added this task");
                     System.out.println(newDeadline);
                     if (tasks.size() == 1) {
@@ -134,6 +143,7 @@ public class Drax {
                     String to = n.substring(toIndex + 5).trim();
                     Event newEvent = new Event(newTask, from, to);
                     tasks.add(newEvent);
+                    saveTasks(tasks);
                     System.out.println("I've added this task");
                     System.out.println(newEvent);
                     if (tasks.size() == 1) {
@@ -156,6 +166,7 @@ public class Drax {
                     System.out.println("I've deleted this task");
                     System.out.println(tasks.get(index));
                     tasks.remove(index);
+                    saveTasks(tasks);
                     if (tasks.size() == 1) {
                         System.out.println("Now you have 1 task!");
                     } else {
@@ -174,5 +185,23 @@ public class Drax {
         }
 
         reader.close();
+    }
+
+    private static void saveTasks(ArrayList<Task> tasks) {
+        try {
+            TaskStorage.save(tasks);
+        } catch (IOException | IllegalArgumentException e) {
+            System.out.println("Sorry! I could not save your tasks. They are available until you exit.");
+        }
+    }
+
+    private static TaskStorage.LoadResult loadTasks() {
+        try {
+            return TaskStorage.load();
+        } catch (IOException e) {
+            ArrayList<String> warnings = new ArrayList<>();
+            warnings.add("Sorry! I could not read your saved tasks. Starting with an empty list.");
+            return new TaskStorage.LoadResult(new ArrayList<>(), warnings);
+        }
     }
 }

@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Drax {
     public static void main(String[] args) {
         TaskStorage.LoadResult loadResult = loadTasks();
-        ArrayList<Task> tasks = loadResult.tasks();
+        TaskList tasks = new TaskList(loadResult.tasks());
         String banner = """
                 ██████╗ ██████╗  █████╗ ██╗  ██╗
                 ██╔══██╗██╔══██╗██╔══██╗╚██╗██╔╝
@@ -188,9 +188,9 @@ public class Drax {
         reader.close();
     }
 
-    private static void saveTasks(ArrayList<Task> tasks) {
+    private static void saveTasks(TaskList tasks) {
         try {
-            TaskStorage.save(tasks);
+            TaskStorage.save(tasks.asList());
         } catch (IOException | IllegalArgumentException e) {
             System.out.println("Sorry! I could not save your tasks. They are available until you exit.");
         }

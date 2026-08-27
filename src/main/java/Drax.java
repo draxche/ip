@@ -1,9 +1,17 @@
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Drax {
     public static void main(String[] args) {
         Storage storage = new Storage();
-        TaskStorage.LoadResult loadResult = storage.load();
+        Storage.LoadResult loadResult;
+        try {
+            loadResult = storage.load();
+        } catch (IOException e) {
+            ArrayList<String> warnings = new ArrayList<>();
+            warnings.add("Sorry! I could not read your saved tasks. Starting with an empty list.");
+            loadResult = new Storage.LoadResult(new ArrayList<>(), warnings);
+        }
         TaskList tasks = new TaskList(loadResult.tasks());
         Ui ui = new Ui();
         ui.showGreeting();

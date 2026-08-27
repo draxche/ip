@@ -1,9 +1,9 @@
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class Drax {
     public static void main(String[] args) {
-        TaskStorage.LoadResult loadResult = loadTasks();
+        Storage storage = new Storage();
+        TaskStorage.LoadResult loadResult = storage.load();
         TaskList tasks = new TaskList(loadResult.tasks());
         Ui ui = new Ui();
         ui.showGreeting();
@@ -12,11 +12,12 @@ public class Drax {
 
         while(ui.hasNextCommand()) {
             n = ui.readCommand();
-            if (n.equals("bye")) {
+            Parser.Command command = Parser.parse(n);
+            if (command.type() == Parser.Type.BYE) {
                 ui.show("Goodbye. Hope to see you again soon!");
                 break;
             }
-            else if (n.equals("list")) {
+            else if (command.type() == Parser.Type.LIST) {
                 int count = 1;
                 if (tasks.isEmpty()) {
                     ui.show("Oops! You currently have no tasks.");
@@ -29,16 +30,16 @@ public class Drax {
                 }
             }
 
-            else if (n.startsWith("mark ")) {
+            else if (command.type() == Parser.Type.MARK) {
                 try {
-                    String taskNumber = n.substring(5).trim();
+                    String taskNumber = command.argument();
                     int index = Integer.parseInt(taskNumber) - 1;
                     if (index >= tasks.size() ||  index < 0) {
                         throw new DraxException("This task doesn't exist. You don't have that many tasks!");
                     }
                     Task task = tasks.get(index);
                     task.markAsDone();
-                    saveTasks(tasks, ui);
+                    saveTasks(storage, tasks, ui);
                     ui.show("I've marked this task as done:");
                     ui.show(task.toString());
                 } catch (DraxException e) {
@@ -48,16 +49,16 @@ public class Drax {
                 }
             }
 
-            else if (n.startsWith("unmark ")) {
+            else if (command.type() == Parser.Type.UNMARK) {
                 try {
-                    String taskNumber = n.substring(7).trim();
+                    String taskNumber = command.argument();
                     int index = Integer.parseInt(taskNumber) - 1;
                     if (index >= tasks.size() ||   index < 0) {
                         throw new DraxException("This task does not exist. You don't have that many tasks!");
                     }
                     Task task = tasks.get(index);
                     task.unmarkAsDone();
-                    saveTasks(tasks, ui);
+                    saveTasks(storage, tasks, ui);
                     ui.show("I've marked this task as not done:");
                     ui.show(task.toString());
                 } catch (DraxException e) {
@@ -67,15 +68,15 @@ public class Drax {
                 }
             }
 
-            else if (n.startsWith("todo ")) {
+            else if (command.type() == Parser.Type.TODO) {
                 try {
-                    String newTask = n.substring(5).trim();
+                    String newTask = command.task();
                     if (newTask.isEmpty()) {
                         throw new DraxException("You didn't provide a task!?");
                     }
                     Todo newTodo = new Todo(newTask);
                     tasks.add(newTodo);
-                    saveTasks(tasks, ui);
+                    saveTasks(storage, tasks, ui);
                     ui.show("I've added this task");
                     ui.show(newTodo.toString());
                     if (tasks.size() == 1) {
@@ -88,20 +89,19 @@ public class Drax {
                 }
             }
 
-            else if (n.startsWith("deadline ")) {
+            else if (command.type() == Parser.Type.DEADLINE) {
                 try {
-                    int split = n.indexOf(" /by ");
-                    if (split == -1) {
+                    if (command.firstDate().isEmpty()) {
                         throw new DraxException("You didn't provide a end date! Use /by [deadline]");
                     }
-                    String newTask = n.substring(9, split).trim();
+                    String newTask = command.task();
                     if (newTask.isEmpty()) {
                         throw new DraxException("You didn't provide a task!?");
                     }
-                    String deadlineText = n.substring(split + 5).trim();
+                    String deadlineText = command.firstDate();
                     Deadline newDeadline = new Deadline(newTask, ScheduleDateTime.parse(deadlineText));
                     tasks.add(newDeadline);
-                    saveTasks(tasks, ui);
+                    saveTasks(storage, tasks, ui);
                     ui.show("I've added this task");
                     ui.show(newDeadline.toString());
                     if (tasks.size() == 1) {
@@ -114,24 +114,22 @@ public class Drax {
                 }
             }
 
-            else if (n.startsWith("event ")) {
+            else if (command.type() == Parser.Type.EVENT) {
                 try {
-                    int fromIndex = n.indexOf(" /from ");
-                    int toIndex = n.indexOf(" /to ");
-                    if (fromIndex == -1 || toIndex == -1) {
+                    if (command.firstDate().isEmpty() || command.secondDate().isEmpty()) {
                         throw new DraxException("You didn't provide when this event is happening! " +
                                 "Use /from [date] /to [date]");
                     }
-                    String newTask = n.substring(6, fromIndex).trim();
+                    String newTask = command.task();
                     if (newTask.isEmpty()) {
                         throw new DraxException("You didn't provide a task!?");
                     }
-                    String fromText = n.substring(fromIndex + 7, toIndex).trim();
-                    String toText = n.substring(toIndex + 5).trim();
+                    String fromText = command.firstDate();
+                    String toText = command.secondDate();
                     Event newEvent = new Event(newTask, ScheduleDateTime.parse(fromText),
                             ScheduleDateTime.parse(toText));
                     tasks.add(newEvent);
-                    saveTasks(tasks, ui);
+                    saveTasks(storage, tasks, ui);
                     ui.show("I've added this task");
                     ui.show(newEvent.toString());
                     if (tasks.size() == 1) {
@@ -144,9 +142,9 @@ public class Drax {
                 }
             }
 
-            else if (n.startsWith("delete ")) {
+            else if (command.type() == Parser.Type.DELETE) {
                 try {
-                    String taskNumber = n.substring(7).trim();
+                    String taskNumber = command.argument();
                     int index = Integer.parseInt(taskNumber) - 1;
                     if (index >= tasks.size() || index < 0) {
                         throw new DraxException("This task does not exist. You don't have that many tasks!");
@@ -154,7 +152,7 @@ public class Drax {
                     ui.show("I've deleted this task");
                     ui.show(tasks.get(index).toString());
                     tasks.remove(index);
-                    saveTasks(tasks, ui);
+                    saveTasks(storage, tasks, ui);
                     if (tasks.size() == 1) {
                         ui.show("Now you have 1 task!");
                     } else {
@@ -175,21 +173,11 @@ public class Drax {
         ui.close();
     }
 
-    private static void saveTasks(TaskList tasks, Ui ui) {
+    private static void saveTasks(Storage storage, TaskList tasks, Ui ui) {
         try {
-            TaskStorage.save(tasks.asList());
+            storage.save(tasks);
         } catch (IOException | IllegalArgumentException e) {
             ui.show("Sorry! I could not save your tasks. They are available until you exit.");
-        }
-    }
-
-    private static TaskStorage.LoadResult loadTasks() {
-        try {
-            return TaskStorage.load();
-        } catch (IOException e) {
-            ArrayList<String> warnings = new ArrayList<>();
-            warnings.add("Sorry! I could not read your saved tasks. Starting with an empty list.");
-            return new TaskStorage.LoadResult(new ArrayList<>(), warnings);
         }
     }
 }

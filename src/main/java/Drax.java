@@ -111,8 +111,8 @@ public class Drax {
                     if (newTask.isEmpty()) {
                         throw new DraxException("You didn't provide a task!?");
                     }
-                    String deadline = n.substring(split + 5).trim();
-                    Deadline newDeadline = new Deadline(newTask, deadline);
+                    String deadlineText = n.substring(split + 5).trim();
+                    Deadline newDeadline = new Deadline(newTask, ScheduleDateTime.parse(deadlineText));
                     tasks.add(newDeadline);
                     saveTasks(tasks);
                     System.out.println("I've added this task");
@@ -122,7 +122,7 @@ public class Drax {
                     } else {
                         System.out.println("Now you have " + tasks.size() + " tasks!");
                     }
-                } catch (DraxException e) {
+                } catch (DraxException | IllegalArgumentException e) {
                     System.out.println(e.getMessage());
                 }
             }
@@ -139,9 +139,10 @@ public class Drax {
                     if (newTask.isEmpty()) {
                         throw new DraxException("You didn't provide a task!?");
                     }
-                    String from = n.substring(fromIndex + 7, toIndex).trim();
-                    String to = n.substring(toIndex + 5).trim();
-                    Event newEvent = new Event(newTask, from, to);
+                    String fromText = n.substring(fromIndex + 7, toIndex).trim();
+                    String toText = n.substring(toIndex + 5).trim();
+                    Event newEvent = new Event(newTask, ScheduleDateTime.parse(fromText),
+                            ScheduleDateTime.parse(toText));
                     tasks.add(newEvent);
                     saveTasks(tasks);
                     System.out.println("I've added this task");
@@ -151,7 +152,7 @@ public class Drax {
                     } else {
                         System.out.println("Now you have " + tasks.size() + " tasks!");
                     }
-                } catch (DraxException e) {
+                } catch (DraxException | IllegalArgumentException e) {
                     System.out.println(e.getMessage());
                 }
             }

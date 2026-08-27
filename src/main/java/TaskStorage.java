@@ -49,9 +49,9 @@ public class TaskStorage {
         String done = task.isDone() ? "1" : "0";
         return switch (task) {
             case Deadline deadline -> String.format("D | %s | %s | %s", done,
-                    escape(deadline.getTask()), escape(deadline.getDeadline()));
+                    escape(deadline.getTask()), escape(deadline.getDeadline().toString()));
             case Event event -> String.format("E | %s | %s | %s | %s", done,
-                    escape(event.getTask()), escape(event.getFrom()), escape(event.getTo()));
+                    escape(event.getTask()), escape(event.getFrom().toString()), escape(event.getTo().toString()));
             case Todo todo -> String.format("T | %s | %s", done, escape(task.getTask()));
             default -> throw new IllegalArgumentException("Unsupported task type");
         };
@@ -73,12 +73,13 @@ public class TaskStorage {
         case "D" -> {
             requireFieldCount(parts, 4);
             yield new Deadline(requireValue(parts, 2, "task description"),
-                    requireValue(parts, 3, "deadline"));
+                    ScheduleDateTime.parse(requireValue(parts, 3, "deadline")));
         }
         case "E" -> {
             requireFieldCount(parts, 5);
             yield new Event(requireValue(parts, 2, "task description"),
-                    requireValue(parts, 3, "start time"), requireValue(parts, 4, "end time"));
+                    ScheduleDateTime.parse(requireValue(parts, 3, "start time")),
+                    ScheduleDateTime.parse(requireValue(parts, 4, "end time")));
         }
         default -> throw new IllegalArgumentException("unknown task type " + type);
         };

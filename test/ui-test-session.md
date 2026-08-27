@@ -2,11 +2,11 @@
 
 ## Test case 1: Start and exit
 
-**Aim:** Confirm that Drax displays its greeting and exits cleanly when the user says `bye`.
+**Aim:** Confirm that drax.Drax displays its greeting and exits cleanly when the user says `bye`.
 
 **Command**
 ```bash
-source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test /tmp/drax-ui-test-work && javac -d /tmp/drax-ui-test src/main/java/*.java && (cd /tmp/drax-ui-test-work && printf 'bye\n' | java -cp /tmp/drax-ui-test Drax)
+source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test /tmp/drax-ui-test-work && javac -d /tmp/drax-ui-test src/main/java/*.java && (cd /tmp/drax-ui-test-work && printf 'bye\n' | java -cp /tmp/drax-ui-test drax.Drax)
 ```
 
 **Console input**
@@ -23,7 +23,7 @@ bye
 ██████╔╝██║  ██║██║  ██║██╔╝ ██╗
 ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
 
-Infinite Salutations! I'm Drax!
+Infinite Salutations! I'm drax.Drax!
 What's on your mind today?
 Goodbye. Hope to see you again soon!
 
@@ -33,11 +33,11 @@ Goodbye. Hope to see you again soon!
 
 ## Test case 2: Add and list a task
 
-**Aim:** Confirm that Drax accepts a todo command, reports the new task, and lists it.
+**Aim:** Confirm that drax.Drax accepts a todo command, reports the new task, and lists it.
 
 **Command**
 ```bash
-source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test-work && (cd /tmp/drax-ui-test-work && printf 'todo read book\nlist\nbye\n' | java -cp /tmp/drax-ui-test Drax)
+source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test-work && (cd /tmp/drax-ui-test-work && printf 'todo read book\nlist\nbye\n' | java -cp /tmp/drax-ui-test drax.Drax)
 ```
 
 **Console input**
@@ -56,7 +56,7 @@ bye
 ██████╔╝██║  ██║██║  ██║██╔╝ ██╗
 ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
 
-Infinite Salutations! I'm Drax!
+Infinite Salutations! I'm drax.Drax!
 What's on your mind today?
 I've added this task
 [T][ ] read book
@@ -71,11 +71,11 @@ Goodbye. Hope to see you again soon!
 
 ## Test case 3: Mark and unmark a task
 
-**Aim:** Confirm that Drax can mark a task as done, unmark it, and display the updated status.
+**Aim:** Confirm that drax.Drax can mark a task as done, unmark it, and display the updated status.
 
 **Command**
 ```bash
-source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test-work && (cd /tmp/drax-ui-test-work && printf 'todo read book\nmark 1\nunmark 1\nlist\nbye\n' | java -cp /tmp/drax-ui-test Drax)
+source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test-work && (cd /tmp/drax-ui-test-work && printf 'todo read book\nmark 1\nunmark 1\nlist\nbye\n' | java -cp /tmp/drax-ui-test drax.Drax)
 ```
 
 **Console input**
@@ -96,7 +96,7 @@ bye
 ██████╔╝██║  ██║██║  ██║██╔╝ ██╗
 ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
 
-Infinite Salutations! I'm Drax!
+Infinite Salutations! I'm drax.Drax!
 What's on your mind today?
 I've added this task
 [T][ ] read book
@@ -115,11 +115,11 @@ Goodbye. Hope to see you again soon!
 
 ## Test case 4: Add all task types
 
-**Aim:** Confirm that Drax parses typed deadline and event dates, then displays them in a readable format.
+**Aim:** Confirm that drax.Drax parses typed deadline and event dates, then displays them in a readable format.
 
 **Command**
 ```bash
-source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test-work && (cd /tmp/drax-ui-test-work && printf 'todo read book\ndeadline submit report /by 2/12/2019 1800\nevent meeting /from 2019-12-03T09:00 /to 2019-12-03T10:30\nlist\nbye\n' | java -cp /tmp/drax-ui-test Drax)
+source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test-work && (cd /tmp/drax-ui-test-work && printf 'todo read book\ndeadline submit report /by 2/12/2019 1800\nevent meeting /from 2019-12-03T09:00 /to 2019-12-03T10:30\nlist\nbye\n' | java -cp /tmp/drax-ui-test drax.Drax)
 ```
 
 **Console input**
@@ -140,7 +140,7 @@ bye
 ██████╔╝██║  ██║██║  ██║██╔╝ ██╗
 ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
 
-Infinite Salutations! I'm Drax!
+Infinite Salutations! I'm drax.Drax!
 What's on your mind today?
 I've added this task
 [T][ ] read book
@@ -163,11 +163,11 @@ Goodbye. Hope to see you again soon!
 
 ## Test case 5: Handle invalid input
 
-**Aim:** Confirm that Drax reports invalid task descriptions, missing scheduling information, invalid task numbers, and non-numeric task numbers without exiting unexpectedly.
+**Aim:** Confirm that drax.Drax reports invalid task descriptions, missing scheduling information, invalid task numbers, and non-numeric task numbers without exiting unexpectedly.
 
 **Command**
 ```bash
-source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test-work && (cd /tmp/drax-ui-test-work && printf 'todo \ndeadline submit report\nevent meeting\ndeadline submit report /by next Friday\nmark 1\nmark abc\nbye\n' | java -cp /tmp/drax-ui-test Drax)
+source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test-work && (cd /tmp/drax-ui-test-work && printf 'todo \ndeadline submit report\nevent meeting\ndeadline submit report /by next Friday\nmark 1\nmark abc\nbye\n' | java -cp /tmp/drax-ui-test drax.Drax)
 ```
 
 **Console input**
@@ -190,7 +190,7 @@ bye
 ██████╔╝██║  ██║██║  ██║██╔╝ ██╗
 ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
 
-Infinite Salutations! I'm Drax!
+Infinite Salutations! I'm drax.Drax!
 What's on your mind today?
 You didn't provide a task!?
 You didn't provide a end date! Use /by [deadline]
@@ -210,7 +210,7 @@ Goodbye. Hope to see you again soon!
 
 **Command**
 ```bash
-source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test /tmp/drax-ui-test-work && javac -d /tmp/drax-ui-test src/main/java/*.java && (cd /tmp/drax-ui-test-work && printf 'todo read book\ndeadline submit report /by 2019-12-02\nmark 1\ndelete 2\nbye\n' | java -cp /tmp/drax-ui-test Drax >/dev/null && cat data/drax.txt)
+source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test /tmp/drax-ui-test-work && javac -d /tmp/drax-ui-test src/main/java/*.java && (cd /tmp/drax-ui-test-work && printf 'todo read book\ndeadline submit report /by 2019-12-02\nmark 1\ndelete 2\nbye\n' | java -cp /tmp/drax-ui-test drax.Drax >/dev/null && cat data/drax.txt)
 ```
 
 **Console input**
@@ -228,11 +228,11 @@ T | 1 | read book
 
 ## Test case 7: Load saved tasks on startup
 
-**Aim:** Confirm that Drax reconstructs all task types and their completion status when it starts again.
+**Aim:** Confirm that drax.Drax reconstructs all task types and their completion status when it starts again.
 
 **Command**
 ```bash
-source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test /tmp/drax-ui-test-work && javac -d /tmp/drax-ui-test src/main/java/*.java && (cd /tmp/drax-ui-test-work && printf 'todo read book\nmark 1\ndeadline submit report /by 2019-12-02\nevent project meeting /from 2/12/2019 0900 /to 2/12/2019 1000\nbye\n' | java -cp /tmp/drax-ui-test Drax >/dev/null && printf 'list\nbye\n' | java -cp /tmp/drax-ui-test Drax)
+source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test /tmp/drax-ui-test-work && javac -d /tmp/drax-ui-test src/main/java/*.java && (cd /tmp/drax-ui-test-work && printf 'todo read book\nmark 1\ndeadline submit report /by 2019-12-02\nevent project meeting /from 2/12/2019 0900 /to 2/12/2019 1000\nbye\n' | java -cp /tmp/drax-ui-test drax.Drax >/dev/null && printf 'list\nbye\n' | java -cp /tmp/drax-ui-test drax.Drax)
 ```
 
 **Console input**
@@ -249,7 +249,7 @@ ignored
 ██████╔╝██║  ██║██║  ██║██╔╝ ██╗
 ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
 
-Infinite Salutations! I'm Drax!
+Infinite Salutations! I'm drax.Drax!
 What's on your mind today?
 Here are the tasks in your list!
 1.[T][X] read book
@@ -267,7 +267,7 @@ Goodbye. Hope to see you again soon!
 
 **Command**
 ```bash
-source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test /tmp/drax-ui-test-work/data && javac -d /tmp/drax-ui-test src/main/java/*.java && (cd /tmp/drax-ui-test-work && printf '%s\n' 'T | 1 | valid task' 'Q | 0 | bad task' 'D | 2 | invalid status | Friday' 'E | 0 | missing end | Monday' '' > data/drax.txt && printf 'list\nbye\n' | java -cp /tmp/drax-ui-test Drax)
+source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test /tmp/drax-ui-test-work/data && javac -d /tmp/drax-ui-test src/main/java/*.java && (cd /tmp/drax-ui-test-work && printf '%s\n' 'T | 1 | valid task' 'Q | 0 | bad task' 'D | 2 | invalid status | Friday' 'E | 0 | missing end | Monday' '' > data/drax.txt && printf 'list\nbye\n' | java -cp /tmp/drax-ui-test drax.Drax)
 ```
 
 **Console input**
@@ -284,7 +284,7 @@ ignored
 ██████╔╝██║  ██║██║  ██║██╔╝ ██╗
 ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
 
-Infinite Salutations! I'm Drax!
+Infinite Salutations! I'm drax.Drax!
 What's on your mind today?
 Saved task on line 2 was ignored: unknown task type Q
 Saved task on line 3 was ignored: completion status must be 0 or 1
@@ -303,7 +303,7 @@ Goodbye. Hope to see you again soon!
 
 **Command**
 ```bash
-source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test /tmp/drax-ui-test-work && javac -d /tmp/drax-ui-test src/main/java/*.java && (cd /tmp/drax-ui-test-work && printf '%s\n' 'todo revise A | B\C' 'bye' | java -cp /tmp/drax-ui-test Drax >/dev/null && printf 'list\nbye\n' | java -cp /tmp/drax-ui-test Drax)
+source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test /tmp/drax-ui-test-work && javac -d /tmp/drax-ui-test src/main/java/*.java && (cd /tmp/drax-ui-test-work && printf '%s\n' 'todo revise A | B\C' 'bye' | java -cp /tmp/drax-ui-test drax.Drax >/dev/null && printf 'list\nbye\n' | java -cp /tmp/drax-ui-test drax.Drax)
 ```
 
 **Console input**
@@ -320,7 +320,7 @@ ignored
 ██████╔╝██║  ██║██║  ██║██╔╝ ██╗
 ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
 
-Infinite Salutations! I'm Drax!
+Infinite Salutations! I'm drax.Drax!
 What's on your mind today?
 Here are the tasks in your list!
 1.[T][ ] revise A | B\C
@@ -332,11 +332,11 @@ Goodbye. Hope to see you again soon!
 
 ## Test case 10: Continue after a save failure
 
-**Aim:** Confirm that Drax reports a write failure without crashing when the data directory cannot be created.
+**Aim:** Confirm that drax.Drax reports a write failure without crashing when the data directory cannot be created.
 
 **Command**
 ```bash
-source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test /tmp/drax-ui-test-work && javac -d /tmp/drax-ui-test src/main/java/*.java && (cd /tmp/drax-ui-test-work && printf 'not a directory' > data && printf 'todo read book\nlist\nbye\n' | java -cp /tmp/drax-ui-test Drax)
+source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test /tmp/drax-ui-test-work && javac -d /tmp/drax-ui-test src/main/java/*.java && (cd /tmp/drax-ui-test-work && printf 'not a directory' > data && printf 'todo read book\nlist\nbye\n' | java -cp /tmp/drax-ui-test drax.Drax)
 ```
 
 **Console input**
@@ -353,7 +353,7 @@ ignored
 ██████╔╝██║  ██║██║  ██║██╔╝ ██╗
 ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
 
-Infinite Salutations! I'm Drax!
+Infinite Salutations! I'm drax.Drax!
 What's on your mind today?
 Sorry! I could not save your tasks. They are available until you exit.
 I've added this task

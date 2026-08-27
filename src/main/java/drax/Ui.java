@@ -1,7 +1,9 @@
+package drax;
+
 import java.util.List;
 import java.util.Scanner;
 
-/** Handles Drax's console input and output so the command loop stays focused on application logic. */
+/** Handles drax.Drax's console input and output so the command loop stays focused on application logic. */
 public class Ui {
     private final Scanner reader;
 
@@ -10,7 +12,7 @@ public class Ui {
         this.reader = new Scanner(System.in);
     }
 
-    /** Displays Drax's greeting banner. */
+    /** Displays drax.Drax's greeting banner. */
     public void showGreeting() {
         System.out.println("""
                 ██████╗ ██████╗  █████╗ ██╗  ██╗
@@ -20,7 +22,7 @@ public class Ui {
                 ██████╔╝██║  ██║██║  ██║██╔╝ ██╗
                 ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
                 """);
-        show("Infinite Salutations! I'm Drax!");
+        show("Infinite Salutations! I'm drax.Drax!");
         show("What's on your mind today?");
     }
 

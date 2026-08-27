@@ -1,3 +1,5 @@
+package drax;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.AtomicMoveNotSupportedException;
@@ -7,7 +9,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Handles loading, serializing, and saving Drax tasks. */
+/** Handles loading, serializing, and saving drax.Drax tasks. */
 public class Storage {
     private static final Path SAVE_FILE = Path.of("data", "drax.txt");
     private static final Path TEMP_FILE = Path.of("data", "drax.txt.tmp");
@@ -35,7 +37,7 @@ public class Storage {
         return new LoadResult(tasks, warnings);
     }
 
-    /** Saves tasks atomically using Drax's established file format. */
+    /** Saves tasks atomically using drax.Drax's established file format. */
     public void save(TaskList tasks) throws IOException {
         Files.createDirectories(SAVE_FILE.getParent());
         try (BufferedWriter writer = Files.newBufferedWriter(TEMP_FILE)) {

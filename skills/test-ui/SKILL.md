@@ -5,7 +5,7 @@ description: Run scripted console UI tests for this Java project from test/ui-te
 
 # Test UI
 
-Use this skill to test Drax's console interface from a reproducible test plan.
+Use this skill to test drax.Drax's console interface from a reproducible test plan.
 
 ## Workflow
 

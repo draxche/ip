@@ -1,11 +1,13 @@
+package drax;
+
 /** Converts a raw console line into a command type and its extracted arguments. */
 public class Parser {
-    /** The command categories understood by Drax. */
+    /** The command categories understood by drax.Drax. */
     public enum Type {
         BYE, LIST, MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, UNKNOWN
     }
 
-    /** Parsed command data consumed by Drax's command handlers. */
+    /** Parsed command data consumed by drax.Drax's command handlers. */
     public record Command(Type type, String argument, String task, String firstDate, String secondDate) {
     }
 

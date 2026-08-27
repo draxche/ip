@@ -1,43 +1,30 @@
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Drax {
     public static void main(String[] args) {
         TaskStorage.LoadResult loadResult = loadTasks();
         TaskList tasks = new TaskList(loadResult.tasks());
-        String banner = """
-                ██████╗ ██████╗  █████╗ ██╗  ██╗
-                ██╔══██╗██╔══██╗██╔══██╗╚██╗██╔╝
-                ██║  ██║██████╔╝███████║ ╚███╔╝
-                ██║  ██║██╔══██╗██╔══██║ ██╔██╗
-                ██████╔╝██║  ██║██║  ██║██╔╝ ██╗
-                ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
-                """;
-        System.out.println(banner);
-        System.out.println("Infinite Salutations! I'm Drax!");
-        System.out.println("What's on your mind today?");
-        for (String warning : loadResult.warnings()) {
-            System.out.println(warning);
-        }
-        Scanner reader = new Scanner(System.in);
+        Ui ui = new Ui();
+        ui.showGreeting();
+        ui.showWarnings(loadResult.warnings());
         String n;
 
-        while(reader.hasNextLine()) {
-            n = reader.nextLine();
+        while(ui.hasNextCommand()) {
+            n = ui.readCommand();
             if (n.equals("bye")) {
-                System.out.println("Goodbye. Hope to see you again soon!");
+                ui.show("Goodbye. Hope to see you again soon!");
                 break;
             }
             else if (n.equals("list")) {
                 int count = 1;
                 if (tasks.isEmpty()) {
-                    System.out.println("Oops! You currently have no tasks.");
+                    ui.show("Oops! You currently have no tasks.");
                 } else {
-                    System.out.println("Here are the tasks in your list!");
+                    ui.show("Here are the tasks in your list!");
                 }
                 for (Task task : tasks) {
-                    System.out.printf("%d.%s%n", count, task);
+                    ui.showTask(count, task);
                     count++;
                 }
             }
@@ -51,13 +38,13 @@ public class Drax {
                     }
                     Task task = tasks.get(index);
                     task.markAsDone();
-                    saveTasks(tasks);
-                    System.out.println("I've marked this task as done:");
-                    System.out.println(task);
+                    saveTasks(tasks, ui);
+                    ui.show("I've marked this task as done:");
+                    ui.show(task.toString());
                 } catch (DraxException e) {
-                    System.out.println(e.getMessage());
+                    ui.show(e.getMessage());
                 } catch (NumberFormatException e) {
-                    System.out.println("Please enter a valid number!");
+                    ui.show("Please enter a valid number!");
                 }
             }
 
@@ -70,13 +57,13 @@ public class Drax {
                     }
                     Task task = tasks.get(index);
                     task.unmarkAsDone();
-                    saveTasks(tasks);
-                    System.out.println("I've marked this task as not done:");
-                    System.out.println(task);
+                    saveTasks(tasks, ui);
+                    ui.show("I've marked this task as not done:");
+                    ui.show(task.toString());
                 } catch (DraxException e) {
-                    System.out.println(e.getMessage());
+                    ui.show(e.getMessage());
                 } catch (NumberFormatException e) {
-                    System.out.println("Please enter a valid number!");
+                    ui.show("Please enter a valid number!");
                 }
             }
 
@@ -88,16 +75,16 @@ public class Drax {
                     }
                     Todo newTodo = new Todo(newTask);
                     tasks.add(newTodo);
-                    saveTasks(tasks);
-                    System.out.println("I've added this task");
-                    System.out.println(newTodo);
+                    saveTasks(tasks, ui);
+                    ui.show("I've added this task");
+                    ui.show(newTodo.toString());
                     if (tasks.size() == 1) {
-                        System.out.println("Now you have 1 task!");
+                        ui.show("Now you have 1 task!");
                     } else {
-                        System.out.println("Now you have " + tasks.size() + " tasks!");
+                        ui.show("Now you have " + tasks.size() + " tasks!");
                     }
                 } catch (DraxException e) {
-                    System.out.println(e.getMessage());
+                    ui.show(e.getMessage());
                 }
             }
 
@@ -114,16 +101,16 @@ public class Drax {
                     String deadlineText = n.substring(split + 5).trim();
                     Deadline newDeadline = new Deadline(newTask, ScheduleDateTime.parse(deadlineText));
                     tasks.add(newDeadline);
-                    saveTasks(tasks);
-                    System.out.println("I've added this task");
-                    System.out.println(newDeadline);
+                    saveTasks(tasks, ui);
+                    ui.show("I've added this task");
+                    ui.show(newDeadline.toString());
                     if (tasks.size() == 1) {
-                        System.out.println("Now you have 1 task!");
+                        ui.show("Now you have 1 task!");
                     } else {
-                        System.out.println("Now you have " + tasks.size() + " tasks!");
+                        ui.show("Now you have " + tasks.size() + " tasks!");
                     }
                 } catch (DraxException | IllegalArgumentException e) {
-                    System.out.println(e.getMessage());
+                    ui.show(e.getMessage());
                 }
             }
 
@@ -144,16 +131,16 @@ public class Drax {
                     Event newEvent = new Event(newTask, ScheduleDateTime.parse(fromText),
                             ScheduleDateTime.parse(toText));
                     tasks.add(newEvent);
-                    saveTasks(tasks);
-                    System.out.println("I've added this task");
-                    System.out.println(newEvent);
+                    saveTasks(tasks, ui);
+                    ui.show("I've added this task");
+                    ui.show(newEvent.toString());
                     if (tasks.size() == 1) {
-                        System.out.println("Now you have 1 task!");
+                        ui.show("Now you have 1 task!");
                     } else {
-                        System.out.println("Now you have " + tasks.size() + " tasks!");
+                        ui.show("Now you have " + tasks.size() + " tasks!");
                     }
                 } catch (DraxException | IllegalArgumentException e) {
-                    System.out.println(e.getMessage());
+                    ui.show(e.getMessage());
                 }
             }
 
@@ -164,35 +151,35 @@ public class Drax {
                     if (index >= tasks.size() || index < 0) {
                         throw new DraxException("This task does not exist. You don't have that many tasks!");
                     }
-                    System.out.println("I've deleted this task");
-                    System.out.println(tasks.get(index));
+                    ui.show("I've deleted this task");
+                    ui.show(tasks.get(index).toString());
                     tasks.remove(index);
-                    saveTasks(tasks);
+                    saveTasks(tasks, ui);
                     if (tasks.size() == 1) {
-                        System.out.println("Now you have 1 task!");
+                        ui.show("Now you have 1 task!");
                     } else {
-                        System.out.println("Now you have " + tasks.size() + " tasks!");
+                        ui.show("Now you have " + tasks.size() + " tasks!");
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("Please enter a valid number!");
+                    ui.show("Please enter a valid number!");
                 } catch (DraxException e) {
-                    System.out.println(e.getMessage());
+                    ui.show(e.getMessage());
                 }
             }
 
             else {
-                System.out.println("Sorry! But that's not a function I can do :(");
+                ui.show("Sorry! But that's not a function I can do :(");
             }
         }
 
-        reader.close();
+        ui.close();
     }
 
-    private static void saveTasks(TaskList tasks) {
+    private static void saveTasks(TaskList tasks, Ui ui) {
         try {
             TaskStorage.save(tasks.asList());
         } catch (IOException | IllegalArgumentException e) {
-            System.out.println("Sorry! I could not save your tasks. They are available until you exit.");
+            ui.show("Sorry! I could not save your tasks. They are available until you exit.");
         }
     }
 

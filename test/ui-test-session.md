@@ -115,18 +115,18 @@ Goodbye. Hope to see you again soon!
 
 ## Test case 4: Add all task types
 
-**Aim:** Confirm that Drax accepts todo, deadline, and event tasks and displays each task type correctly.
+**Aim:** Confirm that Drax parses typed deadline and event dates, then displays them in a readable format.
 
 **Command**
 ```bash
-source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test-work && (cd /tmp/drax-ui-test-work && printf 'todo read book\ndeadline submit report /by Friday\nevent meeting /from Monday /to Tuesday\nlist\nbye\n' | java -cp /tmp/drax-ui-test Drax)
+source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test-work && (cd /tmp/drax-ui-test-work && printf 'todo read book\ndeadline submit report /by 2/12/2019 1800\nevent meeting /from 2019-12-03T09:00 /to 2019-12-03T10:30\nlist\nbye\n' | java -cp /tmp/drax-ui-test Drax)
 ```
 
 **Console input**
 ```text
 todo read book
-deadline submit report /by Friday
-event meeting /from Monday /to Tuesday
+deadline submit report /by 2/12/2019 1800
+event meeting /from 2019-12-03T09:00 /to 2019-12-03T10:30
 list
 bye
 ```
@@ -146,15 +146,15 @@ I've added this task
 [T][ ] read book
 Now you have 1 task!
 I've added this task
-[D][ ] submit report (by: Friday)
+[D][ ] submit report (by: Dec 02 2019 6:00 PM)
 Now you have 2 tasks!
 I've added this task
-[E][ ] meeting (from: Monday to: Tuesday)
+[E][ ] meeting (from: Dec 03 2019 9:00 AM to: Dec 03 2019 10:30 AM)
 Now you have 3 tasks!
 Here are the tasks in your list!
 1.[T][ ] read book
-2.[D][ ] submit report (by: Friday)
-3.[E][ ] meeting (from: Monday to: Tuesday)
+2.[D][ ] submit report (by: Dec 02 2019 6:00 PM)
+3.[E][ ] meeting (from: Dec 03 2019 9:00 AM to: Dec 03 2019 10:30 AM)
 Goodbye. Hope to see you again soon!
 
 ```
@@ -167,7 +167,7 @@ Goodbye. Hope to see you again soon!
 
 **Command**
 ```bash
-source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test-work && (cd /tmp/drax-ui-test-work && printf 'todo \ndeadline submit report\nevent meeting\nmark 1\nmark abc\nbye\n' | java -cp /tmp/drax-ui-test Drax)
+source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test-work && (cd /tmp/drax-ui-test-work && printf 'todo \ndeadline submit report\nevent meeting\ndeadline submit report /by next Friday\nmark 1\nmark abc\nbye\n' | java -cp /tmp/drax-ui-test Drax)
 ```
 
 **Console input**
@@ -175,6 +175,7 @@ source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/n
 todo 
 deadline submit report
 event meeting
+deadline submit report /by next Friday
 mark 1
 mark abc
 bye
@@ -194,6 +195,7 @@ What's on your mind today?
 You didn't provide a task!?
 You didn't provide a end date! Use /by [deadline]
 You didn't provide when this event is happening! Use /from [date] /to [date]
+Please use a valid date and time: yyyy-MM-dd, yyyy-MM-ddTHH:mm, or d/M/yyyy HHmm.
 This task doesn't exist. You don't have that many tasks!
 Please enter a valid number!
 Goodbye. Hope to see you again soon!
@@ -208,7 +210,7 @@ Goodbye. Hope to see you again soon!
 
 **Command**
 ```bash
-source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test /tmp/drax-ui-test-work && javac -d /tmp/drax-ui-test src/main/java/*.java && (cd /tmp/drax-ui-test-work && printf 'todo read book\ndeadline submit report /by Friday\nmark 1\ndelete 2\nbye\n' | java -cp /tmp/drax-ui-test Drax >/dev/null && cat data/drax.txt)
+source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test /tmp/drax-ui-test-work && javac -d /tmp/drax-ui-test src/main/java/*.java && (cd /tmp/drax-ui-test-work && printf 'todo read book\ndeadline submit report /by 2019-12-02\nmark 1\ndelete 2\nbye\n' | java -cp /tmp/drax-ui-test Drax >/dev/null && cat data/drax.txt)
 ```
 
 **Console input**
@@ -230,7 +232,7 @@ T | 1 | read book
 
 **Command**
 ```bash
-source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test /tmp/drax-ui-test-work && javac -d /tmp/drax-ui-test src/main/java/*.java && (cd /tmp/drax-ui-test-work && printf 'todo read book\nmark 1\ndeadline submit report /by Friday\nevent project meeting /from Monday /to Tuesday\nbye\n' | java -cp /tmp/drax-ui-test Drax >/dev/null && printf 'list\nbye\n' | java -cp /tmp/drax-ui-test Drax)
+source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test /tmp/drax-ui-test-work && javac -d /tmp/drax-ui-test src/main/java/*.java && (cd /tmp/drax-ui-test-work && printf 'todo read book\nmark 1\ndeadline submit report /by 2019-12-02\nevent project meeting /from 2/12/2019 0900 /to 2/12/2019 1000\nbye\n' | java -cp /tmp/drax-ui-test Drax >/dev/null && printf 'list\nbye\n' | java -cp /tmp/drax-ui-test Drax)
 ```
 
 **Console input**
@@ -251,8 +253,8 @@ Infinite Salutations! I'm Drax!
 What's on your mind today?
 Here are the tasks in your list!
 1.[T][X] read book
-2.[D][ ] submit report (by: Friday)
-3.[E][ ] project meeting (from: Monday to: Tuesday)
+2.[D][ ] submit report (by: Dec 02 2019)
+3.[E][ ] project meeting (from: Dec 02 2019 9:00 AM to: Dec 02 2019 10:00 AM)
 Goodbye. Hope to see you again soon!
 
 ```

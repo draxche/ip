@@ -11,6 +11,7 @@ import java.util.List;
 public class TaskList implements Iterable<Task> {
     private final ArrayList<Task> tasks;
 
+    /** Creates an empty task list. */
     public TaskList() {
         this.tasks = new ArrayList<>();
     }
@@ -36,7 +37,7 @@ public class TaskList implements Iterable<Task> {
         return tasks.get(index);
     }
 
-    public int size() {
+    public int getSize() {
         return tasks.size();
     }
 

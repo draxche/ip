@@ -4,7 +4,7 @@ package drax;
 public class Parser {
     /** The command categories understood by drax.Drax. */
     public enum Type {
-        BYE, LIST, MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, UNKNOWN
+        BYE, LIST, MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, FIND, UNKNOWN
     }
 
     /** Parsed command data consumed by drax.Drax's command handlers. */
@@ -24,23 +24,32 @@ public class Parser {
         if (input.equals("list")) {
             return new Command(Type.LIST, "", "", "", "");
         }
-        if (input.startsWith("mark ")) {
-            return new Command(Type.MARK, input.substring(5).trim(), "", "", "");
+        if (input.startsWith("mark ") || input.equals("mark")) {
+            String taskNumber = input.length() == 4 ? "" : input.substring(5).trim();
+            return new Command(Type.MARK, taskNumber, "", "", "");
         }
-        if (input.startsWith("unmark ")) {
-            return new Command(Type.UNMARK, input.substring(7).trim(), "", "", "");
+        if (input.startsWith("unmark ") || input.equals("unmark")) {
+            String taskNumber = input.length() == 6 ? "" : input.substring(7).trim();
+            return new Command(Type.UNMARK, taskNumber, "", "", "");
         }
-        if (input.startsWith("todo ")) {
-            return new Command(Type.TODO, "", input.substring(5).trim(), "", "");
+        if (input.startsWith("todo ") || input.equals("todo")) {
+            String task = input.length() == 4 ? "" : input.substring(5).trim();
+            return new Command(Type.TODO, "", task, "", "");
         }
-        if (input.startsWith("deadline ")) {
+        if (input.startsWith("deadline ") || input.equals("deadline")) {
+            if (input.equals("deadline")) {
+                return new Command(Type.DEADLINE, "", "", "", "");
+            }
             int split = input.indexOf(" /by ");
             return split == -1
                     ? new Command(Type.DEADLINE, "", input.substring(9).trim(), "", "")
-                    : new Command(Type.DEADLINE, "", input.substring(9, split).trim(),
+                    : new Command(Type.DEADLINE, "", input.substring(9, split),
                             input.substring(split + 5).trim(), "");
         }
-        if (input.startsWith("event ")) {
+        if (input.startsWith("event ") || input.equals("event")) {
+            if (input.equals("event")) {
+                return new Command(Type.EVENT, "", "", "", "");
+            }
             int fromIndex = input.indexOf(" /from ");
             int toIndex = input.indexOf(" /to ");
             if (fromIndex == -1 || toIndex == -1) {
@@ -49,8 +58,13 @@ public class Parser {
             return new Command(Type.EVENT, "", input.substring(6, fromIndex).trim(),
                     input.substring(fromIndex + 7, toIndex).trim(), input.substring(toIndex + 5).trim());
         }
-        if (input.startsWith("delete ")) {
-            return new Command(Type.DELETE, input.substring(7).trim(), "", "", "");
+        if (input.startsWith("delete ") || input.equals("delete")) {
+            String taskNumber = input.length() == 6 ? "" : input.substring(7).trim();
+            return new Command(Type.DELETE, taskNumber, "", "", "");
+        }
+        if (input.startsWith("find ") || input.equals("find")) {
+            String keyword = input.length() == 4 ? "" : input.substring(5).trim();
+            return new Command(Type.FIND, keyword, "", "", "");
         }
         return new Command(Type.UNKNOWN, input, "", "", "");
     }

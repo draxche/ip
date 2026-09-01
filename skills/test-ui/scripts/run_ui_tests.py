@@ -43,7 +43,7 @@ def main() -> int:
         if expected and not expected.endswith("\n"):
             expected += "\n"
         result = subprocess.run(
-            ["bash", "-lc", command],
+            ["bash", "-c", command],
             input=stdin,
             text=True,
             capture_output=True,

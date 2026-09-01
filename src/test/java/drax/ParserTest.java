@@ -104,6 +104,13 @@ public class ParserTest {
         Parser.Command actual = Parser.parse("delete 5");
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void parse_findCommand_returnsFindCommandWithKeyword() {
+        Parser.Command expected = new Parser.Command(Parser.Type.FIND, "clean house", "", "", "");
+        Parser.Command actual = Parser.parse("find clean house");
+        assertEquals(expected, actual);
+    }
 }
 
 

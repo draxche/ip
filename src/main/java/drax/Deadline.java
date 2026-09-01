@@ -6,12 +6,17 @@ import java.time.LocalDateTime;
 public class Deadline extends Task {
     protected LocalDateTime deadline;
 
+    /**
+     * Creates a deadline task.
+     *
+     * @param task description of the task
+     * @param deadline date and time by which the task should be completed
+     */
     public Deadline(String task, LocalDateTime deadline) {
         super(task);
         this.deadline = deadline;
     }
 
-    /** Returns the typed deadline so callers can compare it chronologically. */
     public LocalDateTime getDeadline() {
         return this.deadline;
     }

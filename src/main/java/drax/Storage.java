@@ -93,22 +93,22 @@ public class Storage {
             throw new IllegalArgumentException("completion status must be 0 or 1");
         }
         Task task = switch (type) {
-        case "T" -> {
-            requireFieldCount(parts, 3);
-            yield new Todo(requireValue(parts, 2, "task description"));
-        }
-        case "D" -> {
-            requireFieldCount(parts, 4);
-            yield new Deadline(requireValue(parts, 2, "task description"),
-                    ScheduleDateTime.parse(requireValue(parts, 3, "deadline")));
-        }
-        case "E" -> {
-            requireFieldCount(parts, 5);
-            yield new Event(requireValue(parts, 2, "task description"),
-                    ScheduleDateTime.parse(requireValue(parts, 3, "start time")),
-                    ScheduleDateTime.parse(requireValue(parts, 4, "end time")));
-        }
-        default -> throw new IllegalArgumentException("unknown task type " + type);
+            case "T" -> {
+                requireFieldCount(parts, 3);
+                yield new Todo(requireValue(parts, 2, "task description"));
+            }
+            case "D" -> {
+                requireFieldCount(parts, 4);
+                yield new Deadline(requireValue(parts, 2, "task description"),
+                        ScheduleDateTime.parse(requireValue(parts, 3, "deadline")));
+            }
+            case "E" -> {
+                requireFieldCount(parts, 5);
+                yield new Event(requireValue(parts, 2, "task description"),
+                        ScheduleDateTime.parse(requireValue(parts, 3, "start time")),
+                        ScheduleDateTime.parse(requireValue(parts, 4, "end time")));
+            }
+            default -> throw new IllegalArgumentException("unknown task type " + type);
         };
         if (status.equals("1")) {
             task.markAsDone();

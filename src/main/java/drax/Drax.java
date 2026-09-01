@@ -26,14 +26,13 @@ public class Drax {
         ui.showWarnings(loadResult.warnings());
         String n;
 
-        while(ui.hasNextCommand()) {
+        while (ui.hasNextCommand()) {
             n = ui.readCommand();
             Parser.Command command = Parser.parse(n);
             if (command.type() == Parser.Type.BYE) {
                 ui.show("Goodbye. Hope to see you again soon!");
                 break;
-            }
-            else if (command.type() == Parser.Type.LIST) {
+            } else if (command.type() == Parser.Type.LIST) {
                 int count = 1;
                 if (tasks.isEmpty()) {
                     ui.show("Oops! You currently have no tasks.");
@@ -44,13 +43,11 @@ public class Drax {
                     ui.showTask(count, task);
                     count++;
                 }
-            }
-
-            else if (command.type() == Parser.Type.MARK) {
+            } else if (command.type() == Parser.Type.MARK) {
                 try {
                     String taskNumber = command.argument();
                     int index = Integer.parseInt(taskNumber) - 1;
-                    if (index >= tasks.getSize() ||  index < 0) {
+                    if (index >= tasks.getSize() || index < 0) {
                         throw new DraxException("This task doesn't exist. You don't have that many tasks!");
                     }
                     Task task = tasks.get(index);
@@ -63,13 +60,11 @@ public class Drax {
                 } catch (NumberFormatException e) {
                     ui.show("Please enter a valid number!");
                 }
-            }
-
-            else if (command.type() == Parser.Type.UNMARK) {
+            } else if (command.type() == Parser.Type.UNMARK) {
                 try {
                     String taskNumber = command.argument();
                     int index = Integer.parseInt(taskNumber) - 1;
-                    if (index >= tasks.getSize() ||   index < 0) {
+                    if (index >= tasks.getSize() || index < 0) {
                         throw new DraxException("This task does not exist. You don't have that many tasks!");
                     }
                     Task task = tasks.get(index);
@@ -82,9 +77,7 @@ public class Drax {
                 } catch (NumberFormatException e) {
                     ui.show("Please enter a valid number!");
                 }
-            }
-
-            else if (command.type() == Parser.Type.TODO) {
+            } else if (command.type() == Parser.Type.TODO) {
                 try {
                     String newTask = command.task();
                     if (newTask.isEmpty()) {
@@ -103,9 +96,7 @@ public class Drax {
                 } catch (DraxException e) {
                     ui.show(e.getMessage());
                 }
-            }
-
-            else if (command.type() == Parser.Type.DEADLINE) {
+            } else if (command.type() == Parser.Type.DEADLINE) {
                 try {
                     if (command.firstDate().isEmpty()) {
                         throw new DraxException("You didn't provide a end date! Use /by [deadline]");
@@ -128,13 +119,11 @@ public class Drax {
                 } catch (DraxException | IllegalArgumentException e) {
                     ui.show(e.getMessage());
                 }
-            }
-
-            else if (command.type() == Parser.Type.EVENT) {
+            } else if (command.type() == Parser.Type.EVENT) {
                 try {
                     if (command.firstDate().isEmpty() || command.secondDate().isEmpty()) {
-                        throw new DraxException("You didn't provide when this event is happening! " +
-                                "Use /from [date] /to [date]");
+                        throw new DraxException("You didn't provide when this event is happening! "
+                                + "Use /from [date] /to [date]");
                     }
                     String newTask = command.task();
                     if (newTask.isEmpty()) {
@@ -156,9 +145,7 @@ public class Drax {
                 } catch (DraxException | IllegalArgumentException e) {
                     ui.show(e.getMessage());
                 }
-            }
-
-            else if (command.type() == Parser.Type.DELETE) {
+            } else if (command.type() == Parser.Type.DELETE) {
                 try {
                     String taskNumber = command.argument();
                     int index = Integer.parseInt(taskNumber) - 1;

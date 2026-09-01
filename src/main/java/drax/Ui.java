@@ -11,6 +11,7 @@ public class Ui {
         this.reader = new Scanner(System.in);
     }
 
+    /** Prints out the chatbot's banner and its greetings. */
     public void showGreeting() {
         System.out.println("""
                 ██████╗ ██████╗  █████╗ ██╗  ██╗

@@ -176,12 +176,32 @@ public class Drax {
                     }
                 } catch (NumberFormatException e) {
                     ui.show("Please enter a valid number!");
+                } catch (DraxException | IllegalArgumentException e) {
+                    ui.show(e.getMessage());
+                }
+            } else if (command.type() == Parser.Type.FIND) {
+                try {
+                    String keyword = command.argument();
+                    int count = 1;
+                    if (keyword.isEmpty()) {
+                        throw new DraxException("You didn't provide a keyword!");
+                    }
+                    for (Task task : tasks) {
+                        if (task.getTask().contains(keyword)) {
+                            if (count == 1) {
+                                ui.show("Here are the matching tasks in your list:");
+                            }
+                            ui.showTask(count, task);
+                            count++;
+                        }
+                    }
+                    if (count == 1) {
+                        throw new DraxException("Oops! No matching tasks found!");
+                    }
                 } catch (DraxException e) {
                     ui.show(e.getMessage());
                 }
-            }
-
-            else {
+            } else {
                 ui.show("Sorry! But that's not a function I can do :(");
             }
         }

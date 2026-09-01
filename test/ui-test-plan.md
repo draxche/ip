@@ -348,3 +348,44 @@ Here are the tasks in your list!
 1.[T][ ] read book
 Goodbye. Hope to see you again soon!
 ```
+
+### Test case 11: Find matching tasks
+
+*Aim*
+Confirm that drax.Drax lists only tasks whose descriptions contain the supplied keyword.
+
+*Command*
+```bash
+source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test /tmp/drax-ui-test-work && javac -d /tmp/drax-ui-test src/main/java/drax/*.java && (cd /tmp/drax-ui-test-work && printf 'todo read book\ntodo return book\ntodo buy groceries\nfind book\nbye\n' | java -cp /tmp/drax-ui-test drax.Drax)
+```
+
+*Input*
+```text
+ignored
+```
+
+*Expected output*
+```text
+██████╗ ██████╗  █████╗ ██╗  ██╗
+██╔══██╗██╔══██╗██╔══██╗╚██╗██╔╝
+██║  ██║██████╔╝███████║ ╚███╔╝
+██║  ██║██╔══██╗██╔══██║ ██╔██╗
+██████╔╝██║  ██║██║  ██║██╔╝ ██╗
+╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
+
+Infinite Salutations! I'm drax.Drax!
+What's on your mind today?
+I've added this task
+[T][ ] read book
+Now you have 1 task!
+I've added this task
+[T][ ] return book
+Now you have 2 tasks!
+I've added this task
+[T][ ] buy groceries
+Now you have 3 tasks!
+Here are the matching tasks in your list:
+1.[T][ ] read book
+2.[T][ ] return book
+Goodbye. Hope to see you again soon!
+```

@@ -7,18 +7,23 @@ public class Event extends Task {
     protected LocalDateTime from;
     protected LocalDateTime to;
 
+    /**
+     * Creates an event task with a start and end time.
+     *
+     * @param task description of the event
+     * @param from date and time when the event starts
+     * @param to date and time when the event ends
+     */
     public Event(String task, LocalDateTime from, LocalDateTime to) {
         super(task);
         this.from = from;
         this.to = to;
     }
 
-    /** Returns the typed event start time. */
     public LocalDateTime getFrom() {
         return this.from;
     }
 
-    /** Returns the typed event end time. */
     public LocalDateTime getTo() {
         return this.to;
     }

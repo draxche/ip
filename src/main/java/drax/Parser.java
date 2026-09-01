@@ -7,7 +7,15 @@ public class Parser {
         BYE, LIST, MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, UNKNOWN
     }
 
-    /** Parsed command data consumed by drax.Drax's command handlers. */
+    /**
+     * Parsed command data consumed by drax.Drax's command handlers.
+     *
+     * @param type category of command to execute
+     * @param argument general command argument, such as a task number
+     * @param task task description for task-creation commands
+     * @param firstDate deadline or event start text
+     * @param secondDate event end text
+     */
     public record Command(Type type, String argument, String task, String firstDate, String secondDate) {
     }
 

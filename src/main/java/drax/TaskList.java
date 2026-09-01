@@ -11,7 +11,6 @@ import java.util.List;
 public class TaskList implements Iterable<Task> {
     private final ArrayList<Task> tasks;
 
-    /** Creates an empty task list. */
     public TaskList() {
         this.tasks = new ArrayList<>();
     }
@@ -25,36 +24,35 @@ public class TaskList implements Iterable<Task> {
         this.tasks = new ArrayList<>(tasks);
     }
 
-    /** Adds a task to the end of the list. */
     public void add(Task task) {
         tasks.add(task);
     }
 
-    /** Removes the task at the supplied zero-based index. */
     public void remove(int index) {
         tasks.remove(index);
     }
 
-    /** Returns the task at the supplied zero-based index. */
     public Task get(int index) {
         return tasks.get(index);
     }
 
-    /** Returns the number of tasks in this list. */
     public int size() {
         return tasks.size();
     }
 
-    /** Returns whether this list contains no tasks. */
     public boolean isEmpty() {
         return tasks.isEmpty();
     }
 
-    /** Returns a read-only view for persistence code. */
     public List<Task> asList() {
         return Collections.unmodifiableList(tasks);
     }
 
+    /**
+     * Provides read-only iteration over the current task order.
+     *
+     * @return an iterator that does not support removing tasks
+     */
     @Override
     public Iterator<Task> iterator() {
         return asList().iterator();

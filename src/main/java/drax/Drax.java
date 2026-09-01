@@ -3,7 +3,13 @@ package drax;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/** Entry point and command-processing loop for the drax task manager. */
 public class Drax {
+    /**
+     * Starts drax, loads saved tasks, and processes commands until the user exits.
+     *
+     * @param args command-line arguments, which are not used
+     */
     public static void main(String[] args) {
         Storage storage = new Storage();
         Storage.LoadResult loadResult;

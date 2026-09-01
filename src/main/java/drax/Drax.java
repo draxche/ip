@@ -44,7 +44,7 @@ public class Drax {
                 try {
                     String taskNumber = command.argument();
                     int index = Integer.parseInt(taskNumber) - 1;
-                    if (index >= tasks.size() ||  index < 0) {
+                    if (index >= tasks.getSize() ||  index < 0) {
                         throw new DraxException("This task doesn't exist. You don't have that many tasks!");
                     }
                     Task task = tasks.get(index);
@@ -63,7 +63,7 @@ public class Drax {
                 try {
                     String taskNumber = command.argument();
                     int index = Integer.parseInt(taskNumber) - 1;
-                    if (index >= tasks.size() ||   index < 0) {
+                    if (index >= tasks.getSize() ||   index < 0) {
                         throw new DraxException("This task does not exist. You don't have that many tasks!");
                     }
                     Task task = tasks.get(index);
@@ -89,10 +89,10 @@ public class Drax {
                     saveTasks(storage, tasks, ui);
                     ui.show("I've added this task");
                     ui.show(newTodo.toString());
-                    if (tasks.size() == 1) {
+                    if (tasks.getSize() == 1) {
                         ui.show("Now you have 1 task!");
                     } else {
-                        ui.show("Now you have " + tasks.size() + " tasks!");
+                        ui.show("Now you have " + tasks.getSize() + " tasks!");
                     }
                 } catch (DraxException e) {
                     ui.show(e.getMessage());
@@ -114,10 +114,10 @@ public class Drax {
                     saveTasks(storage, tasks, ui);
                     ui.show("I've added this task");
                     ui.show(newDeadline.toString());
-                    if (tasks.size() == 1) {
+                    if (tasks.getSize() == 1) {
                         ui.show("Now you have 1 task!");
                     } else {
-                        ui.show("Now you have " + tasks.size() + " tasks!");
+                        ui.show("Now you have " + tasks.getSize() + " tasks!");
                     }
                 } catch (DraxException | IllegalArgumentException e) {
                     ui.show(e.getMessage());
@@ -142,10 +142,10 @@ public class Drax {
                     saveTasks(storage, tasks, ui);
                     ui.show("I've added this task");
                     ui.show(newEvent.toString());
-                    if (tasks.size() == 1) {
+                    if (tasks.getSize() == 1) {
                         ui.show("Now you have 1 task!");
                     } else {
-                        ui.show("Now you have " + tasks.size() + " tasks!");
+                        ui.show("Now you have " + tasks.getSize() + " tasks!");
                     }
                 } catch (DraxException | IllegalArgumentException e) {
                     ui.show(e.getMessage());
@@ -156,17 +156,17 @@ public class Drax {
                 try {
                     String taskNumber = command.argument();
                     int index = Integer.parseInt(taskNumber) - 1;
-                    if (index >= tasks.size() || index < 0) {
+                    if (index >= tasks.getSize() || index < 0) {
                         throw new DraxException("This task does not exist. You don't have that many tasks!");
                     }
                     ui.show("I've deleted this task");
                     ui.show(tasks.get(index).toString());
                     tasks.remove(index);
                     saveTasks(storage, tasks, ui);
-                    if (tasks.size() == 1) {
+                    if (tasks.getSize() == 1) {
                         ui.show("Now you have 1 task!");
                     } else {
-                        ui.show("Now you have " + tasks.size() + " tasks!");
+                        ui.show("Now you have " + tasks.getSize() + " tasks!");
                     }
                 } catch (NumberFormatException e) {
                     ui.show("Please enter a valid number!");

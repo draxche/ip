@@ -85,14 +85,17 @@ public class ParserTest {
 
     @Test
     public void parse_unmarkCommand_returnsUnmarkCommandWithIndex() {
-        Parser.Command expected = new Parser.Command(Parser.Type.UNMARK, "2", "", "", "");
+        Parser.Command expected =
+                new Parser.Command(
+                        Parser.Type.UNMARK, "2", "", "", "");
         Parser.Command actual = Parser.parse("unmark 2");
         assertEquals(expected, actual);
     }
 
     @Test
     public void parse_markCommand_returnsMarkCommandWithIndex() {
-        Parser.Command expected = new Parser.Command(Parser.Type.MARK, "3", "", "", "");
+        Parser.Command expected = new Parser.Command(
+                Parser.Type.MARK, "3", "", "", "");
         Parser.Command actual = Parser.parse("mark 3");
         assertEquals(expected, actual);
     }
@@ -100,7 +103,8 @@ public class ParserTest {
 
     @Test
     public void parse_deleteCommand_returnsDeleteCommandWithIndex() {
-        Parser.Command expected = new Parser.Command(Parser.Type.DELETE, "5", "", "", "");
+        Parser.Command expected = new Parser.Command(
+                Parser.Type.DELETE, "5", "", "", "");
         Parser.Command actual = Parser.parse("delete 5");
         assertEquals(expected, actual);
     }

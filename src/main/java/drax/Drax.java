@@ -200,7 +200,7 @@ public class Drax {
         try {
             storage.save(tasks);
         } catch (IOException | IllegalArgumentException e) {
-            ui.show("Sorry! I could not save your tasks. They are available until you exit.");
+            ui.show("Sorry! I could not save your tasks. They are available until you exit the program.");
         }
     }
 }

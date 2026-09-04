@@ -389,3 +389,27 @@ Here are the matching tasks in your list:
 2.[T][ ] return book
 Goodbye. Hope to see you again soon!
 ```
+
+### Test case 12: Package the JavaFX interface
+
+*Aim*
+Confirm that the runnable JAR contains the JavaFX entry points, custom dialog control, and avatar resources.
+
+*Command*
+```bash
+source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && ./gradlew shadowJar >/dev/null && jar tf build/libs/duke.jar | grep -E '^(drax/(Launcher|Main|DialogBox)\.class|images/(DaUser|DaDuke)\.png)$' | sort
+```
+
+*Input*
+```text
+
+```
+
+*Expected output*
+```text
+drax/DialogBox.class
+drax/Launcher.class
+drax/Main.class
+images/DaDuke.png
+images/DaUser.png
+```

@@ -21,7 +21,7 @@ public class Ui {
                 ██████╔╝██║  ██║██║  ██║██╔╝ ██╗
                 ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
                 """);
-        show("Infinite Salutations! I'm drax.Drax!");
+        show("Infinite Salutations! I'm Drax!");
         show("What's on your mind today?");
     }
 

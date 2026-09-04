@@ -77,8 +77,8 @@ public class Main extends Application {
         String draxText = drax.getResponse(userText);
 
         dialogContainer.getChildren().addAll(
-                new DialogBox(userText, userImage),
-                new DialogBox(draxText, draxImage)
+                DialogBox.getUserDialog(userText, userImage),
+                DialogBox.getDukeDialog(draxText, draxImage)
         );
         userInput.clear();
     }

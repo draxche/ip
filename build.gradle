@@ -52,7 +52,7 @@ test {
 }
 
 application {
-    mainClass = 'seedu.duke.Duke'
+    mainClass.set("drax.Launcher")
 }
 
 jar {

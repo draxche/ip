@@ -1,13 +1,13 @@
 package drax;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.Node;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 /** Displays one chat message together with its speaker's profile image. */
 public class DialogBox extends HBox {
@@ -46,7 +46,7 @@ public class DialogBox extends HBox {
         return new DialogBox(s, i);
     }
 
-    public static DialogBox getDukeDialog(String s, Image i) {
+    public static DialogBox getDraxDialog(String s, Image i) {
         var db = new DialogBox(s, i);
         db.flip();
         return db;

@@ -1,5 +1,8 @@
 package drax;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -78,8 +81,16 @@ public class Main extends Application {
 
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(userText, userImage),
-                DialogBox.getDukeDialog(draxText, draxImage)
+                DialogBox.getDraxDialog(draxText, draxImage)
         );
         userInput.clear();
+        if (userText.equals("bye")) {
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    System.exit(0);
+                }
+            }, 1000);
+        }
     }
 }

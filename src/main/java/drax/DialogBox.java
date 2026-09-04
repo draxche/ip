@@ -1,7 +1,12 @@
 package drax;
 
+import java.io.IOException;
+import java.util.Collections;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -11,44 +16,60 @@ import javafx.scene.layout.HBox;
 
 /** Displays one chat message together with its speaker's profile image. */
 public class DialogBox extends HBox {
-    private final Label text;
-    private final ImageView displayPicture;
+    @FXML
+    private Label dialog;
+    @FXML
+    private ImageView displayPicture;
 
     /**
-     * Creates a dialog box containing the supplied text and profile image.
+     * Loads the dialog layout and supplies its message and profile image.
      *
      * @param message message to display
-     * @param image   profile image of the speaker
+     * @param image profile image of the speaker
      */
-    public DialogBox(String message, Image image) {
-        text = new Label(message);
-        displayPicture = new ImageView(image);
+    private DialogBox(String message, Image image) {
+        FXMLLoader fxmlLoader = new FXMLLoader(MainWindow.class.getResource("/view/DialogBox.fxml"));
+        fxmlLoader.setController(this);
+        fxmlLoader.setRoot(this);
+        try {
+            fxmlLoader.load();
+        } catch (IOException e) {
+            throw new IllegalStateException("Unable to load the dialog-box layout", e);
+        }
 
-        text.setWrapText(true);
-        displayPicture.setFitWidth(100.0);
-        displayPicture.setFitHeight(100.0);
-        this.setAlignment(Pos.TOP_RIGHT);
+        dialog.setText(message);
+        displayPicture.setImage(image);
+    }
 
-        this.getChildren().addAll(text, displayPicture);
+    /** Flips the dialog so that the profile image appears on the left. */
+    private void flip() {
+        ObservableList<Node> children = FXCollections.observableArrayList(getChildren());
+        Collections.reverse(children);
+        getChildren().setAll(children);
+        setAlignment(Pos.TOP_LEFT);
     }
 
     /**
-     * Flips the dialog box such that the ImageView is on the left and text on the right.
+     * Creates a dialog with the user's profile image on the right.
+     *
+     * @param message message entered by the user
+     * @param image user's profile image
+     * @return dialog configured for a user message
      */
-    private void flip() {
-        this.setAlignment(Pos.TOP_LEFT);
-        ObservableList<Node> tmp = FXCollections.observableArrayList(this.getChildren());
-        FXCollections.reverse(tmp);
-        this.getChildren().setAll(tmp);
+    public static DialogBox getUserDialog(String message, Image image) {
+        return new DialogBox(message, image);
     }
 
-    public static DialogBox getUserDialog(String s, Image i) {
-        return new DialogBox(s, i);
-    }
-
-    public static DialogBox getDraxDialog(String s, Image i) {
-        var db = new DialogBox(s, i);
-        db.flip();
-        return db;
+    /**
+     * Creates a dialog with Drax's profile image on the left.
+     *
+     * @param message response returned by Drax
+     * @param image Drax's profile image
+     * @return dialog configured for a Drax response
+     */
+    public static DialogBox getDraxDialog(String message, Image image) {
+        DialogBox dialogBox = new DialogBox(message, image);
+        dialogBox.flip();
+        return dialogBox;
     }
 }

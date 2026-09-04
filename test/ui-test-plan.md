@@ -390,14 +390,14 @@ Here are the matching tasks in your list:
 Goodbye. Hope to see you again soon!
 ```
 
-### Test case 12: Package the JavaFX interface
+### Test case 12: Package the FXML-based JavaFX interface
 
 *Aim*
-Confirm that the runnable JAR contains the JavaFX entry points, custom dialog control, and avatar resources.
+Confirm that the runnable JAR contains the JavaFX entry points, controllers, FXML views, and avatar resources.
 
 *Command*
 ```bash
-source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && ./gradlew shadowJar >/dev/null && jar tf build/libs/duke.jar | grep -E '^(drax/(Launcher|Main|DialogBox)\.class|images/(DaUser|DaDuke)\.png)$' | sort
+source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && ./gradlew shadowJar >/dev/null && jar tf build/libs/duke.jar | grep -E '^(drax/(Launcher|Main|MainWindow|DialogBox)\.class|images/(DaUser|DaDrax)\.png|view/(MainWindow|DialogBox)\.fxml)$' | sort
 ```
 
 *Input*
@@ -410,8 +410,11 @@ source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/n
 drax/DialogBox.class
 drax/Launcher.class
 drax/Main.class
-images/DaDuke.png
+drax/MainWindow.class
+images/DaDrax.png
 images/DaUser.png
+view/DialogBox.fxml
+view/MainWindow.fxml
 ```
 
 ### Test case 13: Return responses for the graphical interface

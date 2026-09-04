@@ -221,7 +221,7 @@ public class CommandExecutor {
     private int parseTaskIndex(String taskNumber) throws DraxException {
         int index = Integer.parseInt(taskNumber) - 1;
         if (index >= tasks.getSize() || index < 0) {
-            throw new DraxException("This task does not exist. You don't have that many tasks!");
+            throw new DraxException("This task doesn't exist. You don't have that many tasks!");
         }
         return index;
     }

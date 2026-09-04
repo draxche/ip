@@ -23,7 +23,7 @@ bye
 ██████╔╝██║  ██║██║  ██║██╔╝ ██╗
 ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
 
-Infinite Salutations! I'm drax.Drax!
+Infinite Salutations! I'm Drax!
 What's on your mind today?
 Goodbye. Hope to see you again soon!
 
@@ -56,7 +56,7 @@ bye
 ██████╔╝██║  ██║██║  ██║██╔╝ ██╗
 ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
 
-Infinite Salutations! I'm drax.Drax!
+Infinite Salutations! I'm Drax!
 What's on your mind today?
 I've added this task
 [T][ ] read book
@@ -96,7 +96,7 @@ bye
 ██████╔╝██║  ██║██║  ██║██╔╝ ██╗
 ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
 
-Infinite Salutations! I'm drax.Drax!
+Infinite Salutations! I'm Drax!
 What's on your mind today?
 I've added this task
 [T][ ] read book
@@ -140,7 +140,7 @@ bye
 ██████╔╝██║  ██║██║  ██║██╔╝ ██╗
 ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
 
-Infinite Salutations! I'm drax.Drax!
+Infinite Salutations! I'm Drax!
 What's on your mind today?
 I've added this task
 [T][ ] read book
@@ -190,7 +190,7 @@ bye
 ██████╔╝██║  ██║██║  ██║██╔╝ ██╗
 ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
 
-Infinite Salutations! I'm drax.Drax!
+Infinite Salutations! I'm Drax!
 What's on your mind today?
 You didn't provide a task!?
 You didn't provide a end date! Use /by [deadline]
@@ -249,7 +249,7 @@ ignored
 ██████╔╝██║  ██║██║  ██║██╔╝ ██╗
 ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
 
-Infinite Salutations! I'm drax.Drax!
+Infinite Salutations! I'm Drax!
 What's on your mind today?
 Here are the tasks in your list!
 1.[T][X] read book
@@ -284,7 +284,7 @@ ignored
 ██████╔╝██║  ██║██║  ██║██╔╝ ██╗
 ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
 
-Infinite Salutations! I'm drax.Drax!
+Infinite Salutations! I'm Drax!
 What's on your mind today?
 Saved task on line 2 was ignored: unknown task type Q
 Saved task on line 3 was ignored: completion status must be 0 or 1
@@ -320,7 +320,7 @@ ignored
 ██████╔╝██║  ██║██║  ██║██╔╝ ██╗
 ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
 
-Infinite Salutations! I'm drax.Drax!
+Infinite Salutations! I'm Drax!
 What's on your mind today?
 Here are the tasks in your list!
 1.[T][ ] revise A | B\C
@@ -353,7 +353,7 @@ ignored
 ██████╔╝██║  ██║██║  ██║██╔╝ ██╗
 ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
 
-Infinite Salutations! I'm drax.Drax!
+Infinite Salutations! I'm Drax!
 What's on your mind today?
 Sorry! I could not save your tasks. They are available until you exit the program.
 I've added this task
@@ -365,9 +365,23 @@ Goodbye. Hope to see you again soon!
 
 ```
 
-**Result:** FAIL (exit status 0)
+**Result:** PASS (exit status 0)
 
-**Expected output**
+## Test case 11: Find matching tasks
+
+**Aim:** Confirm that drax.Drax lists only tasks whose descriptions contain the supplied keyword.
+
+**Command**
+```bash
+source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test /tmp/drax-ui-test-work && javac -d /tmp/drax-ui-test src/main/java/drax/*.java && (cd /tmp/drax-ui-test-work && printf 'todo read book\ntodo return book\ntodo buy groceries\nfind book\nbye\n' | java -cp /tmp/drax-ui-test drax.Drax)
+```
+
+**Console input**
+```text
+ignored
+```
+
+**Console output**
 ```text
 ██████╗ ██████╗  █████╗ ██╗  ██╗
 ██╔══██╗██╔══██╗██╔══██╗╚██╗██╔╝
@@ -376,14 +390,76 @@ Goodbye. Hope to see you again soon!
 ██████╔╝██║  ██║██║  ██║██╔╝ ██╗
 ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
 
-Infinite Salutations! I'm drax.Drax!
+Infinite Salutations! I'm Drax!
 What's on your mind today?
-Sorry! I could not save your tasks. They are available until you exit.
+I've added this task
+[T][ ] read book
+Now you have 1 task!
+I've added this task
+[T][ ] return book
+Now you have 2 tasks!
+I've added this task
+[T][ ] buy groceries
+Now you have 3 tasks!
+Here are the matching tasks in your list:
+1.[T][ ] read book
+2.[T][ ] return book
+Goodbye. Hope to see you again soon!
+
+```
+
+**Result:** PASS (exit status 0)
+
+## Test case 12: Package the JavaFX interface
+
+**Aim:** Confirm that the runnable JAR contains the JavaFX entry points, custom dialog control, and avatar resources.
+
+**Command**
+```bash
+source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && ./gradlew shadowJar >/dev/null && jar tf build/libs/duke.jar | grep -E '^(drax/(Launcher|Main|DialogBox)\.class|images/(DaUser|DaDuke)\.png)$' | sort
+```
+
+**Console input**
+```text
+
+```
+
+**Console output**
+```text
+drax/DialogBox.class
+drax/Launcher.class
+drax/Main.class
+images/DaDuke.png
+images/DaUser.png
+
+```
+
+**Result:** PASS (exit status 0)
+
+## Test case 13: Return responses for the graphical interface
+
+**Aim:** Confirm that one Drax instance returns command responses and preserves its task state without printing a console banner.
+
+**Command**
+```bash
+source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-gui-test /tmp/drax-gui-test-work && mkdir -p /tmp/drax-gui-test /tmp/drax-gui-test-work && javac -d /tmp/drax-gui-test src/main/java/drax/*.java && printf '%s\n' 'import drax.Drax;' 'public class GuiResponseProbe {' '    public static void main(String[] args) {' '        Drax drax = new Drax();' '        System.out.println(drax.greet());' '        System.out.println(drax.getResponse("todo read book"));' '        System.out.println(drax.getResponse("list"));' '    }' '}' > /tmp/drax-gui-test/GuiResponseProbe.java && javac -cp /tmp/drax-gui-test -d /tmp/drax-gui-test /tmp/drax-gui-test/GuiResponseProbe.java && (cd /tmp/drax-gui-test-work && java -cp /tmp/drax-gui-test GuiResponseProbe)
+```
+
+**Console input**
+```text
+
+```
+
+**Console output**
+```text
+Infinite Salutations! I'm Drax!
+What's on your mind today?
 I've added this task
 [T][ ] read book
 Now you have 1 task!
 Here are the tasks in your list!
 1.[T][ ] read book
-Goodbye. Hope to see you again soon!
 
 ```
+
+**Result:** PASS (exit status 0)

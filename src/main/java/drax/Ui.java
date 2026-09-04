@@ -1,32 +1,32 @@
 package drax;
 
-import java.util.List;
 import java.util.Scanner;
 
-/** Handles drax.Drax's console input and output so the command loop stays focused on application logic. */
+/** Handles terminal input and presents response strings produced by Drax. */
 public class Ui {
+    private static final String BANNER = """
+            ██████╗ ██████╗  █████╗ ██╗  ██╗
+            ██╔══██╗██╔══██╗██╔══██╗╚██╗██╔╝
+            ██║  ██║██████╔╝███████║ ╚███╔╝
+            ██║  ██║██╔══██╗██╔══██║ ██╔██╗
+            ██████╔╝██║  ██║██║  ██║██╔╝ ██╗
+            ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝""";
+
     private final Scanner reader;
 
+    /** Creates a console UI that reads commands from standard input. */
     public Ui() {
         this.reader = new Scanner(System.in);
     }
 
-    /** Prints out the chatbot's banner and its greetings. */
-    public void showGreeting() {
-        System.out.println("""
-                ██████╗ ██████╗  █████╗ ██╗  ██╗
-                ██╔══██╗██╔══██╗██╔══██╗╚██╗██╔╝
-                ██║  ██║██████╔╝███████║ ╚███╔╝
-                ██║  ██║██╔══██╗██╔══██║ ██╔██╗
-                ██████╔╝██║  ██║██║  ██║██╔╝ ██╗
-                ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
-                """);
-        show("Infinite Salutations! I'm Drax!");
-        show("What's on your mind today?");
-    }
-
-    public void showWarnings(List<String> warnings) {
-        warnings.forEach(this::show);
+    /**
+     * Adds console-only branding to the interface-neutral greeting.
+     *
+     * @param greeting greeting supplied by Drax
+     * @return the banner and greeting formatted for the terminal
+     */
+    public String getConsoleGreeting(String greeting) {
+        return BANNER + "\n\n" + greeting;
     }
 
     public boolean hasNextCommand() {
@@ -39,10 +39,6 @@ public class Ui {
 
     public void show(String message) {
         System.out.println(message);
-    }
-
-    public void showTask(int number, Task task) {
-        System.out.printf("%d.%s%n", number, task);
     }
 
     public void close() {

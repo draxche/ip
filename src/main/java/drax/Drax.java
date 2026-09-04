@@ -2,15 +2,19 @@ package drax;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
-/** Entry point and command-processing loop for the drax task manager. */
+/** Holds Drax's application state and exposes it to console and graphical interfaces. */
 public class Drax {
-    /**
-     * Starts drax, loads saved tasks, and processes commands until the user exits.
-     *
-     * @param args command-line arguments, which are not used
-     */
-    public static void main(String[] args) {
+    private static final String GREETING = """
+            Infinite Salutations! I'm Drax!
+            What's on your mind today?""";
+
+    private final CommandExecutor executor;
+    private final List<String> startupWarnings;
+
+    /** Loads saved tasks and prepares Drax to process commands. */
+    public Drax() {
         Storage storage = new Storage();
         Storage.LoadResult loadResult;
         try {
@@ -22,20 +26,60 @@ public class Drax {
         }
 
         TaskList tasks = new TaskList(loadResult.tasks());
-        Ui ui = new Ui();
-        ui.showGreeting();
-        ui.showWarnings(loadResult.warnings());
+        this.executor = new CommandExecutor(tasks, storage);
+        this.startupWarnings = List.copyOf(loadResult.warnings());
+    }
 
-        CommandExecutor executor = new CommandExecutor(tasks, storage, ui);
+    /**
+     * Starts the terminal interface and processes commands until the user exits.
+     *
+     * @param args command-line arguments, which are not used
+     */
+    public static void main(String[] args) {
+        Drax drax = new Drax();
+        Ui ui = new Ui();
+        ui.show(ui.getConsoleGreeting(drax.greet()));
 
         while (ui.hasNextCommand()) {
-            Parser.Command command = Parser.parse(ui.readCommand());
-            CommandExecutor.Outcome outcome = executor.execute(command);
-            if (outcome == CommandExecutor.Outcome.EXIT) {
+            CommandExecutor.ExecutionResult result = drax.executeCommand(ui.readCommand());
+            ui.show(result.response());
+            if (result.outcome() == CommandExecutor.Outcome.EXIT) {
                 break;
             }
         }
 
         ui.close();
+    }
+
+    /**
+     * Returns the greeting and any warnings produced while loading saved tasks.
+     *
+     * @return the startup message to display
+     */
+    public String greet() {
+        if (startupWarnings.isEmpty()) {
+            return GREETING;
+        }
+        return GREETING + "\n" + String.join("\n", startupWarnings);
+    }
+
+    /**
+     * Processes one command and returns the response text for a graphical interface.
+     *
+     * @param input raw command entered by the user
+     * @return text produced by executing the command
+     */
+    public String getResponse(String input) {
+        return executeCommand(input).response();
+    }
+
+    /**
+     * Processes one command while retaining its control-flow outcome for the console loop.
+     *
+     * @param input raw command entered by the user
+     * @return response text and whether command processing should continue
+     */
+    public CommandExecutor.ExecutionResult executeCommand(String input) {
+        return executor.execute(Parser.parse(input));
     }
 }

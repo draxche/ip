@@ -14,6 +14,8 @@ import javafx.stage.Stage;
 /** Sets up and displays the JavaFX user interface for Drax. */
 public class Main extends Application {
     private final Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
+    private final Image draxImage = new Image(this.getClass().getResourceAsStream("/images/DaDrax.png"));
+    private final Drax drax = new Drax();
 
     private ScrollPane scrollPane;
     private VBox dialogContainer;
@@ -30,7 +32,7 @@ public class Main extends Application {
         userInput = new TextField();
         sendButton = new Button("Send");
 
-        DialogBox dialogBox = new DialogBox("Hello!", userImage);
+        DialogBox dialogBox = new DialogBox(drax.greet(), draxImage);
         dialogContainer.getChildren().add(dialogBox);
 
         AnchorPane mainLayout = new AnchorPane();
@@ -54,6 +56,8 @@ public class Main extends Application {
 
         userInput.setPrefWidth(325.0);
         sendButton.setPrefWidth(55.0);
+        userInput.setOnAction(event -> handleUserInput());
+        sendButton.setOnAction(event -> handleUserInput());
 
         AnchorPane.setTopAnchor(scrollPane, 1.0);
         AnchorPane.setBottomAnchor(sendButton, 1.0);
@@ -63,5 +67,19 @@ public class Main extends Application {
 
         stage.setScene(scene);
         stage.show();
+    }
+
+    /**
+     * Passes the current input to Drax and displays both sides of the conversation.
+     */
+    private void handleUserInput() {
+        String userText = userInput.getText();
+        String draxText = drax.getResponse(userText);
+
+        dialogContainer.getChildren().addAll(
+                new DialogBox(userText, userImage),
+                new DialogBox(draxText, draxImage)
+        );
+        userInput.clear();
     }
 }

@@ -1,42 +1,46 @@
 package drax;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Executes parsed commands and coordinates changes to the task list,
- * storage, and user interface.
- */
+/** Executes parsed commands and coordinates changes to the task list and storage. */
 public class CommandExecutor {
     /** Indicates whether the application should continue accepting commands after execution. */
     public enum Outcome {
         CONTINUE, EXIT
     }
 
+    /**
+     * Contains the text produced by a command and whether the application should continue.
+     *
+     * @param response text to present to the user in a string format
+     * @param outcome whether command processing should continue
+     */
+    public record ExecutionResult(String response, Outcome outcome) {
+    }
+
     private final TaskList tasks;
     private final Storage storage;
-    private final Ui ui;
 
     /**
      * Creates an executor that coordinates commands using the given application components.
      *
      * @param tasks task list that commands query and modify
      * @param storage storage used to persist task changes
-     * @param ui user interface used to display command results
      */
-    public CommandExecutor(TaskList tasks, Storage storage, Ui ui) {
+    public CommandExecutor(TaskList tasks, Storage storage) {
         this.tasks = tasks;
         this.storage = storage;
-        this.ui = ui;
     }
 
     /**
-     * Executes a parsed command and reports whether command processing should continue.
+     * Executes a parsed command and returns its display text and control-flow outcome.
      *
      * @param command command to execute
-     * @return Outcome.EXIT when the application should stop, or
-     *         Outcome.CONTINUE otherwise
+     * @return the response to display in string format and whether the application should continue
      */
-    public Outcome execute(Parser.Command command) {
+    public ExecutionResult execute(Parser.Command command) {
         return switch (command.type()) {
             case BYE -> executeBye();
             case LIST -> executeList();
@@ -51,101 +55,84 @@ public class CommandExecutor {
         };
     }
 
-    private Outcome executeBye() {
-        ui.show("Goodbye. Hope to see you again soon!");
-        return Outcome.EXIT;
+    private ExecutionResult executeBye() {
+        return exitWith("Goodbye. Hope to see you again soon!");
     }
 
-    private Outcome executeList() {
-        int count = 1;
+    private ExecutionResult executeList() {
+        List<String> messages = new ArrayList<>();
         if (tasks.isEmpty()) {
-            ui.show("Oops! You currently have no tasks.");
+            messages.add("Oops! You currently have no tasks.");
         } else {
-            ui.show("Here are the tasks in your list!");
+            messages.add("Here are the tasks in your list!");
         }
+        int count = 1;
         for (Task task : tasks) {
-            ui.showTask(count, task);
+            messages.add(formatTask(count, task));
             count++;
         }
-        return Outcome.CONTINUE;
+        return continueWith(messages);
     }
 
-    private Outcome executeMark(Parser.Command command) {
+    private ExecutionResult executeMark(Parser.Command command) {
         try {
-            String taskNumber = command.argument();
-            int index = Integer.parseInt(taskNumber) - 1;
-            if (index >= tasks.getSize() || index < 0) {
-                throw new DraxException("This task doesn't exist. You don't have that many tasks!");
-            }
+            int index = parseTaskIndex(command.argument());
             Task task = tasks.get(index);
             task.markAsDone();
-            saveTasks(storage, tasks, ui);
-            ui.show("I've marked this task as done:");
-            ui.show(task.toString());
-            return Outcome.CONTINUE;
+
+            List<String> messages = new ArrayList<>();
+            saveTasks(messages);
+            messages.add("I've marked this task as done:");
+            messages.add(task.toString());
+            return continueWith(messages);
         } catch (DraxException e) {
-            ui.show(e.getMessage());
-            return Outcome.CONTINUE;
+            return continueWith(e.getMessage());
         } catch (NumberFormatException e) {
-            ui.show("Please enter a valid number!");
-            return Outcome.CONTINUE;
+            return continueWith("Please enter a valid number!");
         }
     }
 
-    private Outcome executeUnmark(Parser.Command command) {
+    private ExecutionResult executeUnmark(Parser.Command command) {
         try {
-            String taskNumber = command.argument();
-            int index = Integer.parseInt(taskNumber) - 1;
-            if (index >= tasks.getSize() || index < 0) {
-                throw new DraxException("This task does not exist. You don't have that many tasks!");
-            }
+            int index = parseTaskIndex(command.argument());
             Task task = tasks.get(index);
             task.unmarkAsDone();
-            saveTasks(storage, tasks, ui);
-            ui.show("I've marked this task as not done:");
-            ui.show(task.toString());
-            return Outcome.CONTINUE;
+
+            List<String> messages = new ArrayList<>();
+            saveTasks(messages);
+            messages.add("I've marked this task as not done:");
+            messages.add(task.toString());
+            return continueWith(messages);
         } catch (DraxException e) {
-            ui.show(e.getMessage());
-            return Outcome.CONTINUE;
+            return continueWith(e.getMessage());
         } catch (NumberFormatException e) {
-            ui.show("Please enter a valid number!");
-            return Outcome.CONTINUE;
+            return continueWith("Please enter a valid number!");
         }
     }
 
-    private Outcome executeDelete(Parser.Command command) {
+    private ExecutionResult executeDelete(Parser.Command command) {
         try {
-            String taskNumber = command.argument();
-            int index = Integer.parseInt(taskNumber) - 1;
-            if (index >= tasks.getSize() || index < 0) {
-                throw new DraxException("This task does not exist. You don't have that many tasks!");
-            }
-            ui.show("I've deleted this task");
-            ui.show(tasks.get(index).toString());
+            int index = parseTaskIndex(command.argument());
+            List<String> messages = new ArrayList<>();
+            messages.add("I've deleted this task");
+            messages.add(tasks.get(index).toString());
+
             tasks.remove(index);
-            saveTasks(storage, tasks, ui);
-            if (tasks.getSize() == 1) {
-                ui.show("Now you have 1 task!");
-            } else {
-                ui.show("Now you have " + tasks.getSize() + " tasks!");
-            }
-            return Outcome.CONTINUE;
+            saveTasks(messages);
+            messages.add(getTaskCountMessage());
+            return continueWith(messages);
         } catch (NumberFormatException e) {
-            ui.show("Please enter a valid number!");
-            return Outcome.CONTINUE;
+            return continueWith("Please enter a valid number!");
         } catch (DraxException | IllegalArgumentException e) {
-            ui.show(e.getMessage());
-            return Outcome.CONTINUE;
+            return continueWith(e.getMessage());
         }
     }
 
-    private Outcome executeUnknown() {
-        ui.show("Sorry! But that's not a function I can do :(");
-        return Outcome.CONTINUE;
+    private ExecutionResult executeUnknown() {
+        return continueWith("Sorry! But that's not a function I can do :(");
     }
 
-    private Outcome createTodo(Parser.Command command) {
+    private ExecutionResult createTodo(Parser.Command command) {
         try {
             String newTask = command.task();
             if (newTask.isEmpty()) {
@@ -153,22 +140,13 @@ public class CommandExecutor {
             }
             Todo newTodo = new Todo(newTask);
             tasks.add(newTodo);
-            saveTasks(storage, tasks, ui);
-            ui.show("I've added this task");
-            ui.show(newTodo.toString());
-            if (tasks.getSize() == 1) {
-                ui.show("Now you have 1 task!");
-            } else {
-                ui.show("Now you have " + tasks.getSize() + " tasks!");
-            }
-            return Outcome.CONTINUE;
+            return getTaskCreatedResult(newTodo);
         } catch (DraxException e) {
-            ui.show(e.getMessage());
-            return Outcome.CONTINUE;
+            return continueWith(e.getMessage());
         }
     }
 
-    private Outcome createDeadline(Parser.Command command) {
+    private ExecutionResult createDeadline(Parser.Command command) {
         try {
             if (command.firstDate().isEmpty()) {
                 throw new DraxException("You didn't provide a end date! Use /by [deadline]");
@@ -177,25 +155,15 @@ public class CommandExecutor {
             if (newTask.isEmpty()) {
                 throw new DraxException("You didn't provide a task!?");
             }
-            String deadlineText = command.firstDate();
-            Deadline newDeadline = new Deadline(newTask, ScheduleDateTime.parse(deadlineText));
+            Deadline newDeadline = new Deadline(newTask, ScheduleDateTime.parse(command.firstDate()));
             tasks.add(newDeadline);
-            saveTasks(storage, tasks, ui);
-            ui.show("I've added this task");
-            ui.show(newDeadline.toString());
-            if (tasks.getSize() == 1) {
-                ui.show("Now you have 1 task!");
-            } else {
-                ui.show("Now you have " + tasks.getSize() + " tasks!");
-            }
-            return Outcome.CONTINUE;
+            return getTaskCreatedResult(newDeadline);
         } catch (DraxException | IllegalArgumentException e) {
-            ui.show(e.getMessage());
-            return Outcome.CONTINUE;
+            return continueWith(e.getMessage());
         }
     }
 
-    private Outcome createEvent(Parser.Command command) {
+    private ExecutionResult createEvent(Parser.Command command) {
         try {
             if (command.firstDate().isEmpty() || command.secondDate().isEmpty()) {
                 throw new DraxException("You didn't provide when this event is happening! "
@@ -205,57 +173,87 @@ public class CommandExecutor {
             if (newTask.isEmpty()) {
                 throw new DraxException("You didn't provide a task!?");
             }
-            String fromText = command.firstDate();
-            String toText = command.secondDate();
-            Event newEvent = new Event(newTask, ScheduleDateTime.parse(fromText),
-                    ScheduleDateTime.parse(toText));
+            Event newEvent = new Event(newTask, ScheduleDateTime.parse(
+                    command.firstDate()), ScheduleDateTime.parse(command.secondDate()));
             tasks.add(newEvent);
-            saveTasks(storage, tasks, ui);
-            ui.show("I've added this task");
-            ui.show(newEvent.toString());
-            if (tasks.getSize() == 1) {
-                ui.show("Now you have 1 task!");
-            } else {
-                ui.show("Now you have " + tasks.getSize() + " tasks!");
-            }
-            return Outcome.CONTINUE;
+            return getTaskCreatedResult(newEvent);
         } catch (DraxException | IllegalArgumentException e) {
-            ui.show(e.getMessage());
-            return Outcome.CONTINUE;
+            return continueWith(e.getMessage());
         }
     }
 
-    private Outcome executeFind(Parser.Command command) {
+    private ExecutionResult executeFind(Parser.Command command) {
         try {
             String keyword = command.argument();
-            int count = 1;
             if (keyword.isEmpty()) {
                 throw new DraxException("You didn't provide a keyword!");
             }
+
+            List<String> messages = new ArrayList<>();
+            int count = 1;
             for (Task task : tasks) {
                 if (task.getTask().contains(keyword)) {
                     if (count == 1) {
-                        ui.show("Here are the matching tasks in your list:");
+                        messages.add("Here are the matching tasks in your list:");
                     }
-                    ui.showTask(count, task);
+                    messages.add(formatTask(count, task));
                     count++;
                 }
             }
             if (count == 1) {
                 throw new DraxException("Oops! No matching tasks found!");
             }
-            return Outcome.CONTINUE;
+            return continueWith(messages);
         } catch (DraxException e) {
-            ui.show(e.getMessage());
-            return Outcome.CONTINUE;
+            return continueWith(e.getMessage());
         }
     }
 
-    private static void saveTasks(Storage storage, TaskList tasks, Ui ui) {
+    private ExecutionResult getTaskCreatedResult(Task task) {
+        List<String> messages = new ArrayList<>();
+        saveTasks(messages);
+        messages.add("I've added this task");
+        messages.add(task.toString());
+        messages.add(getTaskCountMessage());
+        return continueWith(messages);
+    }
+
+    private int parseTaskIndex(String taskNumber) throws DraxException {
+        int index = Integer.parseInt(taskNumber) - 1;
+        if (index >= tasks.getSize() || index < 0) {
+            throw new DraxException("This task does not exist. You don't have that many tasks!");
+        }
+        return index;
+    }
+
+    private String getTaskCountMessage() {
+        if (tasks.getSize() == 1) {
+            return "Now you have 1 task!";
+        }
+        return "Now you have " + tasks.getSize() + " tasks!";
+    }
+
+    private String formatTask(int number, Task task) {
+        return number + "." + task;
+    }
+
+    private void saveTasks(List<String> messages) {
         try {
             storage.save(tasks);
         } catch (IOException | IllegalArgumentException e) {
-            ui.show("Sorry! I could not save your tasks. They are available until you exit the program.");
+            messages.add("Sorry! I could not save your tasks. They are available until you exit the program.");
         }
+    }
+
+    private static ExecutionResult continueWith(String... messages) {
+        return continueWith(List.of(messages));
+    }
+
+    private static ExecutionResult continueWith(List<String> messages) {
+        return new ExecutionResult(String.join("\n", messages), Outcome.CONTINUE);
+    }
+
+    private static ExecutionResult exitWith(String message) {
+        return new ExecutionResult(message, Outcome.EXIT);
     }
 }

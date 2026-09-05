@@ -74,6 +74,31 @@ public class Drax {
     }
 
     /**
+     * Parses string input and categorizes commands into groups for differentiated CSS styling
+     * @param input raw command entered by the user
+     * @return command type category for CSS styling
+     */
+    public String getCommandType(String input) {
+        switch (Parser.parse(input).type()) {
+            case MARK, UNMARK -> {
+                return "ChangeMarkCommand";
+            }
+            case TODO, DEADLINE, EVENT -> {
+                return "AddCommand";
+            }
+            case FIND, LIST -> {
+                return "ListCommand";
+            }
+            case DELETE, UNKNOWN -> {
+                return "DeleteCommand";
+            }
+            default -> {
+                return "";
+            }
+        }
+    }
+
+    /**
      * Processes one command while retaining its control-flow outcome for the console loop.
      *
      * @param input raw command entered by the user

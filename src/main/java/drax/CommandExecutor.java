@@ -56,7 +56,7 @@ public class CommandExecutor {
     }
 
     private ExecutionResult executeBye() {
-        return exitWith("Goodbye. Hope to see you again soon!");
+        return new ExecutionResult("Goodbye. Hope to see you again soon!", Outcome.EXIT);
     }
 
     private ExecutionResult executeList() {
@@ -251,9 +251,5 @@ public class CommandExecutor {
 
     private static ExecutionResult continueWith(List<String> messages) {
         return new ExecutionResult(String.join("\n", messages), Outcome.CONTINUE);
-    }
-
-    private static ExecutionResult exitWith(String message) {
-        return new ExecutionResult(message, Outcome.EXIT);
     }
 }

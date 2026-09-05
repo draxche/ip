@@ -62,6 +62,24 @@ public class DialogBox extends HBox {
         return new DialogBox(message, image);
     }
 
+    private void changeDialogStyle(String commandType) {
+        switch(commandType) {
+            case "AddCommand":
+                dialog.getStyleClass().add("add-label");
+                break;
+            case "ChangeMarkCommand":
+                dialog.getStyleClass().add("marked-label");
+                break;
+            case "ListCommand":
+                dialog.getStyleClass().add("list-label");
+                break;
+            case "DeleteCommand":
+                dialog.getStyleClass().add("delete-label");
+                break;
+            default:
+        }
+    }
+
     /**
      * Creates a dialog with Drax's profile image on the left.
      *
@@ -69,9 +87,10 @@ public class DialogBox extends HBox {
      * @param image Drax's profile image
      * @return dialog configured for a Drax response
      */
-    public static DialogBox getDraxDialog(String message, Image image) {
+    public static DialogBox getDraxDialog(String message, Image image, String commandType) {
         DialogBox dialogBox = new DialogBox(message, image);
         dialogBox.flip();
+        dialogBox.changeDialogStyle(commandType);
         return dialogBox;
     }
 }

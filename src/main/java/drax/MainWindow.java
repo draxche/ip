@@ -40,7 +40,7 @@ public class MainWindow extends AnchorPane {
      */
     public void setDrax(Drax drax) {
         this.drax = drax;
-        dialogContainer.getChildren().add(DialogBox.getDraxDialog(drax.greet(), draxImage));
+        dialogContainer.getChildren().add(DialogBox.getDraxDialog(drax.greet(), draxImage, ""));
     }
 
     /** Passes user input to Drax and adds both sides of the conversation to the view. */
@@ -51,7 +51,7 @@ public class MainWindow extends AnchorPane {
 
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(userText, userImage),
-                DialogBox.getDraxDialog(draxText, draxImage)
+                DialogBox.getDraxDialog(draxText, draxImage, drax.getCommandType(userText))
         );
         userInput.clear();
         if (userText.equals("bye")) {

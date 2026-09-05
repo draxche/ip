@@ -15,7 +15,7 @@
                 <VBox fx:id="dialogContainer" prefHeight="-1.0" />
             </content>
         </ScrollPane>
-        <TextField fx:id="userInput" onAction="#handleUserInput" prefWidth="350.0" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="38.0" />
+        <TextField fx:id="userInput" promptText="What do you want to do today?" onAction="#handleUserInput" prefWidth="350.0" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="38.0" />
         <Button fx:id="sendButton" graphicTextGap="0.0" mnemonicParsing="false" onAction="#handleUserInput" prefWidth="30.0" AnchorPane.bottomAnchor="1.0" AnchorPane.rightAnchor="0.0">
             <graphic>
                 <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">

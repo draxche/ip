@@ -1,50 +1,62 @@
 package drax;
 
-import java.util.List;
 import java.util.Scanner;
 
-/** Handles drax.Drax's console input and output so the command loop stays focused on application logic. */
+/** Handles terminal input and presents response strings produced by Drax. */
 public class Ui {
+    private static final String BANNER = """
+            ██████╗ ██████╗  █████╗ ██╗  ██╗
+            ██╔══██╗██╔══██╗██╔══██╗╚██╗██╔╝
+            ██║  ██║██████╔╝███████║ ╚███╔╝
+            ██║  ██║██╔══██╗██╔══██║ ██╔██╗
+            ██████╔╝██║  ██║██║  ██║██╔╝ ██╗
+            ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝""";
+
     private final Scanner reader;
 
+    /** Creates a console UI that reads commands from standard input. */
     public Ui() {
         this.reader = new Scanner(System.in);
     }
 
-    /** Prints out the chatbot's banner and its greetings. */
-    public void showGreeting() {
-        System.out.println("""
-                ██████╗ ██████╗  █████╗ ██╗  ██╗
-                ██╔══██╗██╔══██╗██╔══██╗╚██╗██╔╝
-                ██║  ██║██████╔╝███████║ ╚███╔╝
-                ██║  ██║██╔══██╗██╔══██║ ██╔██╗
-                ██████╔╝██║  ██║██║  ██║██╔╝ ██╗
-                ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
-                """);
-        show("Infinite Salutations! I'm drax.Drax!");
-        show("What's on your mind today?");
+    /**
+     * Adds console-only branding to the interface-neutral greeting.
+     *
+     * @param greeting greeting supplied by Drax
+     * @return the banner and greeting formatted for the terminal
+     */
+    public String getConsoleGreeting(String greeting) {
+        return BANNER + "\n\n" + greeting;
     }
 
-    public void showWarnings(List<String> warnings) {
-        warnings.forEach(this::show);
-    }
-
+    /**
+     * Checks whether another command is available from standard input.
+     *
+     * @return true if another command can be read
+     */
     public boolean hasNextCommand() {
         return reader.hasNextLine();
     }
 
+    /**
+     * Reads the next command from standard input.
+     *
+     * @return the next input line
+     */
     public String readCommand() {
         return reader.nextLine();
     }
 
+    /**
+     * Displays a message on standard output.
+     *
+     * @param message message to display
+     */
     public void show(String message) {
         System.out.println(message);
     }
 
-    public void showTask(int number, Task task) {
-        System.out.printf("%d.%s%n", number, task);
-    }
-
+    /** Closes the standard-input reader. */
     public void close() {
         reader.close();
     }

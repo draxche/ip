@@ -412,11 +412,11 @@ Goodbye. Hope to see you again soon!
 
 ## Test case 12: Package the FXML-based JavaFX interface
 
-**Aim:** Confirm that the runnable JAR contains the JavaFX entry points, controllers, FXML views, and avatar resources.
+**Aim:** Confirm that the runnable JAR contains the JavaFX entry points, controllers, FXML views, and image resources used by the interface.
 
 **Command**
 ```bash
-source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && ./gradlew shadowJar >/dev/null && jar tf build/libs/duke.jar | grep -E '^(drax/(Launcher|Main|MainWindow|DialogBox)\.class|images/(DaUser|DaDrax)\.png|view/(MainWindow|DialogBox)\.fxml)$' | sort
+source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && ./gradlew shadowJar >/dev/null && jar tf build/libs/duke.jar | grep -E '^(drax/(Launcher|Main|MainWindow|DialogBox)\.class|images/(DaUser|DaDrax|sendbutton)\.png|view/(MainWindow|DialogBox)\.fxml)$' | sort
 ```
 
 **Console input**
@@ -432,6 +432,7 @@ drax/Main.class
 drax/MainWindow.class
 images/DaDrax.png
 images/DaUser.png
+images/sendbutton.png
 view/DialogBox.fxml
 view/MainWindow.fxml
 

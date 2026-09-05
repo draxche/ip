@@ -9,20 +9,23 @@
 .text-field {
     -fx-background-color: #d9ffe2;
     -fx-font: 16px "Inter";
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
 }
 
 .button {
-    -fx-background-color: mediumspringgreen;
+    -fx-background-color: black;
     -fx-font: italic bold 16px "inter";
+    -fx-padding: 0;
 }
 
 .button:hover {
-    -fx-background-color:cyan;
+    -fx-background-color:black;
     -fx-font-size: 18px;
 }
 
 .button:pressed {
-    -fx-background-color:orange;
+    -fx-background-color:black;
     -fx-font-size: 20px;
 }
 
@@ -33,7 +36,7 @@
 
 .scroll-bar {
     -fx-font-size: 10px;  /* Change width of scroll bar. */
-    -fx-background-color: main-color;
+    -fx-background-color: white;
 }
 
 .scroll-bar .thumb {

@@ -29,18 +29,34 @@ public class Ui {
         return BANNER + "\n\n" + greeting;
     }
 
+    /**
+     * Checks whether another command is available from standard input.
+     *
+     * @return true if another command can be read
+     */
     public boolean hasNextCommand() {
         return reader.hasNextLine();
     }
 
+    /**
+     * Reads the next command from standard input.
+     *
+     * @return the next input line
+     */
     public String readCommand() {
         return reader.nextLine();
     }
 
+    /**
+     * Displays a message on standard output.
+     *
+     * @param message message to display
+     */
     public void show(String message) {
         System.out.println(message);
     }
 
+    /** Closes the standard-input reader. */
     public void close() {
         reader.close();
     }

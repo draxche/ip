@@ -25,26 +25,57 @@ public class TaskList implements Iterable<Task> {
         this.tasks = new ArrayList<>(tasks);
     }
 
+    /**
+     * Adds a task to the end of the list.
+     *
+     * @param task task to add
+     */
     public void add(Task task) {
         tasks.add(task);
     }
 
+    /**
+     * Removes the task at the specified zero-based index.
+     *
+     * @param index index of the task to remove
+     */
     public void remove(int index) {
         tasks.remove(index);
     }
 
+    /**
+     * Returns the task at the specified zero-based index.
+     *
+     * @param index index of the task to retrieve
+     * @return task at the specified index
+     */
     public Task get(int index) {
         return tasks.get(index);
     }
 
+    /**
+     * Returns the number of tasks in this list.
+     *
+     * @return number of tasks
+     */
     public int getSize() {
         return tasks.size();
     }
 
+    /**
+     * Checks whether this list contains no tasks.
+     *
+     * @return true if the list is empty
+     */
     public boolean isEmpty() {
         return tasks.isEmpty();
     }
 
+    /**
+     * Returns an unmodifiable view of the tasks in their current order.
+     *
+     * @return unmodifiable task list view
+     */
     public List<Task> asList() {
         return Collections.unmodifiableList(tasks);
     }

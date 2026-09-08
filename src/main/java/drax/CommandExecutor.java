@@ -150,7 +150,7 @@ public class CommandExecutor {
 
     private ExecutionResult createDeadline(Parser.Command command) {
         try {
-            if (command.startDate().isEmpty()) {
+            if (command.endDate().isEmpty()) {
                 throw new DraxException("You didn't provide a end date! Use /by [deadline]");
             }
 
@@ -159,7 +159,7 @@ public class CommandExecutor {
                 throw new DraxException("You didn't provide a task!?");
             }
 
-            Deadline newDeadline = new Deadline(newTask, ScheduleDateTime.parse(command.startDate()));
+            Deadline newDeadline = new Deadline(newTask, ScheduleDateTime.parse(command.endDate()));
             tasks.add(newDeadline);
             return getTaskCreatedResult(newDeadline);
         } catch (DraxException | IllegalArgumentException e) {
@@ -261,7 +261,3 @@ public class CommandExecutor {
         return new ExecutionResult(String.join("\n", messages), Outcome.CONTINUE);
     }
 }
-
-
-// add white space
-// rename variables and functions

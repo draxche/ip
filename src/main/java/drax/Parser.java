@@ -2,7 +2,9 @@ package drax;
 
 /** Converts a raw console line into a command type and its extracted arguments. */
 public class Parser {
-    /** The command categories understood by drax.Drax. */
+    /**
+     * The command categories understood by drax.Drax.
+     */
     public enum Type {
         BYE, LIST, MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, FIND, UNKNOWN
     }
@@ -10,11 +12,11 @@ public class Parser {
     /**
      * Parsed command data consumed by drax.Drax's command handlers.
      *
-     * @param type category of command to execute
-     * @param argument general command argument, such as a task number
-     * @param task task description for task-creation commands
+     * @param type      category of command to execute
+     * @param argument  general command argument, such as a task number
+     * @param task      task description for task-creation commands
      * @param startDate deadline or event start text
-     * @param endDate event end text
+     * @param endDate   event end text
      */
     public record Command(Type type, String argument, String task, String startDate, String endDate) {
     }
@@ -27,53 +29,151 @@ public class Parser {
      */
     public static Command parse(String input) {
         if (input.equals("bye")) {
-            return new Command(Type.BYE, "", "", "", "");
+            return parseBye();
         }
         if (input.equals("list")) {
-            return new Command(Type.LIST, "", "", "", "");
+            return parseList();
         }
         if (input.startsWith("mark ") || input.equals("mark")) {
-            String taskNumber = input.length() == 4 ? "" : input.substring(5).trim();
-            return new Command(Type.MARK, taskNumber, "", "", "");
+            return parseMark(input);
         }
         if (input.startsWith("unmark ") || input.equals("unmark")) {
-            String taskNumber = input.length() == 6 ? "" : input.substring(7).trim();
-            return new Command(Type.UNMARK, taskNumber, "", "", "");
+            return parseUnmark(input);
         }
         if (input.startsWith("todo ") || input.equals("todo")) {
-            String task = input.length() == 4 ? "" : input.substring(5).trim();
-            return new Command(Type.TODO, "", task, "", "");
+            return parseTodo(input);
         }
         if (input.startsWith("deadline ") || input.equals("deadline")) {
-            if (input.equals("deadline")) {
-                return new Command(Type.DEADLINE, "", "", "", "");
-            }
-            int split = input.indexOf(" /by ");
-            return split == -1
-                    ? new Command(Type.DEADLINE, "", input.substring(9).trim(), "", "")
-                    : new Command(Type.DEADLINE, "", input.substring(9, split),
-                            input.substring(split + 5).trim(), "");
+            return parseDeadline(input);
         }
         if (input.startsWith("event ") || input.equals("event")) {
-            if (input.equals("event")) {
-                return new Command(Type.EVENT, "", "", "", "");
-            }
-            int fromIndex = input.indexOf(" /from ");
-            int toIndex = input.indexOf(" /to ");
-            if (fromIndex == -1 || toIndex == -1) {
-                return new Command(Type.EVENT, "", input.substring(6).trim(), "", "");
-            }
-            return new Command(Type.EVENT, "", input.substring(6, fromIndex).trim(),
-                    input.substring(fromIndex + 7, toIndex).trim(), input.substring(toIndex + 5).trim());
+            return parseEvent(input);
         }
         if (input.startsWith("delete ") || input.equals("delete")) {
-            String taskNumber = input.length() == 6 ? "" : input.substring(7).trim();
-            return new Command(Type.DELETE, taskNumber, "", "", "");
+            return parseDelete(input);
         }
         if (input.startsWith("find ") || input.equals("find")) {
-            String keyword = input.length() == 4 ? "" : input.substring(5).trim();
-            return new Command(Type.FIND, keyword, "", "", "");
+            return parseFind(input);
         }
+
+        return parseUnknown(input);
+    }
+
+    /**
+     * Parses the bye command.
+     */
+    private static Command parseBye() {
+        return new Command(Type.BYE, "", "", "", "");
+    }
+
+    /**
+     * Parses the list command.
+     */
+    private static Command parseList() {
+        return new Command(Type.LIST, "", "", "", "");
+    }
+
+    /**
+     * Parses the mark command and its optional task number.
+     */
+    private static Command parseMark(String input) {
+        String taskNumber = extractArgument(input, 4);
+        return new Command(Type.MARK, taskNumber, "", "", "");
+    }
+
+    /**
+     * Parses the unmark command and its optional task number.
+     */
+    private static Command parseUnmark(String input) {
+        String taskNumber = extractArgument(input, 6);
+        return new Command(Type.UNMARK, taskNumber, "", "", "");
+    }
+
+    /**
+     * Parses the todo command and its task description.
+     */
+    private static Command parseTodo(String input) {
+        String task = extractArgument(input, 4);
+        return new Command(Type.TODO, "", task, "", "");
+    }
+
+    /**
+     * Parses the deadline command and its optional due date.
+     */
+    private static Command parseDeadline(String input) {
+        if (input.equals("deadline")) {
+            return new Command(Type.DEADLINE, "", "", "", "");
+        }
+        int splitString = input.indexOf(" /by ");
+
+        if (splitString == -1) {
+            String task = input.substring(9).trim();
+            return new Command(Type.DEADLINE, "", task, "", "");
+        }
+
+        String task = input.substring(9, splitString);
+        String endDate = input.substring(splitString + 5).trim();
+        return new Command(Type.DEADLINE, "", task, "", endDate);
+    }
+
+    /**
+     * Parses the event command and its optional start and end dates.
+     */
+    private static Command parseEvent(String input) {
+        if (input.equals("event")) {
+            return new Command(Type.EVENT, "", "", "", "");
+        }
+
+        int fromIndex = input.indexOf(" /from ");
+        int toIndex = input.indexOf(" /to ");
+        boolean hasDates = fromIndex != -1 && toIndex != -1;
+        if (!hasDates) {
+            String task = input.substring(6).trim();
+            return new Command(Type.EVENT, "", task, "", "");
+        }
+        String task = input.substring(6, fromIndex).trim();
+        String startDate = input.substring(fromIndex + 7, toIndex).trim();
+        String endDate = input.substring(toIndex + 5).trim();
+        return new Command(Type.EVENT, "", task, startDate, endDate);
+    }
+
+    /**
+     * Parses the delete command and its optional task number.
+     */
+    private static Command parseDelete(String input) {
+        String taskNumber = extractArgument(input, 6);
+        return new Command(Type.DELETE, taskNumber, "", "", "");
+    }
+
+    /**
+     * Parses the find command and its optional keyword.
+     */
+    private static Command parseFind(String input) {
+        String keyword = extractArgument(input, 4);
+        return new Command(Type.FIND, keyword, "", "", "");
+    }
+
+    /**
+     * Parses a command that does not match any known command keyword.
+     */
+    private static Command parseUnknown(String input) {
         return new Command(Type.UNKNOWN, input, "", "", "");
     }
+
+    /**
+     * Extracts the text that follows a command keyword, omitting the separating space when present.
+     *
+     * @param input         complete command entered by the user
+     * @param commandLength length of the command keyword
+     * @return the trimmed argument, or an empty string when no argument was supplied
+     */
+    private static String extractArgument(String input, int commandLength) {
+        boolean hasArgument = input.length() > commandLength;
+        if (!hasArgument) {
+            return "";
+        }
+        String argument = input.substring(commandLength + 1).trim();
+        return argument;
+    }
+
 }

@@ -47,7 +47,6 @@ public class Drax {
                 break;
             }
         }
-
         ui.close();
     }
 

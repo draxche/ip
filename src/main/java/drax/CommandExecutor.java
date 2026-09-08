@@ -63,15 +63,15 @@ public class CommandExecutor {
         List<String> messages = new ArrayList<>();
         if (tasks.isEmpty()) {
             messages.add("Oops! You currently have no tasks.");
-        } else {
-            messages.add("Here are the tasks in your list!");
         }
+        messages.add("Here are the tasks in your list!");
+
         int count = 1;
         for (Task task : tasks) {
-            messages.add(formatTask(count, task));
+            messages.add(formatTaskWithNumber(count, task));
             count++;
         }
-        return continueWith(messages);
+        return returnWithContinue(messages);
     }
 
     private ExecutionResult executeMark(Parser.Command command) {
@@ -84,11 +84,11 @@ public class CommandExecutor {
             saveTasks(messages);
             messages.add("I've marked this task as done:");
             messages.add(task.toString());
-            return continueWith(messages);
+            return returnWithContinue(messages);
         } catch (DraxException e) {
-            return continueWith(e.getMessage());
+            return parseWithContinue(e.getMessage());
         } catch (NumberFormatException e) {
-            return continueWith("Please enter a valid number!");
+            return parseWithContinue("Please enter a valid number!");
         }
     }
 
@@ -102,17 +102,18 @@ public class CommandExecutor {
             saveTasks(messages);
             messages.add("I've marked this task as not done:");
             messages.add(task.toString());
-            return continueWith(messages);
+            return returnWithContinue(messages);
         } catch (DraxException e) {
-            return continueWith(e.getMessage());
+            return parseWithContinue(e.getMessage());
         } catch (NumberFormatException e) {
-            return continueWith("Please enter a valid number!");
+            return parseWithContinue("Please enter a valid number!");
         }
     }
 
     private ExecutionResult executeDelete(Parser.Command command) {
         try {
             int index = parseTaskIndex(command.argument());
+
             List<String> messages = new ArrayList<>();
             messages.add("I've deleted this task");
             messages.add(tasks.get(index).toString());
@@ -120,16 +121,16 @@ public class CommandExecutor {
             tasks.remove(index);
             saveTasks(messages);
             messages.add(getTaskCountMessage());
-            return continueWith(messages);
+            return returnWithContinue(messages);
         } catch (NumberFormatException e) {
-            return continueWith("Please enter a valid number!");
+            return parseWithContinue("Please enter a valid number!");
         } catch (DraxException | IllegalArgumentException e) {
-            return continueWith(e.getMessage());
+            return parseWithContinue(e.getMessage());
         }
     }
 
     private ExecutionResult executeUnknown() {
-        return continueWith("Sorry! But that's not a function I can do :(");
+        return parseWithContinue("Sorry! But that's not a function I can do :(");
     }
 
     private ExecutionResult createTodo(Parser.Command command) {
@@ -138,47 +139,52 @@ public class CommandExecutor {
             if (newTask.isEmpty()) {
                 throw new DraxException("You didn't provide a task!?");
             }
+
             Todo newTodo = new Todo(newTask);
             tasks.add(newTodo);
             return getTaskCreatedResult(newTodo);
         } catch (DraxException e) {
-            return continueWith(e.getMessage());
+            return parseWithContinue(e.getMessage());
         }
     }
 
     private ExecutionResult createDeadline(Parser.Command command) {
         try {
-            if (command.firstDate().isEmpty()) {
+            if (command.startDate().isEmpty()) {
                 throw new DraxException("You didn't provide a end date! Use /by [deadline]");
             }
+
             String newTask = command.task();
             if (newTask.isEmpty()) {
                 throw new DraxException("You didn't provide a task!?");
             }
-            Deadline newDeadline = new Deadline(newTask, ScheduleDateTime.parse(command.firstDate()));
+
+            Deadline newDeadline = new Deadline(newTask, ScheduleDateTime.parse(command.startDate()));
             tasks.add(newDeadline);
             return getTaskCreatedResult(newDeadline);
         } catch (DraxException | IllegalArgumentException e) {
-            return continueWith(e.getMessage());
+            return parseWithContinue(e.getMessage());
         }
     }
 
     private ExecutionResult createEvent(Parser.Command command) {
         try {
-            if (command.firstDate().isEmpty() || command.secondDate().isEmpty()) {
+            if (command.startDate().isEmpty() || command.endDate().isEmpty()) {
                 throw new DraxException("You didn't provide when this event is happening! "
                         + "Use /from [date] /to [date]");
             }
+
             String newTask = command.task();
             if (newTask.isEmpty()) {
                 throw new DraxException("You didn't provide a task!?");
             }
+
             Event newEvent = new Event(newTask, ScheduleDateTime.parse(
-                    command.firstDate()), ScheduleDateTime.parse(command.secondDate()));
+                    command.startDate()), ScheduleDateTime.parse(command.endDate()));
             tasks.add(newEvent);
             return getTaskCreatedResult(newEvent);
         } catch (DraxException | IllegalArgumentException e) {
-            return continueWith(e.getMessage());
+            return parseWithContinue(e.getMessage());
         }
     }
 
@@ -196,16 +202,17 @@ public class CommandExecutor {
                     if (count == 1) {
                         messages.add("Here are the matching tasks in your list:");
                     }
-                    messages.add(formatTask(count, task));
+                    messages.add(formatTaskWithNumber(count, task));
                     count++;
                 }
             }
+
             if (count == 1) {
                 throw new DraxException("Oops! No matching tasks found!");
             }
-            return continueWith(messages);
+            return returnWithContinue(messages);
         } catch (DraxException e) {
-            return continueWith(e.getMessage());
+            return parseWithContinue(e.getMessage());
         }
     }
 
@@ -215,12 +222,13 @@ public class CommandExecutor {
         messages.add("I've added this task");
         messages.add(task.toString());
         messages.add(getTaskCountMessage());
-        return continueWith(messages);
+        return returnWithContinue(messages);
     }
 
     private int parseTaskIndex(String taskNumber) throws DraxException {
         int index = Integer.parseInt(taskNumber) - 1;
-        if (index >= tasks.getSize() || index < 0) {
+        boolean exceedsTaskSize = index >= tasks.getSize();
+        if (exceedsTaskSize || index < 0) {
             throw new DraxException("This task doesn't exist. You don't have that many tasks!");
         }
         return index;
@@ -233,7 +241,7 @@ public class CommandExecutor {
         return "Now you have " + tasks.getSize() + " tasks!";
     }
 
-    private String formatTask(int number, Task task) {
+    private String formatTaskWithNumber(int number, Task task) {
         return number + "." + task;
     }
 
@@ -245,11 +253,15 @@ public class CommandExecutor {
         }
     }
 
-    private static ExecutionResult continueWith(String... messages) {
-        return continueWith(List.of(messages));
+    private static ExecutionResult parseWithContinue(String... messages) {
+        return returnWithContinue(List.of(messages));
     }
 
-    private static ExecutionResult continueWith(List<String> messages) {
+    private static ExecutionResult returnWithContinue(List<String> messages) {
         return new ExecutionResult(String.join("\n", messages), Outcome.CONTINUE);
     }
 }
+
+
+// add white space
+// rename variables and functions

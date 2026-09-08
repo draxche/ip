@@ -13,10 +13,10 @@ public class Parser {
      * @param type category of command to execute
      * @param argument general command argument, such as a task number
      * @param task task description for task-creation commands
-     * @param firstDate deadline or event start text
-     * @param secondDate event end text
+     * @param startDate deadline or event start text
+     * @param endDate event end text
      */
-    public record Command(Type type, String argument, String task, String firstDate, String secondDate) {
+    public record Command(Type type, String argument, String task, String startDate, String endDate) {
     }
 
     /**

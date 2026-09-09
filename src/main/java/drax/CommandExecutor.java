@@ -190,7 +190,7 @@ public class CommandExecutor {
 
     private ExecutionResult executeFind(Parser.Command command) {
         try {
-            String keyword = command.argument();
+            String keyword = command.argument().toLowerCase();
             if (keyword.isEmpty()) {
                 throw new DraxException("You didn't provide a keyword!");
             }
@@ -198,7 +198,8 @@ public class CommandExecutor {
             List<String> messages = new ArrayList<>();
             int count = 1;
             for (Task task : tasks) {
-                if (task.getTask().contains(keyword)) {
+                String currentTask = task.getTask().toLowerCase();
+                if (currentTask.contains(keyword)) {
                     if (count == 1) {
                         messages.add("Here are the matching tasks in your list:");
                     }

@@ -41,6 +41,6 @@ public class Event extends Task {
     @Override
     public String toString() {
         return String.format("[E][%s] %s (from: %s to: %s)", this.getStatusIcon(), this.task,
-                ScheduleDateTime.format(this.from), ScheduleDateTime.format(this.to));
+                ScheduleDateTime.formatForDisplay(this.from), ScheduleDateTime.formatForDisplay(this.to));
     }
 }

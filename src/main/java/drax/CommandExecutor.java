@@ -14,7 +14,7 @@ public class CommandExecutor {
     /**
      * Contains the text produced by a command and whether the application should continue.
      *
-     * @param response text to present to the user in a string format
+     * @param response text to present to the user in a string formatForDisplay
      * @param outcome whether command processing should continue
      */
     public record ExecutionResult(String response, Outcome outcome) {
@@ -38,7 +38,7 @@ public class CommandExecutor {
      * Executes a parsed command and returns its display text and control-flow outcome.
      *
      * @param command command to execute
-     * @return the response to display in string format and whether the application should continue
+     * @return the response to display in string formatForDisplay and whether the application should continue
      */
     public ExecutionResult execute(Parser.Command command) {
         return switch (command.type()) {

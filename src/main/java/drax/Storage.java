@@ -43,7 +43,7 @@ public class Storage {
     }
 
     /**
-     * Saves tasks atomically using drax.Drax's established file format.
+     * Saves tasks atomically using drax.Drax's established file formatForDisplay.
      *
      * @param tasks tasks to persist in their current order
      * @throws IOException if the temporary or save file cannot be written

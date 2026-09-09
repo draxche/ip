@@ -29,6 +29,6 @@ public class Deadline extends Task {
     @Override
     public String toString() {
         return String.format("[D][%s] %s (by: %s)", this.getStatusIcon(), this.task,
-                ScheduleDateTime.format(this.deadline));
+                ScheduleDateTime.formatForDisplay(this.deadline));
     }
 }

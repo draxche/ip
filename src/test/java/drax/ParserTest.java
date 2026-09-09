@@ -24,7 +24,7 @@ public class ParserTest {
     @Test
     public void parse_deadlineCommand_returnsDeadlineCommand() {
         Parser.Command expected = new Parser.Command(
-                Parser.Type.DEADLINE, "", "return book", "06/06/2026 1800", "");
+                Parser.Type.DEADLINE, "", "return book", "", "06/06/2026 1800");
         Parser.Command actual = Parser.parse("deadline return book /by 06/06/2026 1800");
         assertEquals(expected, actual);
     }

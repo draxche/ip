@@ -59,7 +59,7 @@ public class MainWindow extends AnchorPane {
         }
     }
 
-    /** Preserves the short delay that allows the farewell dialog to appear before exit. */
+    /** Preserves the short delay that allows the farewell dialog to appear before closing the program. */
     private void scheduleExit() {
         new Timer().schedule(new TimerTask() {
             @Override

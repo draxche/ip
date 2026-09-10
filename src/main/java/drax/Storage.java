@@ -43,7 +43,7 @@ public class Storage {
     }
 
     /**
-     * Saves tasks atomically using drax.Drax's established file formatForDisplay.
+     * Saves tasks atomically using drax.Drax's established file format.
      *
      * @param tasks tasks to persist in their current order
      * @throws IOException if the temporary or save file cannot be written
@@ -51,12 +51,23 @@ public class Storage {
     public void save(TaskList tasks) throws IOException {
         Files.createDirectories(SAVE_FILE.getParent());
         try (BufferedWriter writer = Files.newBufferedWriter(TEMP_FILE)) {
-            for (Task task : tasks) {
-                writer.write(serialize(task));
-                writer.newLine();
-            }
+            writeSerializedTasks(tasks, writer);
         }
         replaceSaveFile();
+    }
+
+    /**
+     * Serializes each task and writes it as a separate line.
+     *
+     * @param tasks tasks to write in their current order
+     * @param writer destination for the serialized task records
+     * @throws IOException if a task record cannot be written
+     */
+    private void writeSerializedTasks(TaskList tasks, BufferedWriter writer) throws IOException {
+        for (Task task : tasks) {
+            writer.write(serialize(task));
+            writer.newLine();
+        }
     }
 
     /**
@@ -93,29 +104,42 @@ public class Storage {
         if (!isStatusValid) {
             throw new IllegalArgumentException("completion status must be 0 or 1");
         }
-        Task task = switch (taskType) {
-            case "T" -> {
-                checkFieldCount(taskComponents, 3);
-                yield new Todo(extractValue(taskComponents, 2, "task description"));
-            }
-            case "D" -> {
-                checkFieldCount(taskComponents, 4);
-                yield new Deadline(extractValue(taskComponents, 2, "task description"),
-                        ScheduleDateTime.parse(extractValue(taskComponents, 3, "deadline")));
-            }
-            case "E" -> {
-                checkFieldCount(taskComponents, 5);
-                yield new Event(extractValue(taskComponents, 2, "task description"),
-                        ScheduleDateTime.parse(extractValue(taskComponents, 3, "start time")),
-                        ScheduleDateTime.parse(extractValue(taskComponents, 4, "end time")));
-            }
-            default -> throw new IllegalArgumentException("unknown task type " + taskType);
-        };
+
+        Task task = getTaskFromSaveFile(taskType, taskComponents);
 
         if (taskStatus.equals("1")) {
             task.markAsDone();
         }
         return task;
+    }
+
+    /**
+     * Creates the task subtype identified by a parsed save-file record.
+     *
+     * @param taskType saved type identifier for the task
+     * @param taskComponents fields parsed from the save-file record
+     * @return a task reconstructed from the parsed fields
+     * @throws IllegalArgumentException if the task type or its fields are invalid
+     */
+    private Task getTaskFromSaveFile(String taskType, List<String> taskComponents) {
+        switch (taskType) {
+            case "T" -> {
+                checkFieldCount(taskComponents, 3);
+                return new Todo(extractValue(taskComponents, 2, "task description"));
+            }
+            case "D" -> {
+                checkFieldCount(taskComponents, 4);
+                return new Deadline(extractValue(taskComponents, 2, "task description"),
+                        ScheduleDateTime.parse(extractValue(taskComponents, 3, "deadline")));
+            }
+            case "E" -> {
+                checkFieldCount(taskComponents, 5);
+                return new Event(extractValue(taskComponents, 2, "task description"),
+                        ScheduleDateTime.parse(extractValue(taskComponents, 3, "start time")),
+                        ScheduleDateTime.parse(extractValue(taskComponents, 4, "end time")));
+            }
+            default -> throw new IllegalArgumentException("unknown task type " + taskType);
+        }
     }
 
     /**
@@ -141,11 +165,7 @@ public class Storage {
         for (int index = 0; index < line.length(); index++) {
             char character = line.charAt(index);
             if (isPreviousCharBackslash) {
-                if (character == '|' || character == '\\') {
-                    field.append(character);
-                } else {
-                    field.append('\\').append(character);
-                }
+                appendEscapedCharacter(character, field);
                 isPreviousCharBackslash = false;
             } else if (character == '\\') {
                 isPreviousCharBackslash = true;
@@ -163,6 +183,20 @@ public class Storage {
         }
         fields.add(field.toString().trim());
         return fields;
+    }
+
+    /**
+     * Appends a character following an escape marker to the current field.
+     *
+     * @param character character following the escape marker
+     * @param field field being reconstructed
+     */
+    private static void appendEscapedCharacter(char character, StringBuilder field) {
+        if (character == '|' || character == '\\') {
+            field.append(character);
+        } else {
+            field.append('\\').append(character);
+        }
     }
 
     /**

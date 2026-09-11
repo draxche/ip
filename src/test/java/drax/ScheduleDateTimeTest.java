@@ -52,14 +52,14 @@ public class ScheduleDateTimeTest {
     @Test
     public void format_midnight_returnsDateOnly() {
         LocalDateTime dateTime = LocalDateTime.of(2026, 12, 2, 0, 0);
-        String actual = ScheduleDateTime.format(dateTime);
+        String actual = ScheduleDateTime.formatForDisplay(dateTime);
         assertEquals("Dec 02 2026", actual);
     }
 
     @Test
     public void format_nonMidnight_returnsDateAndTime() {
         LocalDateTime dateTime = LocalDateTime.of(2026, 12, 2, 18, 30);
-        String actual = ScheduleDateTime.format(dateTime);
+        String actual = ScheduleDateTime.formatForDisplay(dateTime);
         assertEquals("Dec 02 2026 6:30 PM", actual);
     }
 

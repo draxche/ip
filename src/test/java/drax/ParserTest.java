@@ -24,9 +24,17 @@ public class ParserTest {
     @Test
     public void parse_deadlineCommand_returnsDeadlineCommand() {
         Parser.Command expected = new Parser.Command(
-                Parser.Type.DEADLINE, "", "return book", "06/06/2026 1800", "");
+                Parser.Type.DEADLINE, "", "return book", "", "06/06/2026 1800");
         Parser.Command actual = Parser.parse("deadline return book /by 06/06/2026 1800");
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void parse_bareDeadline_returnsDeadlineWithEmptyFields() {
+        Parser.Command expected =
+                new Parser.Command(Parser.Type.DEADLINE, "", "", "", "");
+
+        assertEquals(expected, Parser.parse("deadline"));
     }
 
     @Test
@@ -44,6 +52,14 @@ public class ParserTest {
     }
 
     @Test
+    public void parse_deadlineWithoutDescription_preservesDate() {
+        Parser.Command expected = new Parser.Command(
+                Parser.Type.DEADLINE, "", "", "", "2026-09-11");
+
+        assertEquals(expected, Parser.parse("deadline /by 2026-09-11"));
+    }
+
+    @Test
     public void parse_eventCommand_returnsEventCommand() {
         Parser.Command expected = new Parser.Command(
                 Parser.Type.EVENT,
@@ -53,6 +69,13 @@ public class ParserTest {
                 "20/08/2026 1400");
         Parser.Command actual = Parser.parse("event meeting /from 20/08/2026 1200 /to 20/08/2026 1400");
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void parse_bareEvent_returnsEventWithEmptyFields() {
+        Parser.Command expected = new Parser.Command(Parser.Type.EVENT, "", "", "", "");
+
+        assertEquals(expected, Parser.parse("event"));
     }
 
     @Test
@@ -66,6 +89,42 @@ public class ParserTest {
         );
         Parser.Command actual = Parser.parse("event meeting");
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void parse_eventWithoutDescription_preservesDates() {
+        Parser.Command expected = new Parser.Command(
+                Parser.Type.EVENT, "", "", "2026-09-11", "2026-09-12");
+
+        assertEquals(
+                expected,
+                Parser.parse("event /from 2026-09-11 /to 2026-09-12"));
+    }
+
+    @Test
+    public void parse_eventWithAdjacentMarkers_returnsEmptyDates() {
+        Parser.Command actual = Parser.parse("event meeting /from /to 2026-09-12");
+
+        assertEquals(Parser.Type.EVENT, actual.type());
+        assertEquals("", actual.startDate());
+        assertEquals("", actual.endDate());
+    }
+
+    @Test
+    public void parse_eventWithReversedMarkers_returnsEmptyDates() {
+        Parser.Command actual = Parser.parse("event meeting /to 2026-09-12 /from 2026-09-11");
+
+        assertEquals(Parser.Type.EVENT, actual.type());
+        assertEquals("", actual.startDate());
+        assertEquals("", actual.endDate());
+    }
+
+    @Test
+    public void parse_eventWithWhitespaceStartDate_returnsEmptyStartDate() {
+        Parser.Command expected = new Parser.Command(
+                Parser.Type.EVENT, "", "meeting", "", "2026-09-12");
+
+        assertEquals(expected, Parser.parse("event meeting /from  /to 2026-09-12"));
     }
 
     @Test
@@ -117,4 +176,3 @@ public class ParserTest {
         assertEquals(expected, actual);
     }
 }
-

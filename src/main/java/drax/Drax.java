@@ -60,7 +60,8 @@ public class Drax {
         if (startupWarnings.isEmpty()) {
             return GREETING;
         }
-        return GREETING + "\n" + String.join("\n", startupWarnings);
+        String greetingWithWarnings = GREETING + "\n" + String.join("\n", startupWarnings);
+        return greetingWithWarnings;
     }
 
     /**

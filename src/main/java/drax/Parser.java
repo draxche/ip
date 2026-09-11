@@ -52,7 +52,7 @@ public class Parser {
             return split == -1
                     ? new Command(Type.DEADLINE, "", input.substring(9).trim(), "", "")
                     : new Command(Type.DEADLINE, "", input.substring(9, split),
-                    input.substring(split + 5).trim(), "");
+                            input.substring(split + 5).trim(), "");
         }
         if (input.startsWith("event ") || input.equals("event")) {
             if (input.equals("event")) {

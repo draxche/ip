@@ -71,6 +71,7 @@ public class CommandExecutor {
             messages.add(formatTaskWithNumber(count, task));
             count++;
         }
+        assert count == tasks.getSize() + 1 : "Each task number should get the correct corresponding number";
         return returnWithContinue(messages);
     }
 
@@ -118,9 +119,11 @@ public class CommandExecutor {
             messages.add("I've deleted this task");
             messages.add(tasks.get(index).toString());
 
+            int previousSize = tasks.getSize();
             tasks.remove(index);
             saveTasks(messages);
             messages.add(getTaskCountMessage());
+            assert tasks.getSize() == previousSize - 1: "Deleting a task should decrease task count by one";
             return returnWithContinue(messages);
         } catch (NumberFormatException e) {
             return parseWithContinue("Please enter a valid number!");
@@ -141,7 +144,9 @@ public class CommandExecutor {
             }
 
             Todo newTodo = new Todo(newTask);
+            int previousSize = tasks.getSize();
             tasks.add(newTodo);
+            assert tasks.getSize() == previousSize + 1 : "Adding a todo should increase task count by one";
             return getTaskCreatedResult(newTodo);
         } catch (DraxException e) {
             return parseWithContinue(e.getMessage());
@@ -160,7 +165,9 @@ public class CommandExecutor {
             }
 
             Deadline newDeadline = new Deadline(newTask, ScheduleDateTime.parse(command.endDate()));
+            int previousSize = tasks.getSize();
             tasks.add(newDeadline);
+            assert tasks.getSize() == previousSize + 1 : "Adding a deadline should increase task count by one";
             return getTaskCreatedResult(newDeadline);
         } catch (DraxException | IllegalArgumentException e) {
             return parseWithContinue(e.getMessage());
@@ -181,7 +188,9 @@ public class CommandExecutor {
 
             Event newEvent = new Event(newTask, ScheduleDateTime.parse(
                     command.startDate()), ScheduleDateTime.parse(command.endDate()));
+            int previousSize = tasks.getSize();
             tasks.add(newEvent);
+            assert tasks.getSize() == previousSize + 1 : "Adding an event should increase task count by one";
             return getTaskCreatedResult(newEvent);
         } catch (DraxException | IllegalArgumentException e) {
             return parseWithContinue(e.getMessage());
@@ -209,6 +218,7 @@ public class CommandExecutor {
             }
 
             if (count == 1) {
+                assert messages.isEmpty() : "No header messages or tasks should be added to messages";
                 throw new DraxException("Oops! No matching tasks found!");
             }
             return returnWithContinue(messages);
@@ -218,6 +228,8 @@ public class CommandExecutor {
     }
 
     private ExecutionResult getTaskCreatedResult(Task task) {
+        assert !tasks.isEmpty() || tasks.get(tasks.getSize() - 1) == task
+                : "Created task must be added before response";
         List<String> messages = new ArrayList<>();
         saveTasks(messages);
         messages.add("I've added this task");
@@ -232,6 +244,7 @@ public class CommandExecutor {
         if (exceedsTaskSize || index < 0) {
             throw new DraxException("This task doesn't exist. You don't have that many tasks!");
         }
+        assert tasks.get(index) != null : "The task at the index exists in tasks";
         return index;
     }
 
@@ -243,6 +256,7 @@ public class CommandExecutor {
     }
 
     private String formatTaskWithNumber(int number, Task task) {
+        assert number >= 1 : "Task number should be 1 or greater";
         return number + "." + task;
     }
 

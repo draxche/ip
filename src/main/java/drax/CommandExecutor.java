@@ -123,7 +123,7 @@ public class CommandExecutor {
             tasks.remove(index);
             saveTasks(messages);
             messages.add(getTaskCountMessage());
-            assert tasks.getSize() == previousSize - 1: "Deleting a task should decrease task count by one";
+            assert tasks.getSize() == previousSize - 1 : "Deleting a task should decrease task count by one";
             return returnWithContinue(messages);
         } catch (NumberFormatException e) {
             return parseWithContinue("Please enter a valid number!");

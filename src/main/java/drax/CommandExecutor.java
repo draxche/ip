@@ -150,13 +150,13 @@ public class CommandExecutor {
 
     private ExecutionResult createDeadline(Parser.Command command) {
         try {
-            if (command.endDate().isEmpty()) {
-                throw new DraxException("You didn't provide a end date! Use /by [deadline]");
-            }
-
             String newTask = command.task();
             if (newTask.isEmpty()) {
                 throw new DraxException("You didn't provide a task!?");
+            }
+
+            if (command.endDate().isEmpty()) {
+                throw new DraxException("You didn't provide a end date! Use /by [deadline]");
             }
 
             Deadline newDeadline = new Deadline(newTask, ScheduleDateTime.parse(command.endDate()));
@@ -169,14 +169,14 @@ public class CommandExecutor {
 
     private ExecutionResult createEvent(Parser.Command command) {
         try {
-            if (command.startDate().isEmpty() || command.endDate().isEmpty()) {
-                throw new DraxException("You didn't provide when this event is happening! "
-                        + "Use /from [date] /to [date]");
-            }
-
             String newTask = command.task();
             if (newTask.isEmpty()) {
                 throw new DraxException("You didn't provide a task!?");
+            }
+
+            if (command.startDate().isEmpty() || command.endDate().isEmpty()) {
+                throw new DraxException("You didn't provide when this event is happening! "
+                        + "Use /from [date] /to [date]");
             }
 
             Event newEvent = new Event(newTask, ScheduleDateTime.parse(

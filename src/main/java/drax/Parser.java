@@ -8,6 +8,11 @@ public class Parser {
     public enum Type {
         BYE, LIST, MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, FIND, UNKNOWN
     }
+    private static final String EVENT_COMMAND = "event";
+    private static final String DEADLINE_COMMAND = "deadline";
+    private static final String FROM_DELIMITER = " /from ";
+    private static final String TO_DELIMITER = " /to ";
+    private static final String BY_DELIMITER = " /by ";
 
     /**
      * Parsed command data consumed by drax.Drax's command handlers.
@@ -101,19 +106,15 @@ public class Parser {
      * Parses the deadline command and its optional due date.
      */
     private static Command parseDeadline(String input) {
-        if (input.equals("deadline")) {
-            return new Command(Type.DEADLINE, "", "", "", "");
-        }
-
-        int splitStringIndex = input.indexOf(" /by ");
-        boolean hasDeadline = splitStringIndex != -1;
+        int byIndex = input.indexOf(BY_DELIMITER);
+        boolean hasDeadline = byIndex != -1;
         if (!hasDeadline) {
-            String task = input.substring(9).trim();
+            String task = input.substring(DEADLINE_COMMAND.length()).trim();
             return new Command(Type.DEADLINE, "", task, "", "");
         }
 
-        String task = input.substring(9, splitStringIndex);
-        String endDate = input.substring(splitStringIndex + 5).trim();
+        String task = input.substring(DEADLINE_COMMAND.length(), byIndex).trim();
+        String endDate = input.substring(byIndex + BY_DELIMITER.length()).trim();
         return new Command(Type.DEADLINE, "", task, "", endDate);
     }
 
@@ -121,20 +122,21 @@ public class Parser {
      * Parses the event command and its optional start and end dates.
      */
     private static Command parseEvent(String input) {
-        if (input.equals("event")) {
-            return new Command(Type.EVENT, "", "", "", "");
-        }
+        int fromIndex = input.indexOf(FROM_DELIMITER);
+        int toIndex = input.indexOf(TO_DELIMITER);
 
-        int fromIndex = input.indexOf(" /from ");
-        int toIndex = input.indexOf(" /to ");
         boolean hasDates = fromIndex != -1 && toIndex != -1;
-        if (!hasDates) {
-            String task = input.substring(6).trim();
+        int startDateIndex = fromIndex + FROM_DELIMITER.length();
+        boolean hasValidDateBounds = toIndex >= startDateIndex;
+
+        if (!hasDates || !hasValidDateBounds) {
+            String task = input.substring(EVENT_COMMAND.length()).trim();
             return new Command(Type.EVENT, "", task, "", "");
         }
-        String task = input.substring(6, fromIndex).trim();
-        String startDate = input.substring(fromIndex + 7, toIndex).trim();
-        String endDate = input.substring(toIndex + 5).trim();
+
+        String task = input.substring(EVENT_COMMAND.length(), fromIndex).trim();
+        String startDate = input.substring(startDateIndex, toIndex).trim();
+        String endDate = input.substring(toIndex + TO_DELIMITER.length()).trim();
         return new Command(Type.EVENT, "", task, startDate, endDate);
     }
 

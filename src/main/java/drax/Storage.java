@@ -73,7 +73,7 @@ public class Storage {
                     escape(deadline.getTask()), escape(deadline.getDeadline().toString()));
             case Event event -> String.format("E | %s | %s | %s | %s", done,
                     escape(event.getTask()), escape(event.getFrom().toString()), escape(event.getTo().toString()));
-            case Todo todo -> String.format("T | %s | %s", done, escape(task.getTask()));
+            case Todo todo -> String.format("T | %s | %s", done, escape(todo.getTask()));
             default -> throw new IllegalArgumentException("Unsupported task type");
         };
     }

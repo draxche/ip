@@ -104,15 +104,16 @@ public class Parser {
         if (input.equals("deadline")) {
             return new Command(Type.DEADLINE, "", "", "", "");
         }
-        int splitString = input.indexOf(" /by ");
 
-        if (splitString == -1) {
+        int splitStringIndex = input.indexOf(" /by ");
+        boolean hasDeadline = splitStringIndex != -1;
+        if (!hasDeadline) {
             String task = input.substring(9).trim();
             return new Command(Type.DEADLINE, "", task, "", "");
         }
 
-        String task = input.substring(9, splitString);
-        String endDate = input.substring(splitString + 5).trim();
+        String task = input.substring(9, splitStringIndex);
+        String endDate = input.substring(splitStringIndex + 5).trim();
         return new Command(Type.DEADLINE, "", task, "", endDate);
     }
 

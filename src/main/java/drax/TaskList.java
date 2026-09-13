@@ -11,6 +11,17 @@ import java.util.List;
 public class TaskList implements Iterable<Task> {
     private final ArrayList<Task> tasks;
 
+    static class TaskMemento {
+        private final TaskList taskList;
+
+        public TaskMemento(TaskList taskList) {
+            this.taskList = taskList;
+        }
+
+        public TaskList getSavedContent() {
+            return this.taskList;
+        }
+    }
     /** Creates an empty task list. */
     public TaskList() {
         this.tasks = new ArrayList<>();
@@ -78,6 +89,13 @@ public class TaskList implements Iterable<Task> {
      */
     public List<Task> asList() {
         return Collections.unmodifiableList(tasks);
+    }
+
+    public void createMemento() {
+        TaskMemento newMemento = new TaskMemento(this);
+    }
+    public void restorePreviousMemento() {
+
     }
 
     /**

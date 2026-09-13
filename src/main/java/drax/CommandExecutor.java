@@ -55,6 +55,7 @@ public class CommandExecutor {
             case EVENT -> createEvent(command);
             case FIND -> executeFind(command);
             case UNDO -> executeUndo();
+            case REDO -> executeRedo();
             default -> executeUnknown();
         };
     }
@@ -248,6 +249,25 @@ public class CommandExecutor {
             saveTasks(messages);
 
             messages.add("Your last command was undone!");
+            messages.add(executeList().response());
+            return returnWithContinue(messages);
+        } catch (DraxException e) {
+            return parseWithContinue(e.getMessage());
+        }
+    }
+
+    private ExecutionResult executeRedo() {
+        try {
+            TaskMemento nextMemento = taskHistory.getNextMemento();
+            if (nextMemento == null) {
+                throw new DraxException("There's nothin' to redo!");
+            }
+            tasks.restoreTaskList(nextMemento);
+
+            List<String> messages = new ArrayList<>();
+            saveTasks(messages);
+
+            messages.add("Your last command was redone!");
             messages.add(executeList().response());
             return returnWithContinue(messages);
         } catch (DraxException e) {

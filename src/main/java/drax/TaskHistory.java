@@ -6,8 +6,8 @@ import java.util.Stack;
  * Stores two stacks of mementos, and undoneMementos
  */
 public class TaskHistory {
-    private Stack<TaskMemento> mementos;
-    private Stack<TaskMemento> undoneMementos;
+    private final Stack<TaskMemento> mementos;
+    private final Stack<TaskMemento> undoneMementos;
 
     /**
      * Creates a TaskHistory object and initializes it with two new stacks
@@ -47,4 +47,16 @@ public class TaskHistory {
         return previousMemento;
     }
 
+    /**
+     * Retrieves the latest snapshot from the redo stack
+     * @return a snapshot of the previous state before undoing
+     */
+    public TaskMemento getNextMemento() {
+        if (this.undoneMementos.isEmpty()) {
+            return null;
+        }
+        TaskMemento nextMemento = this.undoneMementos.pop();
+        this.mementos.push(nextMemento);
+        return nextMemento;
+    }
 }

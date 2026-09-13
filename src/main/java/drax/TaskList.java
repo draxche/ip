@@ -10,18 +10,6 @@ import java.util.List;
  */
 public class TaskList implements Iterable<Task> {
     private final ArrayList<Task> tasks;
-
-    static class TaskMemento {
-        private final TaskList taskList;
-
-        public TaskMemento(TaskList taskList) {
-            this.taskList = taskList;
-        }
-
-        public TaskList getSavedContent() {
-            return this.taskList;
-        }
-    }
     /** Creates an empty task list. */
     public TaskList() {
         this.tasks = new ArrayList<>();
@@ -33,7 +21,11 @@ public class TaskList implements Iterable<Task> {
      * @param tasks tasks to copy into this list
      */
     public TaskList(List<Task> tasks) {
-        this.tasks = new ArrayList<>(tasks);
+        this.tasks = new ArrayList<>();
+
+        for (Task original : tasks) {
+            this.tasks.add(copyTask(original));
+        }
     }
 
     /**
@@ -91,11 +83,40 @@ public class TaskList implements Iterable<Task> {
         return Collections.unmodifiableList(tasks);
     }
 
-    public void createMemento() {
-        TaskMemento newMemento = new TaskMemento(this);
+    public TaskMemento createMemento() {
+        return new TaskMemento(this);
     }
-    public void restorePreviousMemento() {
 
+    /**
+     * Replaces the current tasks with independent copies of a saved state.
+     *
+     * @param memento snapshot to restore
+     */
+    public void restoreTaskList(TaskMemento memento) {
+        TaskList restoredList = memento.getSavedContent();
+        tasks.clear();
+        tasks.addAll(restoredList.asList());
+    }
+
+    /**
+     * Copies a task preserving its subtype and completion state.
+     *
+     * @param original task to copy
+     * @return an independent task with the same values
+     */
+    private static Task copyTask(Task original) {
+        Task copy = switch (original) {
+            case Todo todo -> new Todo(todo.getTask());
+            case Deadline deadline -> new Deadline(deadline.getTask(), deadline.getDeadline());
+            case Event event -> new Event(event.getTask(), event.getFrom(), event.getTo());
+            default -> throw new IllegalArgumentException("Unsupported task type");
+        };
+
+        if (original.isDone()) {
+            copy.markAsDone();
+        }
+
+        return copy;
     }
 
     /**

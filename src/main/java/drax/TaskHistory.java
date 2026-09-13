@@ -18,17 +18,18 @@ public class TaskHistory {
     }
 
     /**
-     * Adds a TaskMemento into the history
-     * @param memento
+     * Adds a TaskMemento into the history and clears the redo stack
+     * @param memento the current snapshot to be added
      */
     public void addMemento(TaskMemento memento) {
+        clearUndoneMementos();
         this.mementos.push(memento);
     }
 
     /**
      * Clears the redo stack history
      */
-    public void clearUndoneMementos() {
+    private void clearUndoneMementos() {
         this.undoneMementos.clear();
     }
 
@@ -37,9 +38,13 @@ public class TaskHistory {
      * @return a snapshot of the previous TaskMemento state
      */
     public TaskMemento getPreviousMemento() {
-        TaskMemento previousMemento = this.mementos.pop();
-        this.undoneMementos.push(previousMemento);
+        if (this.mementos.size() <= 1) {
+            return null;
+        }
+        TaskMemento currentMemento = this.mementos.pop();
+        TaskMemento previousMemento = this.mementos.peek();
+        this.undoneMementos.push(currentMemento);
         return previousMemento;
-
     }
+
 }

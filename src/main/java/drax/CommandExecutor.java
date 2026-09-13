@@ -22,6 +22,7 @@ public class CommandExecutor {
 
     private final TaskList tasks;
     private final Storage storage;
+    private final TaskHistory taskHistory;
 
     /**
      * Creates an executor that coordinates commands using the given application components.
@@ -32,6 +33,8 @@ public class CommandExecutor {
     public CommandExecutor(TaskList tasks, Storage storage) {
         this.tasks = tasks;
         this.storage = storage;
+        this.taskHistory = new TaskHistory();
+        taskHistory.addMemento(tasks.createMemento());
     }
 
     /**
@@ -51,6 +54,7 @@ public class CommandExecutor {
             case DEADLINE -> createDeadline(command);
             case EVENT -> createEvent(command);
             case FIND -> executeFind(command);
+            case UNDO -> executeUndo();
             default -> executeUnknown();
         };
     }
@@ -85,6 +89,7 @@ public class CommandExecutor {
             saveTasks(messages);
             messages.add("I've marked this task as done:");
             messages.add(task.toString());
+            taskHistory.addMemento(tasks.createMemento());
             return returnWithContinue(messages);
         } catch (DraxException e) {
             return parseWithContinue(e.getMessage());
@@ -103,6 +108,7 @@ public class CommandExecutor {
             saveTasks(messages);
             messages.add("I've marked this task as not done:");
             messages.add(task.toString());
+            taskHistory.addMemento(tasks.createMemento());
             return returnWithContinue(messages);
         } catch (DraxException e) {
             return parseWithContinue(e.getMessage());
@@ -124,6 +130,7 @@ public class CommandExecutor {
             saveTasks(messages);
             messages.add(getTaskCountMessage());
             assert tasks.getSize() == previousSize - 1 : "Deleting a task should decrease task count by one";
+            taskHistory.addMemento(tasks.createMemento());
             return returnWithContinue(messages);
         } catch (NumberFormatException e) {
             return parseWithContinue("Please enter a valid number!");
@@ -147,6 +154,7 @@ public class CommandExecutor {
             int previousSize = tasks.getSize();
             tasks.add(newTodo);
             assert tasks.getSize() == previousSize + 1 : "Adding a todo should increase task count by one";
+            taskHistory.addMemento(tasks.createMemento());
             return getTaskCreatedResult(newTodo);
         } catch (DraxException e) {
             return parseWithContinue(e.getMessage());
@@ -168,6 +176,7 @@ public class CommandExecutor {
             int previousSize = tasks.getSize();
             tasks.add(newDeadline);
             assert tasks.getSize() == previousSize + 1 : "Adding a deadline should increase task count by one";
+            taskHistory.addMemento(tasks.createMemento());
             return getTaskCreatedResult(newDeadline);
         } catch (DraxException | IllegalArgumentException e) {
             return parseWithContinue(e.getMessage());
@@ -191,6 +200,7 @@ public class CommandExecutor {
             int previousSize = tasks.getSize();
             tasks.add(newEvent);
             assert tasks.getSize() == previousSize + 1 : "Adding an event should increase task count by one";
+            taskHistory.addMemento(tasks.createMemento());
             return getTaskCreatedResult(newEvent);
         } catch (DraxException | IllegalArgumentException e) {
             return parseWithContinue(e.getMessage());
@@ -221,6 +231,24 @@ public class CommandExecutor {
                 assert messages.isEmpty() : "No header messages or tasks should be added to messages";
                 throw new DraxException("Oops! No matching tasks found!");
             }
+            return returnWithContinue(messages);
+        } catch (DraxException e) {
+            return parseWithContinue(e.getMessage());
+        }
+    }
+    private ExecutionResult executeUndo() {
+        try {
+            TaskMemento previousMemento = taskHistory.getPreviousMemento();
+            if (previousMemento == null) {
+                throw new DraxException("There's nothin' to undo!");
+            }
+            tasks.restoreTaskList(previousMemento);
+
+            List<String> messages = new ArrayList<>();
+            saveTasks(messages);
+
+            messages.add("Your last command was undone!");
+            messages.add(executeList().response());
             return returnWithContinue(messages);
         } catch (DraxException e) {
             return parseWithContinue(e.getMessage());

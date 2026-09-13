@@ -21,7 +21,7 @@ dependencies {
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${jUnitVersion}"
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.14.4'
 
-    String javaFxVersion = '17.0.7'
+    String javaFxVersion = '25.0.1'
 
     implementation("org.openjfx:javafx-base:${javaFxVersion}:win")
     implementation("org.openjfx:javafx-base:${javaFxVersion}:mac")
@@ -53,6 +53,12 @@ test {
 
 application {
     mainClass.set("drax.Launcher")
+}
+
+// Allow JavaFX bundled with the project's Zulu FX JDK 25 to load its native libraries.
+// This also covers IntelliJ's Gradle-generated tasks for running Main directly.
+tasks.withType(JavaExec).configureEach {
+    jvmArgs '--enable-native-access=javafx.graphics'
 }
 
 jar {

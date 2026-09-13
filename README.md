@@ -23,3 +23,16 @@ Prerequisites: JDK 25, update Intellij to the most recent version.
    ```
 
 **Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
+
+## Running the JavaFX interface
+
+Use the Zulu FX JDK `25.0.3.fx-zulu` for both the project SDK and Gradle JVM.
+On macOS with SDKMAN, select it with `sdk use java 25.0.3.fx-zulu`, then run `./gradlew run`.
+Gradle's Java launch tasks enable native access for `javafx.graphics` so JavaFX can load its native libraries without warnings.
+Reload the Gradle project in IntelliJ after changing `build.gradle`.
+
+If you run `drax.Main` or `drax.Launcher` using an IntelliJ Application configuration instead of Gradle,
+add `--enable-native-access=javafx.graphics` to that configuration's **VM options** (not program arguments).
+
+The project uses JavaFX 25.0.1, matching the Java 25 runtime bundled with the Zulu FX JDK.
+The FXML files declare JavaFX 25; keep this declaration when saving the views in Scene Builder.

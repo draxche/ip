@@ -2,6 +2,15 @@
 
 The runner executes these cases in order and compares combined standard output and standard error exactly. Each case is independent: the command must compile or start the program as needed.
 
+## Manual JavaFX startup check
+
+Use Zulu FX JDK `25.0.3.fx-zulu` and a temporary working directory to protect `data/drax.txt`.
+Launch `drax.Main` with `--enable-native-access=javafx.graphics` in the VM options, or use a Gradle Java launch task,
+which supplies that option from `build.gradle` (override its working directory to the temporary directory).
+Confirm that the window and greeting appear, then submit `todo read book` and `list`.
+Both commands should display their responses without any restricted native-access or FXML API-version warnings in the console.
+Close the window. This graphical check supplements the scripted console cases below.
+
 ### Test case 1: Start and exit
 
 *Aim*

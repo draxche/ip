@@ -2,6 +2,15 @@
 
 The runner executes these cases in order and compares combined standard output and standard error exactly. Each case is independent: the command must compile or start the program as needed.
 
+## Manual JavaFX startup check
+
+Use Zulu FX JDK `25.0.3.fx-zulu` and a temporary working directory to protect `data/drax.txt`.
+Launch `drax.Main` with `--enable-native-access=javafx.graphics` in the VM options, or use a Gradle Java launch task,
+which supplies that option from `build.gradle` (override its working directory to the temporary directory).
+Confirm that the window and greeting appear, then submit `todo read book` and `list`.
+Both commands should display their responses without any restricted native-access or FXML API-version warnings in the console.
+Close the window. This graphical check supplements the scripted console cases below.
+
 ### Test case 1: Start and exit
 
 *Aim*
@@ -442,4 +451,108 @@ I've added this task
 Now you have 1 task!
 Here are the tasks in your list!
 1.[T][ ] read book
+```
+
+### Test case 14: Persist redone tasks across a restart
+
+*Aim*
+Confirm that redo restores task types, dates, completion state, and order on disk, and that reopening does not duplicate tasks. History starts fresh after reopening.
+
+*Command*
+```bash
+source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && redo_test_dir=$(mktemp -d /tmp/drax-redo-persistence.XXXXXX) && mkdir -p "$redo_test_dir/classes" && javac -d "$redo_test_dir/classes" src/main/java/drax/*.java && (cd "$redo_test_dir" && printf 'todo A\ndeadline B /by 2019-12-02T18:00\nevent C /from 2019-12-03T09:00 /to 2019-12-03T10:30\nmark 2\nundo\nundo\nundo\nredo\nredo\nredo\nbye\n' | java -ea -cp "$redo_test_dir/classes" drax.Drax >/dev/null && cat data/drax.txt && printf 'list\nundo\nredo\nbye\n' | java -ea -cp "$redo_test_dir/classes" drax.Drax)
+```
+
+*Input*
+```text
+
+```
+
+*Expected output*
+```text
+T | 0 | A
+D | 1 | B | 2019-12-02T18:00
+E | 0 | C | 2019-12-03T09:00 | 2019-12-03T10:30
+██████╗ ██████╗  █████╗ ██╗  ██╗
+██╔══██╗██╔══██╗██╔══██╗╚██╗██╔╝
+██║  ██║██████╔╝███████║ ╚███╔╝
+██║  ██║██╔══██╗██╔══██║ ██╔██╗
+██████╔╝██║  ██║██║  ██║██╔╝ ██╗
+╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
+
+Infinite Salutations! I'm Drax!
+What's on your mind today?
+Here are the tasks in your list!
+1.[T][ ] A
+2.[D][X] B (by: Dec 02 2019 6:00 PM)
+3.[E][ ] C (from: Dec 03 2019 9:00 AM to: Dec 03 2019 10:30 AM)
+There's nothin' to undo!
+There's nothin' to redo!
+Goodbye. Hope to see you again soon!
+```
+
+### Test case 15: Repeat undo and redo over three rounds
+
+*Aim*
+Confirm that every redone command can be undone again, and that exceeding either history boundary leaves subsequent transitions intact.
+
+*Command*
+```bash
+source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && redo_test_dir=$(mktemp -d /tmp/drax-redo-rounds.XXXXXX) && mkdir -p "$redo_test_dir/classes" && javac -d "$redo_test_dir/classes" src/main/java/drax/*.java && (cd "$redo_test_dir" && java -ea -cp "$redo_test_dir/classes" drax.Drax)
+```
+
+*Input*
+```text
+redo
+todo A
+undo
+undo
+redo
+redo
+undo
+redo
+undo
+redo
+list
+bye
+```
+
+*Expected output*
+```text
+██████╗ ██████╗  █████╗ ██╗  ██╗
+██╔══██╗██╔══██╗██╔══██╗╚██╗██╔╝
+██║  ██║██████╔╝███████║ ╚███╔╝
+██║  ██║██╔══██╗██╔══██║ ██╔██╗
+██████╔╝██║  ██║██║  ██║██╔╝ ██╗
+╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
+
+Infinite Salutations! I'm Drax!
+What's on your mind today?
+There's nothin' to redo!
+I've added this task
+[T][ ] A
+Now you have 1 task!
+Your last command was undone!
+Oops! You currently have no tasks.
+Here are the tasks in your list!
+There's nothin' to undo!
+Your last command was redone!
+Here are the tasks in your list!
+1.[T][ ] A
+There's nothin' to redo!
+Your last command was undone!
+Oops! You currently have no tasks.
+Here are the tasks in your list!
+Your last command was redone!
+Here are the tasks in your list!
+1.[T][ ] A
+Your last command was undone!
+Oops! You currently have no tasks.
+Here are the tasks in your list!
+Your last command was redone!
+Here are the tasks in your list!
+1.[T][ ] A
+Here are the tasks in your list!
+1.[T][ ] A
+Goodbye. Hope to see you again soon!
 ```

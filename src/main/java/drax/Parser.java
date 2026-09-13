@@ -6,7 +6,7 @@ public class Parser {
      * The command categories understood by drax.Drax.
      */
     public enum Type {
-        BYE, LIST, MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, FIND, UNKNOWN
+        BYE, LIST, MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, FIND, UNKNOWN, UNDO, REDO
     }
     private static final String EVENT_COMMAND = "event";
     private static final String DEADLINE_COMMAND = "deadline";
@@ -59,6 +59,12 @@ public class Parser {
         }
         if (input.startsWith("find ") || input.equals("find")) {
             return parseFind(input);
+        }
+        if (input.equals("undo")) {
+            return parseUndo();
+        }
+        if (input.equals("redo")) {
+            return parseRedo();
         }
 
         return parseUnknown(input);
@@ -154,6 +160,14 @@ public class Parser {
     private static Command parseFind(String input) {
         String keyword = extractArgument(input, 4);
         return new Command(Type.FIND, keyword, "", "", "");
+    }
+
+    private static Command parseUndo() {
+        return new Command(Type.UNDO, "", "", "", "");
+    }
+
+    private static Command parseRedo() {
+        return new Command(Type.REDO, "", "", "", "");
     }
 
     /**

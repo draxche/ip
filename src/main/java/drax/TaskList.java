@@ -6,7 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Owns drax.Drax's collection of tasks and exposes only the operations the command loop needs.
+ * Maintains an ordered, mutable collection of tasks and supports
+ * creating and restoring independent snapshots.
  */
 public class TaskList implements Iterable<Task> {
     private final ArrayList<Task> tasks;
@@ -16,9 +17,11 @@ public class TaskList implements Iterable<Task> {
     }
 
     /**
-     * Creates a task list from tasks loaded by storage.
+     * Creates independent copies of the supplied tasks in their current order,
+     * preserving their descriptions, subtypes, dates, and completion states.
      *
-     * @param tasks tasks to copy into this list
+     * @param tasks tasks to copy
+     * @throws IllegalArgumentException if a task type is unsupported
      */
     public TaskList(List<Task> tasks) {
         this.tasks = new ArrayList<>();
@@ -48,6 +51,7 @@ public class TaskList implements Iterable<Task> {
 
     /**
      * Returns the task at the specified zero-based index.
+     * Changes to the returned task affect this list.
      *
      * @param index index of the task to retrieve
      * @return task at the specified index
@@ -76,19 +80,26 @@ public class TaskList implements Iterable<Task> {
 
     /**
      * Returns an unmodifiable view of the tasks in their current order.
+     * The view reflects changes to this list, and its tasks remain mutable.
      *
-     * @return unmodifiable task list view
+     * @return an unmodifiable view backed by this list
      */
     public List<Task> asList() {
         return Collections.unmodifiableList(tasks);
     }
 
+    /**
+     * Captures the current task order and each task's state.
+     *
+     * @return an independent snapshot of this task list
+     */
     public TaskMemento createMemento() {
         return new TaskMemento(this);
     }
 
     /**
      * Replaces the current tasks with independent copies of a saved state.
+     * The existing {@code TaskList} instance is retained.
      *
      * @param memento snapshot to restore
      */
@@ -99,10 +110,11 @@ public class TaskList implements Iterable<Task> {
     }
 
     /**
-     * Copies a task preserving its subtype and completion state.
+     * Copies a task, preserving its description, subtype, dates, and completion state.
      *
      * @param original task to copy
      * @return an independent task with the same values
+     * @throws IllegalArgumentException if the task type is unsupported
      */
     private static Task copyTask(Task original) {
         Task copy = switch (original) {
@@ -120,7 +132,8 @@ public class TaskList implements Iterable<Task> {
     }
 
     /**
-     * Provides read-only iteration over the current task order.
+     * Provides iteration over the tasks in their current order without allowing removal.
+     * The returned tasks remain mutable.
      *
      * @return an iterator that does not support removing tasks
      */

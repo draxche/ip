@@ -3,14 +3,15 @@ package drax;
 import java.util.Stack;
 
 /**
- * Stores two stacks of mementos, and undoneMementos
+ * Tracks task-list snapshots for undo and redo.
+ * The main history includes the current state.
  */
 public class TaskHistory {
     private final Stack<TaskMemento> mementos;
     private final Stack<TaskMemento> undoneMementos;
 
     /**
-     * Creates a TaskHistory object and initializes it with two new stacks
+     * Creates an empty undo and redo history.
      */
     public TaskHistory() {
         this.mementos = new Stack<>();
@@ -18,8 +19,9 @@ public class TaskHistory {
     }
 
     /**
-     * Adds a TaskMemento into the history and clears the redo stack
-     * @param memento the current snapshot to be added
+     * Records a snapshot as the current state and discards redo history.
+     *
+     * @param memento snapshot of the initial state or a newly applied change
      */
     public void addMemento(TaskMemento memento) {
         clearUndoneMementos();
@@ -27,15 +29,17 @@ public class TaskHistory {
     }
 
     /**
-     * Clears the redo stack history
+     * Discards all snapshots available for redo.
      */
     private void clearUndoneMementos() {
         this.undoneMementos.clear();
     }
 
     /**
-     * Retrieves the previous saved snapshot TaskMemento
-     * @return a snapshot of the previous TaskMemento state
+     * Moves the current snapshot to the redo history and returns the
+     * preceding snapshot for restoration.
+     *
+     * @return snapshot to restore, or {@code null} if undo is unavailable
      */
     public TaskMemento getPreviousMemento() {
         if (this.mementos.size() <= 1) {
@@ -48,8 +52,10 @@ public class TaskHistory {
     }
 
     /**
-     * Retrieves the latest snapshot from the redo stack
-     * @return a snapshot of the previous state before undoing
+     * Moves the most recently undone snapshot back into the main history
+     * and returns it for restoration.
+     *
+     * @return snapshot to restore, or {@code null} if redo is unavailable
      */
     public TaskMemento getNextMemento() {
         if (this.undoneMementos.isEmpty()) {

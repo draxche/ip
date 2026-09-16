@@ -21,7 +21,7 @@ public class Drax {
             loadResult = storage.load();
         } catch (IOException e) {
             ArrayList<String> warnings = new ArrayList<>();
-            warnings.add("Sorry! I could not read your saved tasks. Starting with an empty list.");
+            warnings.add("Sorry! I couldn't read your saved tasks! Starting with an empty list.");
             loadResult = new Storage.LoadResult(new ArrayList<>(), warnings);
         }
 

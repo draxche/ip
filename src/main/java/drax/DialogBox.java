@@ -59,7 +59,9 @@ public class DialogBox extends HBox {
      * @return dialog configured for a user message
      */
     public static DialogBox getUserDialog(String message, Image image) {
-        return new DialogBox(message, image);
+        DialogBox dialogBox = new DialogBox(message, image);
+        dialogBox.dialog.getStyleClass().add("user-label");
+        return dialogBox;
     }
 
     private void changeDialogStyle(String commandType) {

@@ -8,6 +8,16 @@ Use Zulu FX JDK `25.0.3.fx-zulu` and a temporary working directory to protect `d
 Launch `drax.Main` with `--enable-native-access=javafx.graphics` in the VM options, or use a Gradle Java launch task,
 which supplies that option from `build.gradle` (override its working directory to the temporary directory).
 Confirm that the window and greeting appear, then submit `todo read book` and `list`.
+The user command bubbles should have a warm white background, while Drax's reply bubbles use a cohesive, gently saturated palette
+of dusty blue, sage, muted amber, golden cream, and terracotta. All bubbles should use dark text and the same subtle one-pixel warm-gray border;
+no bubble should have a multicolored border.
+The input field should use the same warm white and dark text treatment, and the scrollbar thumb should use a light blue accent.
+Both chat avatars should be displayed at 64 by 64 pixels, leaving the message bubbles as the focus of the conversation.
+Confirm that the greeting and each newly submitted message bubble fade in while sliding upward slightly over about 180 milliseconds.
+The animation should not delay the appearance of the message or prevent entering the next command.
+Add enough commands to overflow the conversation area, then confirm that mouse-wheel or trackpad scrolling moves freely through older messages.
+Hover over the send button and confirm that its image grows without showing a background, border, or glow.
+Press the send button and confirm that its image shrinks and becomes slightly transparent while the button remains borderless.
 Both commands should display their responses without any restricted native-access or FXML API-version warnings in the console.
 Close the window. This graphical check supplements the scripted console cases below.
 
@@ -37,7 +47,7 @@ bye
 
 Infinite Salutations! I'm Drax!
 What's on your mind today?
-Goodbye. Hope to see you again soon!
+Godspeed. Hope to see ya again soon!
 ```
 
 ### Test case 2: Add and list a task
@@ -73,7 +83,7 @@ I've added this task
 Now you have 1 task!
 Here are the tasks in your list!
 1.[T][ ] read book
-Goodbye. Hope to see you again soon!
+Godspeed. Hope to see ya again soon!
 ```
 
 ### Test case 3: Mark and unmark a task
@@ -115,7 +125,7 @@ I've marked this task as not done:
 [T][ ] read book
 Here are the tasks in your list!
 1.[T][ ] read book
-Goodbye. Hope to see you again soon!
+Godspeed. Hope to see ya again soon!
 ```
 
 ### Test case 4: Add all task types
@@ -161,17 +171,17 @@ Here are the tasks in your list!
 1.[T][ ] read book
 2.[D][ ] submit report (by: Dec 02 2019 6:00 PM)
 3.[E][ ] meeting (from: Dec 03 2019 9:00 AM to: Dec 03 2019 10:30 AM)
-Goodbye. Hope to see you again soon!
+Godspeed. Hope to see ya again soon!
 ```
 
 ### Test case 5: Handle invalid input
 
 *Aim*
-Confirm that drax.Drax reports invalid task descriptions, missing scheduling information, invalid task numbers, and non-numeric task numbers without exiting unexpectedly.
+Confirm that drax.Drax reports invalid task descriptions, missing scheduling information, invalid task numbers, non-numeric task numbers, missing search keywords, and unknown commands without exiting unexpectedly.
 
 *Command*
 ```bash
-source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test-work && (cd /tmp/drax-ui-test-work && printf 'todo \ndeadline submit report\nevent meeting\ndeadline submit report /by next Friday\nmark 1\nmark abc\nbye\n' | java -cp /tmp/drax-ui-test drax.Drax)
+source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test-work && (cd /tmp/drax-ui-test-work && printf 'todo \ndeadline submit report\nevent meeting\ndeadline submit report /by next Friday\nmark 1\nmark abc\nfind\nnot a command\nbye\n' | java -cp /tmp/drax-ui-test drax.Drax)
 ```
 
 *Input*
@@ -182,6 +192,8 @@ event meeting
 deadline submit report /by next Friday
 mark 1
 mark abc
+find
+not a command
 bye
 ```
 
@@ -199,10 +211,12 @@ What's on your mind today?
 You didn't provide a task!?
 You didn't provide a end date! Use /by [deadline]
 You didn't provide when this event is happening! Use /from [date] /to [date]
-Please use a valid date and time: yyyy-MM-dd, yyyy-MM-ddTHH:mm, or d/M/yyyy HHmm.
+Please use a valid date and time: yyyy-MM-dd, yyyy-MM-ddTHH:mm, or d/M/yyyy HHmm!
 This task doesn't exist. You don't have that many tasks!
 Please enter a valid number!
-Goodbye. Hope to see you again soon!
+You didn't provide a keyword!?
+Sorry! But that's not a function I can perform. :(
+Godspeed. Hope to see ya again soon!
 ```
 
 ### Test case 6: Save changed tasks
@@ -255,7 +269,7 @@ Here are the tasks in your list!
 1.[T][X] read book
 2.[D][ ] submit report (by: Dec 02 2019)
 3.[E][ ] project meeting (from: Dec 02 2019 9:00 AM to: Dec 02 2019 10:00 AM)
-Goodbye. Hope to see you again soon!
+Godspeed. Hope to see ya again soon!
 ```
 
 ### Test case 8: Skip malformed saved records
@@ -289,7 +303,7 @@ Saved task on line 3 was ignored: completion status must be 0 or 1
 Saved task on line 4 was ignored: expected 5 fields
 Here are the tasks in your list!
 1.[T][X] valid task
-Goodbye. Hope to see you again soon!
+Godspeed. Hope to see ya again soon!
 ```
 
 ### Test case 9: Preserve delimiters in saved task text
@@ -320,7 +334,7 @@ Infinite Salutations! I'm Drax!
 What's on your mind today?
 Here are the tasks in your list!
 1.[T][ ] revise A | B\C
-Goodbye. Hope to see you again soon!
+Godspeed. Hope to see ya again soon!
 ```
 
 ### Test case 10: Continue after a save failure
@@ -349,13 +363,13 @@ ignored
 
 Infinite Salutations! I'm Drax!
 What's on your mind today?
-Sorry! I could not save your tasks. They are available until you exit the program.
+Sorry! I couldn't save your tasks :(. They are available till you exit the program!
 I've added this task
 [T][ ] read book
 Now you have 1 task!
 Here are the tasks in your list!
 1.[T][ ] read book
-Goodbye. Hope to see you again soon!
+Godspeed. Hope to see ya again soon!
 ```
 
 ### Test case 11: Find matching tasks
@@ -396,7 +410,7 @@ Now you have 3 tasks!
 Here are the matching tasks in your list:
 1.[T][ ] read book
 2.[T][ ] return book
-Goodbye. Hope to see you again soon!
+Godspeed. Hope to see ya again soon!
 ```
 
 ### Test case 12: Package the FXML-based JavaFX interface
@@ -488,7 +502,7 @@ Here are the tasks in your list!
 3.[E][ ] C (from: Dec 03 2019 9:00 AM to: Dec 03 2019 10:30 AM)
 There's nothin' to undo!
 There's nothin' to redo!
-Goodbye. Hope to see you again soon!
+Godspeed. Hope to see ya again soon!
 ```
 
 ### Test case 15: Repeat undo and redo over three rounds
@@ -554,5 +568,5 @@ Here are the tasks in your list!
 1.[T][ ] A
 Here are the tasks in your list!
 1.[T][ ] A
-Goodbye. Hope to see you again soon!
+Godspeed. Hope to see ya again soon!
 ```

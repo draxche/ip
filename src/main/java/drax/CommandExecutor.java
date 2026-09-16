@@ -61,7 +61,7 @@ public class CommandExecutor {
     }
 
     private ExecutionResult executeBye() {
-        return new ExecutionResult("Goodbye. Hope to see you again soon!", Outcome.EXIT);
+        return new ExecutionResult("Godspeed. Hope to see ya again soon!", Outcome.EXIT);
     }
 
     private ExecutionResult executeList() {
@@ -141,7 +141,7 @@ public class CommandExecutor {
     }
 
     private ExecutionResult executeUnknown() {
-        return parseWithContinue("Sorry! But that's not a function I can do :(");
+        return parseWithContinue("Sorry! But that's not a function I can perform. :(");
     }
 
     private ExecutionResult createTodo(Parser.Command command) {
@@ -212,7 +212,7 @@ public class CommandExecutor {
         try {
             String keyword = command.argument().toLowerCase();
             if (keyword.isEmpty()) {
-                throw new DraxException("You didn't provide a keyword!");
+                throw new DraxException("You didn't provide a keyword!?");
             }
 
             List<String> messages = new ArrayList<>();
@@ -312,7 +312,7 @@ public class CommandExecutor {
         try {
             storage.save(tasks);
         } catch (IOException | IllegalArgumentException e) {
-            messages.add("Sorry! I could not save your tasks. They are available until you exit the program.");
+            messages.add("Sorry! I couldn't save your tasks :(. They are available till you exit the program!");
         }
     }
 

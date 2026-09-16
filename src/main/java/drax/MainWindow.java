@@ -27,10 +27,20 @@ public class MainWindow extends AnchorPane {
 
     private Drax drax;
 
-    /** Connects behavior that depends on controls injected from the FXML view. */
+    /**
+     * Connects behavior that depends on controls injected from the FXML view.
+     * */
     @FXML
     private void initialize() {
-        scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+        dialogContainer.heightProperty().addListener((
+                observable, oldHeight, newHeight) -> scrollToBottom());
+    }
+
+    /**
+     * Scrolls the conversation to its newest message.
+     * */
+    private void scrollToBottom() {
+        scrollPane.setVvalue(scrollPane.getVmax());
     }
 
     /**

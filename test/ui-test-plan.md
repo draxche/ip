@@ -9,6 +9,7 @@ Launch `drax.Main` with `--enable-native-access=javafx.graphics` in the VM optio
 which supplies that option from `build.gradle` (override its working directory to the temporary directory).
 Confirm that the window and greeting appear, then submit `todo read book` and `list`.
 The user command bubbles should have a clean white background with black text, while Drax's reply bubbles retain their existing styles.
+Add enough commands to overflow the conversation area, then confirm that mouse-wheel or trackpad scrolling moves freely through older messages.
 Both commands should display their responses without any restricted native-access or FXML API-version warnings in the console.
 Close the window. This graphical check supplements the scripted console cases below.
 

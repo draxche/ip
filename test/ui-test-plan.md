@@ -8,7 +8,10 @@ Use Zulu FX JDK `25.0.3.fx-zulu` and a temporary working directory to protect `d
 Launch `drax.Main` with `--enable-native-access=javafx.graphics` in the VM options, or use a Gradle Java launch task,
 which supplies that option from `build.gradle` (override its working directory to the temporary directory).
 Confirm that the window and greeting appear, then submit `todo read book` and `list`.
-The user command bubbles should have a clean white background with black text, while Drax's reply bubbles retain their existing styles.
+The user command bubbles should have a warm white background, while Drax's reply bubbles use a cohesive, gently saturated palette
+of dusty blue, sage, muted amber, golden cream, and terracotta. All bubbles should use dark text and the same subtle one-pixel warm-gray border;
+no bubble should have a multicolored border.
+The input field should use the same warm white and dark text treatment, and the scrollbar thumb should use a light blue accent.
 Add enough commands to overflow the conversation area, then confirm that mouse-wheel or trackpad scrolling moves freely through older messages.
 Hover over the send button and confirm that its image grows without showing a background, border, or glow.
 Press the send button and confirm that its image shrinks and becomes slightly transparent while the button remains borderless.

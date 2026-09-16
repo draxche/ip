@@ -13,6 +13,8 @@ of dusty blue, sage, muted amber, golden cream, and terracotta. All bubbles shou
 no bubble should have a multicolored border.
 The input field should use the same warm white and dark text treatment, and the scrollbar thumb should use a light blue accent.
 Both chat avatars should be displayed at 64 by 64 pixels, leaving the message bubbles as the focus of the conversation.
+Confirm that the greeting and each newly submitted message bubble fade in while sliding upward slightly over about 180 milliseconds.
+The animation should not delay the appearance of the message or prevent entering the next command.
 Add enough commands to overflow the conversation area, then confirm that mouse-wheel or trackpad scrolling moves freely through older messages.
 Hover over the send button and confirm that its image grows without showing a background, border, or glow.
 Press the send button and confirm that its image shrinks and becomes slightly transparent while the button remains borderless.

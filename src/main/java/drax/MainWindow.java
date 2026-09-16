@@ -3,6 +3,9 @@ package drax;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -10,9 +13,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 /** Controls the main JavaFX window defined in {@code MainWindow.fxml}. */
 public class MainWindow extends AnchorPane {
+    private static final Duration MESSAGE_ANIMATION_DURATION = Duration.millis(175);
+    private static final double MESSAGE_SLIDE_DISTANCE = 6;
+
     private final Image userImage = new Image(getClass().getResourceAsStream("/images/DaUser.png"));
     private final Image draxImage = new Image(getClass().getResourceAsStream("/images/DaDrax.png"));
 
@@ -44,13 +51,30 @@ public class MainWindow extends AnchorPane {
     }
 
     /**
+     * Adds a message to the conversation and plays its entrance animation.
+     *
+     * @param dialogBox message bubble to display
+     */
+    private void addDialog(DialogBox dialogBox) {
+        dialogBox.setOpacity(0);
+        dialogBox.setTranslateY(MESSAGE_SLIDE_DISTANCE);
+        dialogContainer.getChildren().add(dialogBox);
+
+        FadeTransition fadeAnimation = new FadeTransition(MESSAGE_ANIMATION_DURATION, dialogBox);
+        fadeAnimation.setToValue(1);
+        TranslateTransition slideAnimation = new TranslateTransition(MESSAGE_ANIMATION_DURATION, dialogBox);
+        slideAnimation.setToY(0);
+        new ParallelTransition(fadeAnimation, slideAnimation).play();
+    }
+
+    /**
      * Injects the shared Drax instance and displays its startup greeting.
      *
      * @param drax Drax instance that owns the application's state and logic
      */
     public void setDrax(Drax drax) {
         this.drax = drax;
-        dialogContainer.getChildren().add(DialogBox.getDraxDialog(drax.greet(), draxImage, ""));
+        addDialog(DialogBox.getDraxDialog(drax.greet(), draxImage, ""));
     }
 
     /** Passes user input to Drax and adds both sides of the conversation to the view. */
@@ -58,12 +82,14 @@ public class MainWindow extends AnchorPane {
     private void handleUserInput() {
         String userText = userInput.getText();
         String draxText = drax.getResponse(userText);
+        DialogBox userDialogBox = DialogBox.getUserDialog(userText, userImage);
+        DialogBox draxDialogBox = DialogBox.getDraxDialog(draxText, draxImage, drax.getCommandType(userText));
 
-        dialogContainer.getChildren().addAll(
-                DialogBox.getUserDialog(userText, userImage),
-                DialogBox.getDraxDialog(draxText, draxImage, drax.getCommandType(userText))
-        );
+        addDialog(userDialogBox);
+        addDialog(draxDialogBox);
+
         userInput.clear();
+
         if (userText.equals("bye")) {
             scheduleExit();
         }

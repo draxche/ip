@@ -37,7 +37,7 @@ bye
 
 Infinite Salutations! I'm Drax!
 What's on your mind today?
-Goodbye. Hope to see you again soon!
+Godspeed. Hope to see ya again soon!
 ```
 
 ### Test case 2: Add and list a task
@@ -73,7 +73,7 @@ I've added this task
 Now you have 1 task!
 Here are the tasks in your list!
 1.[T][ ] read book
-Goodbye. Hope to see you again soon!
+Godspeed. Hope to see ya again soon!
 ```
 
 ### Test case 3: Mark and unmark a task
@@ -115,7 +115,7 @@ I've marked this task as not done:
 [T][ ] read book
 Here are the tasks in your list!
 1.[T][ ] read book
-Goodbye. Hope to see you again soon!
+Godspeed. Hope to see ya again soon!
 ```
 
 ### Test case 4: Add all task types
@@ -161,17 +161,17 @@ Here are the tasks in your list!
 1.[T][ ] read book
 2.[D][ ] submit report (by: Dec 02 2019 6:00 PM)
 3.[E][ ] meeting (from: Dec 03 2019 9:00 AM to: Dec 03 2019 10:30 AM)
-Goodbye. Hope to see you again soon!
+Godspeed. Hope to see ya again soon!
 ```
 
 ### Test case 5: Handle invalid input
 
 *Aim*
-Confirm that drax.Drax reports invalid task descriptions, missing scheduling information, invalid task numbers, and non-numeric task numbers without exiting unexpectedly.
+Confirm that drax.Drax reports invalid task descriptions, missing scheduling information, invalid task numbers, non-numeric task numbers, missing search keywords, and unknown commands without exiting unexpectedly.
 
 *Command*
 ```bash
-source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test-work && (cd /tmp/drax-ui-test-work && printf 'todo \ndeadline submit report\nevent meeting\ndeadline submit report /by next Friday\nmark 1\nmark abc\nbye\n' | java -cp /tmp/drax-ui-test drax.Drax)
+source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && rm -rf /tmp/drax-ui-test-work && mkdir -p /tmp/drax-ui-test-work && (cd /tmp/drax-ui-test-work && printf 'todo \ndeadline submit report\nevent meeting\ndeadline submit report /by next Friday\nmark 1\nmark abc\nfind\nnot a command\nbye\n' | java -cp /tmp/drax-ui-test drax.Drax)
 ```
 
 *Input*
@@ -182,6 +182,8 @@ event meeting
 deadline submit report /by next Friday
 mark 1
 mark abc
+find
+not a command
 bye
 ```
 
@@ -199,10 +201,12 @@ What's on your mind today?
 You didn't provide a task!?
 You didn't provide a end date! Use /by [deadline]
 You didn't provide when this event is happening! Use /from [date] /to [date]
-Please use a valid date and time: yyyy-MM-dd, yyyy-MM-ddTHH:mm, or d/M/yyyy HHmm.
+Please use a valid date and time: yyyy-MM-dd, yyyy-MM-ddTHH:mm, or d/M/yyyy HHmm!
 This task doesn't exist. You don't have that many tasks!
 Please enter a valid number!
-Goodbye. Hope to see you again soon!
+You didn't provide a keyword!?
+Sorry! But that's not a function I can perform. :(
+Godspeed. Hope to see ya again soon!
 ```
 
 ### Test case 6: Save changed tasks
@@ -255,7 +259,7 @@ Here are the tasks in your list!
 1.[T][X] read book
 2.[D][ ] submit report (by: Dec 02 2019)
 3.[E][ ] project meeting (from: Dec 02 2019 9:00 AM to: Dec 02 2019 10:00 AM)
-Goodbye. Hope to see you again soon!
+Godspeed. Hope to see ya again soon!
 ```
 
 ### Test case 8: Skip malformed saved records
@@ -289,7 +293,7 @@ Saved task on line 3 was ignored: completion status must be 0 or 1
 Saved task on line 4 was ignored: expected 5 fields
 Here are the tasks in your list!
 1.[T][X] valid task
-Goodbye. Hope to see you again soon!
+Godspeed. Hope to see ya again soon!
 ```
 
 ### Test case 9: Preserve delimiters in saved task text
@@ -320,7 +324,7 @@ Infinite Salutations! I'm Drax!
 What's on your mind today?
 Here are the tasks in your list!
 1.[T][ ] revise A | B\C
-Goodbye. Hope to see you again soon!
+Godspeed. Hope to see ya again soon!
 ```
 
 ### Test case 10: Continue after a save failure
@@ -349,13 +353,13 @@ ignored
 
 Infinite Salutations! I'm Drax!
 What's on your mind today?
-Sorry! I could not save your tasks. They are available until you exit the program.
+Sorry! I couldn't save your tasks :(. They are available till you exit the program!
 I've added this task
 [T][ ] read book
 Now you have 1 task!
 Here are the tasks in your list!
 1.[T][ ] read book
-Goodbye. Hope to see you again soon!
+Godspeed. Hope to see ya again soon!
 ```
 
 ### Test case 11: Find matching tasks
@@ -396,7 +400,7 @@ Now you have 3 tasks!
 Here are the matching tasks in your list:
 1.[T][ ] read book
 2.[T][ ] return book
-Goodbye. Hope to see you again soon!
+Godspeed. Hope to see ya again soon!
 ```
 
 ### Test case 12: Package the FXML-based JavaFX interface
@@ -488,7 +492,7 @@ Here are the tasks in your list!
 3.[E][ ] C (from: Dec 03 2019 9:00 AM to: Dec 03 2019 10:30 AM)
 There's nothin' to undo!
 There's nothin' to redo!
-Goodbye. Hope to see you again soon!
+Godspeed. Hope to see ya again soon!
 ```
 
 ### Test case 15: Repeat undo and redo over three rounds
@@ -554,5 +558,5 @@ Here are the tasks in your list!
 1.[T][ ] A
 Here are the tasks in your list!
 1.[T][ ] A
-Goodbye. Hope to see you again soon!
+Godspeed. Hope to see ya again soon!
 ```

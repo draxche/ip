@@ -19,7 +19,7 @@ public final class ScheduleDateTime {
             DateTimeFormatter.ofPattern("MMM dd uuuu h:mm a");
     private static final String ACCEPTED_FORMATS = "yyyy-MM-dd, yyyy-MM-ddTHH:mm, or d/M/yyyy HHmm";
     private static final String INVALID_DATE_TIME_MESSAGE = "Please use a valid date and time: "
-            + ACCEPTED_FORMATS + ".";
+            + ACCEPTED_FORMATS + "!";
 
     private ScheduleDateTime() {
     }

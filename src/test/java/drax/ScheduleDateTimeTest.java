@@ -35,7 +35,7 @@ public class ScheduleDateTimeTest {
             fail();
         } catch (IllegalArgumentException e) {
             assertEquals("Please use a valid date and time: "
-                    + "yyyy-MM-dd, yyyy-MM-ddTHH:mm, or d/M/yyyy HHmm.", e.getMessage());
+                    + "yyyy-MM-dd, yyyy-MM-ddTHH:mm, or d/M/yyyy HHmm!", e.getMessage());
         }
     }
     @Test
@@ -45,7 +45,7 @@ public class ScheduleDateTimeTest {
             fail();
         } catch (IllegalArgumentException e) {
             assertEquals("Please use a valid date and time: "
-                    + "yyyy-MM-dd, yyyy-MM-ddTHH:mm, or d/M/yyyy HHmm.", e.getMessage());
+                    + "yyyy-MM-dd, yyyy-MM-ddTHH:mm, or d/M/yyyy HHmm!", e.getMessage());
         }
     }
 

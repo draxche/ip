@@ -8,6 +8,7 @@ Use Zulu FX JDK `25.0.3.fx-zulu` and a temporary working directory to protect `d
 Launch `drax.Main` with `--enable-native-access=javafx.graphics` in the VM options, or use a Gradle Java launch task,
 which supplies that option from `build.gradle` (override its working directory to the temporary directory).
 Confirm that the window and greeting appear, then submit `todo read book` and `list`.
+The user command bubbles should have a clean white background with black text, while Drax's reply bubbles retain their existing styles.
 Both commands should display their responses without any restricted native-access or FXML API-version warnings in the console.
 Close the window. This graphical check supplements the scripted console cases below.
 

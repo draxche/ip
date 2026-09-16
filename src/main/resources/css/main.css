@@ -13,20 +13,35 @@
     -fx-border-radius: 12px;
 }
 
-.button {
-    -fx-background-color: black;
-    -fx-font: italic bold 16px "inter";
+#sendButton {
+    -fx-background-color: transparent;
+    -fx-background-radius: 8px;
+    -fx-border-color: transparent;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-cursor: hand;
     -fx-padding: 0;
 }
 
-.button:hover {
-    -fx-background-color:black;
-    -fx-font-size: 18px;
+#sendButton:hover {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
 }
 
-.button:pressed {
-    -fx-background-color:black;
-    -fx-font-size: 20px;
+#sendButton:hover .image-view {
+    -fx-scale-x: 1.12;
+    -fx-scale-y: 1.12;
+}
+
+#sendButton:pressed {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+#sendButton:pressed .image-view {
+    -fx-scale-x: 0.92;
+    -fx-scale-y: 0.92;
+    -fx-opacity: 0.8;
 }
 
 .scroll-pane,
@@ -50,4 +65,3 @@
     -fx-pref-height: 0;
     -fx-opacity: 0;
 }
-

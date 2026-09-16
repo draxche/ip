@@ -10,6 +10,8 @@ which supplies that option from `build.gradle` (override its working directory t
 Confirm that the window and greeting appear, then submit `todo read book` and `list`.
 The user command bubbles should have a clean white background with black text, while Drax's reply bubbles retain their existing styles.
 Add enough commands to overflow the conversation area, then confirm that mouse-wheel or trackpad scrolling moves freely through older messages.
+Hover over the send button and confirm that its image grows without showing a background, border, or glow.
+Press the send button and confirm that its image shrinks and becomes slightly transparent while the button remains borderless.
 Both commands should display their responses without any restricted native-access or FXML API-version warnings in the console.
 Close the window. This graphical check supplements the scripted console cases below.
 

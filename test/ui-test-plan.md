@@ -12,6 +12,7 @@ The user command bubbles should have a warm white background, while Drax's reply
 of dusty blue, sage, muted amber, golden cream, and terracotta. All bubbles should use dark text and the same subtle one-pixel warm-gray border;
 no bubble should have a multicolored border.
 The input field should use the same warm white and dark text treatment, and the scrollbar thumb should use a light blue accent.
+Each message bubble should leave 8 pixels of internal space around its text.
 At the default 400 by 600 window size, both chat avatars should be displayed at 64 by 64 pixels and message text
 should use the medium weight of Helvetica Neue at 13 pixels. Resize the window proportionally to 600 by 900 and
 confirm existing and new message text retains the medium weight while growing to 19.5 pixels, and both avatars grow

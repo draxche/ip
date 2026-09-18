@@ -175,4 +175,20 @@ public class ParserTest {
         Parser.Command actual = Parser.parse("find clean house");
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void parse_undoCommand_returnsUndoCommand() {
+        Parser.Command expected = new Parser.Command(
+                Parser.Type.UNDO, "", "", "", "");
+
+        assertEquals(expected, Parser.parse("undo"));
+    }
+
+    @Test
+    public void parse_redoCommand_returnsRedoCommand() {
+        Parser.Command expected = new Parser.Command(
+                Parser.Type.REDO, "", "", "", "");
+
+        assertEquals(expected, Parser.parse("redo"));
+    }
 }

@@ -6,6 +6,8 @@ import java.util.TimerTask;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -16,13 +18,18 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 /** Controls the main JavaFX window defined in {@code MainWindow.fxml}. */
-public class MainWindow extends AnchorPane {
+public class MainWindow {
+    private static final double DEFAULT_WINDOW_HEIGHT = 600;
+    private static final double DEFAULT_WINDOW_WIDTH = 400;
+    private static final double MINIMUM_CONTENT_SCALE = 1;
     private static final Duration MESSAGE_ANIMATION_DURATION = Duration.millis(175);
     private static final double MESSAGE_SLIDE_DISTANCE = 6;
 
     private final Image userImage = new Image(getClass().getResourceAsStream("/images/DaUser.png"));
     private final Image draxImage = new Image(getClass().getResourceAsStream("/images/DaDrax.png"));
 
+    @FXML
+    private AnchorPane rootPane;
     @FXML
     private ScrollPane scrollPane;
     @FXML
@@ -33,19 +40,38 @@ public class MainWindow extends AnchorPane {
     private Button sendButton;
 
     private Drax drax;
+    private DoubleBinding contentScale;
+
+    /**
+     * Calculates proportional growth while keeping the default sizes at or below the initial window size.
+     * The smaller dimension ratio prevents content from outgrowing a window stretched in only one direction.
+     *
+     * @param width current content width
+     * @param height current content height
+     * @return scale of at least {@code 1.0}
+     */
+    static double calculateContentScale(double width, double height) {
+        double widthScale = width / DEFAULT_WINDOW_WIDTH;
+        double heightScale = height / DEFAULT_WINDOW_HEIGHT;
+        double constrainedScale = Math.min(widthScale, heightScale);
+        return Math.max(MINIMUM_CONTENT_SCALE, constrainedScale);
+    }
 
     /**
      * Connects behavior that depends on controls injected from the FXML view.
-     * */
+     */
     @FXML
     private void initialize() {
+        contentScale = Bindings.createDoubleBinding(() ->
+                calculateContentScale(rootPane.getWidth(), rootPane.getHeight()),
+                rootPane.widthProperty(), rootPane.heightProperty());
         dialogContainer.heightProperty().addListener((
                 observable, oldHeight, newHeight) -> scrollToBottom());
     }
 
     /**
      * Scrolls the conversation to its newest message.
-     * */
+     */
     private void scrollToBottom() {
         scrollPane.setVvalue(scrollPane.getVmax());
     }
@@ -74,7 +100,7 @@ public class MainWindow extends AnchorPane {
      */
     public void setDrax(Drax drax) {
         this.drax = drax;
-        addDialog(DialogBox.getDraxDialog(drax.greet(), draxImage, ""));
+        addDialog(DialogBox.getDraxDialog(drax.greet(), draxImage, "", contentScale));
     }
 
     /** Passes user input to Drax and adds both sides of the conversation to the view. */
@@ -82,8 +108,9 @@ public class MainWindow extends AnchorPane {
     private void handleUserInput() {
         String userText = userInput.getText();
         String draxText = drax.getResponse(userText);
-        DialogBox userDialogBox = DialogBox.getUserDialog(userText, userImage);
-        DialogBox draxDialogBox = DialogBox.getDraxDialog(draxText, draxImage, drax.getCommandType(userText));
+        DialogBox userDialogBox = DialogBox.getUserDialog(userText, userImage, contentScale);
+        DialogBox draxDialogBox = DialogBox.getDraxDialog(
+                draxText, draxImage, drax.getCommandType(userText), contentScale);
 
         addDialog(userDialogBox);
         addDialog(draxDialogBox);

@@ -12,7 +12,11 @@ The user command bubbles should have a warm white background, while Drax's reply
 of dusty blue, sage, muted amber, golden cream, and terracotta. All bubbles should use dark text and the same subtle one-pixel warm-gray border;
 no bubble should have a multicolored border.
 The input field should use the same warm white and dark text treatment, and the scrollbar thumb should use a light blue accent.
-Both chat avatars should be displayed at 64 by 64 pixels, leaving the message bubbles as the focus of the conversation.
+At the default 400 by 600 window size, both chat avatars should be displayed at 64 by 64 pixels and message text
+should be 13 pixels. Resize the window proportionally to 600 by 900 and confirm existing and new message text grows
+to 19.5 pixels while both avatars grow to 96 by 96 pixels. Restore the window to 400 by 600 and confirm the text
+and avatars return to their default sizes. When only one window dimension is enlarged, the text and avatars should
+remain at a size that fits the unchanged dimension.
 Confirm that the greeting and each newly submitted message bubble fade in while sliding upward slightly over about 180 milliseconds.
 The animation should not delay the appearance of the message or prevent entering the next command.
 Add enough commands to overflow the conversation area, then confirm that mouse-wheel or trackpad scrolling moves freely through older messages.

@@ -18,6 +18,10 @@ confirm existing and new message text retains the medium weight while growing to
 to 96 by 96 pixels. Restore the window to 400 by 600 and confirm the text and avatars return to their default sizes.
 When only one window dimension is enlarged, the text and avatars should remain at a size that fits the unchanged
 dimension.
+At 400 by 600, the command field should use 16-pixel text and the send image should be 35 by 35 pixels. At 600 by
+900, confirm they grow more gently than the conversation content: the command text should be 20 pixels and the send
+image 43.75 by 43.75 pixels. The command field and send button should remain aligned along the bottom without
+overlapping each other or the conversation area, and they should return to their default sizes when the window does.
 Confirm that the greeting and each newly submitted message bubble fade in while sliding upward slightly over about 180 milliseconds.
 The animation should not delay the appearance of the message or prevent entering the next command.
 Add enough commands to overflow the conversation area, then confirm that mouse-wheel or trackpad scrolling moves freely through older messages.

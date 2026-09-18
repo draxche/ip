@@ -13,15 +13,24 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 /** Controls the main JavaFX window defined in {@code MainWindow.fxml}. */
 public class MainWindow {
+    private static final double CONTROL_GROWTH_RATE = 0.5;
+    private static final double DEFAULT_CONVERSATION_BOTTOM_INSET = 43;
+    private static final double DEFAULT_INPUT_FONT_SIZE = 16;
+    private static final double DEFAULT_INPUT_RIGHT_INSET = 38;
+    private static final double DEFAULT_SEND_BUTTON_WIDTH = 30;
+    private static final double DEFAULT_SEND_ICON_SIZE = 35;
     private static final double DEFAULT_WINDOW_HEIGHT = 600;
     private static final double DEFAULT_WINDOW_WIDTH = 400;
     private static final double MINIMUM_CONTENT_SCALE = 1;
+    private static final String INPUT_FONT_NAME = "Inter";
     private static final Duration MESSAGE_ANIMATION_DURATION = Duration.millis(175);
     private static final double MESSAGE_SLIDE_DISTANCE = 6;
 
@@ -38,9 +47,12 @@ public class MainWindow {
     private TextField userInput;
     @FXML
     private Button sendButton;
+    @FXML
+    private ImageView sendButtonImage;
 
     private Drax drax;
     private DoubleBinding contentScale;
+    private DoubleBinding controlScale;
 
     /**
      * Calculates proportional growth while keeping the default sizes at or below the initial window size.
@@ -58,6 +70,17 @@ public class MainWindow {
     }
 
     /**
+     * Calculates gentler growth for input controls than for conversation content.
+     *
+     * @param contentScale scale used by message text and avatars
+     * @return scale that applies half of the additional conversation-content growth
+     */
+    static double calculateControlScale(double contentScale) {
+        double additionalGrowth = contentScale - MINIMUM_CONTENT_SCALE;
+        return MINIMUM_CONTENT_SCALE + additionalGrowth * CONTROL_GROWTH_RATE;
+    }
+
+    /**
      * Connects behavior that depends on controls injected from the FXML view.
      */
     @FXML
@@ -65,8 +88,35 @@ public class MainWindow {
         contentScale = Bindings.createDoubleBinding(() ->
                 calculateContentScale(rootPane.getWidth(), rootPane.getHeight()),
                 rootPane.widthProperty(), rootPane.heightProperty());
+        controlScale = Bindings.createDoubleBinding(() ->
+                calculateControlScale(contentScale.doubleValue()), contentScale);
+        bindControlSize();
         dialogContainer.heightProperty().addListener((
                 observable, oldHeight, newHeight) -> scrollToBottom());
+    }
+
+    /** Keeps the command field, send button, and surrounding space aligned as their size changes. */
+    private void bindControlSize() {
+        userInput.fontProperty().bind(Bindings.createObjectBinding(() ->
+                new Font(INPUT_FONT_NAME, DEFAULT_INPUT_FONT_SIZE * controlScale.doubleValue()),
+                controlScale));
+        sendButton.prefWidthProperty().bind(Bindings.multiply(DEFAULT_SEND_BUTTON_WIDTH, controlScale));
+        sendButtonImage.fitWidthProperty().bind(Bindings.multiply(DEFAULT_SEND_ICON_SIZE, controlScale));
+        sendButtonImage.fitHeightProperty().bind(Bindings.multiply(DEFAULT_SEND_ICON_SIZE, controlScale));
+
+        controlScale.addListener((observable, oldScale, newScale) ->
+                updateControlInsets(newScale.doubleValue()));
+        updateControlInsets(controlScale.doubleValue());
+    }
+
+    /**
+     * Reserves enough room for the scaled input controls without allowing them to overlap nearby content.
+     *
+     * @param scale current input-control scale
+     */
+    private void updateControlInsets(double scale) {
+        AnchorPane.setRightAnchor(userInput, DEFAULT_INPUT_RIGHT_INSET * scale);
+        AnchorPane.setBottomAnchor(scrollPane, DEFAULT_CONVERSATION_BOTTOM_INSET * scale);
     }
 
     /**

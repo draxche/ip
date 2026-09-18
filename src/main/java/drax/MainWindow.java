@@ -173,9 +173,8 @@ public class MainWindow {
     }
 
     /** Preserves the short delay that allows the farewell dialog to appear before closing the program. */
-    // Source - https://stackoverflow.com/a/56225206
-    // Posted by Luca Pinelli, modified by community. See post 'Timeline' for change history
-    // Retrieved 2026-09-13, License - CC BY-SA 4.0
+    // @@author draxche-reused
+    // Reused from https://stackoverflow.com/a/56225206
     private void scheduleExit() {
         new Timer().schedule(new TimerTask() {
             @Override

@@ -21,7 +21,7 @@ import javafx.scene.text.Font;
 public class DialogBox extends HBox {
     private static final double DEFAULT_AVATAR_SIZE = 64;
     private static final double DEFAULT_FONT_SIZE = 13;
-    private static final String DIALOG_FONT_FAMILY = "Helvetica Neue";
+    private static final String DIALOG_FONT_NAME = "Helvetica Neue Medium";
 
     @FXML
     private Label dialog;
@@ -57,7 +57,7 @@ public class DialogBox extends HBox {
      */
     private void bindContentSize(ObservableDoubleValue contentScale) {
         dialog.fontProperty().bind(Bindings.createObjectBinding(() ->
-                Font.font(DIALOG_FONT_FAMILY, DEFAULT_FONT_SIZE * contentScale.doubleValue()),
+                new Font(DIALOG_FONT_NAME, DEFAULT_FONT_SIZE * contentScale.doubleValue()),
                 contentScale));
         displayPicture.fitWidthProperty().bind(Bindings.multiply(DEFAULT_AVATAR_SIZE, contentScale));
         displayPicture.fitHeightProperty().bind(Bindings.multiply(DEFAULT_AVATAR_SIZE, contentScale));

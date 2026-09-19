@@ -69,7 +69,7 @@ jar {
 }
 
 shadowJar {
-    archiveFileName = 'duke.jar'
+    archiveFileName = 'drax.jar'
 }
 
 run {

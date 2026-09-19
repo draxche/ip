@@ -1,6 +1,8 @@
 package drax;
 
-/** Base representation of a task and its completion state. */
+/**
+ * Base representation of a task and its completion state.
+ */
 public class Task {
     protected String task;
     protected boolean isDone;
@@ -8,7 +10,7 @@ public class Task {
     /**
      * Creates an incomplete task with the supplied description.
      *
-     * @param task description of the task
+     * @param task description of the task.
      */
     public Task(String task) {
         this.task = task;

@@ -9,7 +9,7 @@ public class TaskMemento {
     /**
      * Captures independent copies of the supplied tasks and their state.
      *
-     * @param taskList task list to snapshot
+     * @param taskList task list to snapshot.
      */
     public TaskMemento(TaskList taskList) {
         this.taskList = new TaskList(taskList.asList());

@@ -19,7 +19,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 
-/** Controls the main JavaFX window defined in {@code MainWindow.fxml}. */
+/**
+ * Controls the main JavaFX window defined in {@code MainWindow.fxml}.
+ */
 public class MainWindow {
     private static final double CONTROL_GROWTH_RATE = 0.5;
     private static final double DEFAULT_CONVERSATION_BOTTOM_INSET = 43;
@@ -58,8 +60,8 @@ public class MainWindow {
      * Calculates proportional growth while keeping the default sizes at or below the initial window size.
      * The smaller dimension ratio prevents content from outgrowing a window stretched in only one direction.
      *
-     * @param width current content width
-     * @param height current content height
+     * @param width current content width.
+     * @param height current content height.
      * @return scale of at least {@code 1.0}
      */
     static double calculateContentScale(double width, double height) {
@@ -72,7 +74,7 @@ public class MainWindow {
     /**
      * Calculates gentler growth for input controls than for conversation content.
      *
-     * @param contentScale scale used by message text and avatars
+     * @param contentScale scale used by message text and avatars.
      * @return scale that applies half of the additional conversation-content growth
      */
     static double calculateControlScale(double contentScale) {
@@ -112,7 +114,7 @@ public class MainWindow {
     /**
      * Reserves enough room for the scaled input controls without allowing them to overlap nearby content.
      *
-     * @param scale current input-control scale
+     * @param scale current input-control scale.
      */
     private void updateControlInsets(double scale) {
         AnchorPane.setRightAnchor(userInput, DEFAULT_INPUT_RIGHT_INSET * scale);
@@ -129,7 +131,7 @@ public class MainWindow {
     /**
      * Adds a message to the conversation and plays its entrance animation.
      *
-     * @param dialogBox message bubble to display
+     * @param dialogBox message bubble to display.
      */
     private void addDialog(DialogBox dialogBox) {
         dialogBox.setOpacity(0);
@@ -146,7 +148,7 @@ public class MainWindow {
     /**
      * Injects the shared Drax instance and displays its startup greeting.
      *
-     * @param drax Drax instance that owns the application's state and logic
+     * @param drax Drax instance that owns the application's state and logic.
      */
     public void setDrax(Drax drax) {
         this.drax = drax;

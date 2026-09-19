@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Holds Drax's application state and exposes it to console and graphical interfaces. */
+/**
+ * Holds Drax's application state and exposes it to console and graphical interfaces.
+ */
 public class Drax {
     private static final String GREETING = """
             Infinite Salutations! I'm Drax!
@@ -33,7 +35,7 @@ public class Drax {
     /**
      * Starts the terminal interface and processes commands until the user exits.
      *
-     * @param args command-line arguments, which are not used
+     * @param args command-line arguments, which are not used.
      */
     public static void main(String[] args) {
         Drax drax = new Drax();
@@ -66,7 +68,7 @@ public class Drax {
     /**
      * Processes one command and returns the response text for a graphical interface.
      *
-     * @param input raw command entered by the user
+     * @param input raw command entered by the user.
      * @return text produced by executing the command
      */
     public String getResponse(String input) {
@@ -74,8 +76,9 @@ public class Drax {
     }
 
     /**
-     * Parses string input and categorizes commands into groups for differentiated CSS styling
-     * @param input raw command entered by the user
+     * Parses string input and categorizes commands into groups for differentiated CSS styling.
+     *
+     * @param input raw command entered by the user.
      * @return command type category for CSS styling
      */
     public String getCommandType(String input) {
@@ -101,7 +104,7 @@ public class Drax {
     /**
      * Processes one command while retaining its control-flow outcome for the console loop.
      *
-     * @param input raw command entered by the user
+     * @param input raw command entered by the user.
      * @return response text and whether command processing should continue
      */
     public CommandExecutor.ExecutionResult executeCommand(String input) {

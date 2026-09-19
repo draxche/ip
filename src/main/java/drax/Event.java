@@ -2,7 +2,9 @@ package drax;
 
 import java.time.LocalDateTime;
 
-/** A task that takes place between a typed start and end date and time. */
+/**
+ * A task that takes place between a typed start and end date and time.
+ */
 public class Event extends Task {
     protected LocalDateTime from;
     protected LocalDateTime to;
@@ -10,9 +12,9 @@ public class Event extends Task {
     /**
      * Creates an event task with a start and end time.
      *
-     * @param task description of the event
-     * @param from date and time when the event starts
-     * @param to date and time when the event ends
+     * @param task description of the event.
+     * @param from date and time when the event starts.
+     * @param to date and time when the event ends.
      */
     public Event(String task, LocalDateTime from, LocalDateTime to) {
         super(task);

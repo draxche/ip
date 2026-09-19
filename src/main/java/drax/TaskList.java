@@ -20,7 +20,7 @@ public class TaskList implements Iterable<Task> {
      * Creates independent copies of the supplied tasks in their current order,
      * preserving their descriptions, subtypes, dates, and completion states.
      *
-     * @param tasks tasks to copy
+     * @param tasks tasks to copy.
      * @throws IllegalArgumentException if a task type is unsupported
      */
     public TaskList(List<Task> tasks) {
@@ -34,7 +34,7 @@ public class TaskList implements Iterable<Task> {
     /**
      * Adds a task to the end of the list.
      *
-     * @param task task to add
+     * @param task task to add.
      */
     public void add(Task task) {
         tasks.add(task);
@@ -43,7 +43,7 @@ public class TaskList implements Iterable<Task> {
     /**
      * Removes the task at the specified zero-based index.
      *
-     * @param index index of the task to remove
+     * @param index index of the task to remove.
      */
     public void remove(int index) {
         tasks.remove(index);
@@ -53,7 +53,7 @@ public class TaskList implements Iterable<Task> {
      * Returns the task at the specified zero-based index.
      * Changes to the returned task affect this list.
      *
-     * @param index index of the task to retrieve
+     * @param index index of the task to retrieve.
      * @return task at the specified index
      */
     public Task get(int index) {
@@ -101,7 +101,7 @@ public class TaskList implements Iterable<Task> {
      * Replaces the current tasks with independent copies of a saved state.
      * The existing {@code TaskList} instance is retained.
      *
-     * @param memento snapshot to restore
+     * @param memento snapshot to restore.
      */
     public void restoreTaskList(TaskMemento memento) {
         TaskList restoredList = memento.getSavedContent();
@@ -112,7 +112,7 @@ public class TaskList implements Iterable<Task> {
     /**
      * Copies a task, preserving its description, subtype, dates, and completion state.
      *
-     * @param original task to copy
+     * @param original task to copy.
      * @return an independent task with the same values
      * @throws IllegalArgumentException if the task type is unsupported
      */

@@ -1,6 +1,8 @@
 package drax;
 
-/** Converts a raw console line into a command type and its extracted arguments. */
+/**
+ * Converts a raw console line into a command type and its extracted arguments.
+ */
 public class Parser {
     /**
      * The command categories understood by drax.Drax.
@@ -15,13 +17,13 @@ public class Parser {
     private static final String BY_DELIMITER = " /by ";
 
     /**
-     * Parsed command data consumed by drax.Drax's command handlers.
+     * Parses command data consumed by drax.Drax's command handlers.
      *
-     * @param type      category of command to execute
-     * @param argument  general command argument, such as a task number
-     * @param task      task description for task-creation commands
-     * @param startDate deadline or event start text
-     * @param endDate   event end text
+     * @param type      category of command to execute.
+     * @param argument  general command argument, such as a task number.
+     * @param task      task description for task-creation commands.
+     * @param startDate deadline or event start text.
+     * @param endDate   event end text.
      */
     public record Command(Type type, String argument, String task, String startDate, String endDate) {
     }
@@ -29,7 +31,7 @@ public class Parser {
     /**
      * Parses one console line without performing the command's side effects.
      *
-     * @param input raw line entered by the user
+     * @param input raw line entered by the user.
      * @return the command type and extracted text fields
      */
     public static Command parse(String input) {
@@ -180,8 +182,8 @@ public class Parser {
     /**
      * Extracts the text that follows a command keyword, omitting the separating space when present.
      *
-     * @param input         complete command entered by the user
-     * @param commandLength length of the command keyword
+     * @param input         complete command entered by the user.
+     * @param commandLength length of the command keyword.
      * @return the trimmed argument, or an empty string when no argument was supplied
      */
     private static String extractArgument(String input, int commandLength) {

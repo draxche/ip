@@ -1,11 +1,13 @@
 package drax;
 
-/** A task without a deadline or event time range. */
+/**
+ * A task without a deadline or event time range.
+ */
 public class Todo extends Task {
     /**
      * Creates an incomplete todo task.
      *
-     * @param task description of the task
+     * @param task description of the task.
      */
     public Todo(String task) {
         super(task);

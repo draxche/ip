@@ -30,7 +30,7 @@ public final class ScheduleDateTime {
      * in the {@code d/M/uuuu HHmm} format.
      * A date without a time is represented as midnight.
      *
-     * @param text date or date-time text from command input or storage
+     * @param text date or date-time text from command input or storage.
      * @return the parsed local date and time
      * @throws IllegalArgumentException if {@code text} has an invalid or unsupported format
      */
@@ -54,7 +54,7 @@ public final class ScheduleDateTime {
     /**
      * Formats a schedule date and time for user-facing display. Midnight values are shown as dates only.
      *
-     * @param dateTime date and time to display
+     * @param dateTime date and time to display.
      * @return a readable date or date and time
      */
     public static String formatForDisplay(LocalDateTime dateTime) {

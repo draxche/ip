@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Executes parsed commands and coordinates changes to the task list and storage. */
+/**
+ * Executes parsed commands and coordinates changes to the task list and storage.
+ */
 public class CommandExecutor {
     /** Indicates whether the application should continue accepting commands after execution. */
     public enum Outcome {
@@ -14,8 +16,8 @@ public class CommandExecutor {
     /**
      * Contains the text produced by a command and whether the application should continue.
      *
-     * @param response text to present to the user in a string formatForDisplay
-     * @param outcome whether command processing should continue
+     * @param response text to present to the user in a string formatForDisplay.
+     * @param outcome whether command processing should continue.
      */
     public record ExecutionResult(String response, Outcome outcome) {
     }
@@ -27,8 +29,8 @@ public class CommandExecutor {
     /**
      * Creates an executor that coordinates commands using the given application components.
      *
-     * @param tasks task list that commands query and modify
-     * @param storage storage used to persist task changes
+     * @param tasks task list that commands query and modify.
+     * @param storage storage used to persist task changes.
      */
     public CommandExecutor(TaskList tasks, Storage storage) {
         this.tasks = tasks;
@@ -40,7 +42,7 @@ public class CommandExecutor {
     /**
      * Executes a parsed command and returns its display text and control-flow outcome.
      *
-     * @param command command to execute
+     * @param command command to execute.
      * @return the response to display in string formatForDisplay and whether the application should continue
      */
     public ExecutionResult execute(Parser.Command command) {

@@ -9,7 +9,9 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Handles loading, serializing, and saving drax.Drax tasks. */
+/**
+ * Handles loading, serializing, and saving drax.Drax tasks.
+ */
 public class Storage {
     private static final Path SAVE_FILE = Path.of("data", "drax.txt");
     private static final Path TEMP_FILE = Path.of("data", "drax.txt.tmp");
@@ -45,7 +47,7 @@ public class Storage {
     /**
      * Saves tasks atomically using drax.Drax's established file format.
      *
-     * @param tasks tasks to persist in their current order
+     * @param tasks tasks to persist in their current order.
      * @throws IOException if the temporary or save file cannot be written
      */
     public void save(TaskList tasks) throws IOException {
@@ -59,8 +61,8 @@ public class Storage {
     /**
      * Serializes each task and writes it as a separate line.
      *
-     * @param tasks tasks to write in their current order
-     * @param writer destination for the serialized task records
+     * @param tasks tasks to write in their current order.
+     * @param writer destination for the serialized task records.
      * @throws IOException if a task record cannot be written
      */
     private void writeSerializedTasks(TaskList tasks, BufferedWriter writer) throws IOException {
@@ -73,7 +75,7 @@ public class Storage {
     /**
      * Converts one task to an escaped, pipe-delimited save-file record to be saved.
      *
-     * @param task task to store
+     * @param task task to store.
      * @return one save-file line representing the task
      * @throws IllegalArgumentException if the task subtype cannot be stored
      */
@@ -92,7 +94,7 @@ public class Storage {
     /**
      * Reconstructs a task from one save-file record and restores its completion state.
      *
-     * @param line one escaped, pipe-delimited save-file record
+     * @param line one escaped, pipe-delimited save-file record.
      * @return the reconstructed task
      * @throws IllegalArgumentException if the record is malformed or unsupported
      */
@@ -116,8 +118,8 @@ public class Storage {
     /**
      * Creates the task subtype identified by a parsed save-file record.
      *
-     * @param taskType saved type identifier for the task
-     * @param taskComponents fields parsed from the save-file record
+     * @param taskType saved type identifier for the task.
+     * @param taskComponents fields parsed from the save-file record.
      * @return a task reconstructed from the parsed fields
      * @throws IllegalArgumentException if the task type or its fields are invalid
      */
@@ -145,7 +147,7 @@ public class Storage {
     /**
      * Escapes field separators and escape characters before a value is written to disk.
      *
-     * @param value unescaped field value
+     * @param value unescaped field value.
      * @return value safe to include in a pipe-delimited record
      */
     private String escape(String value) {
@@ -155,7 +157,7 @@ public class Storage {
     /**
      * Splits a save-file record into fields while preserving escaped separators.
      *
-     * @param line escaped, pipe-delimited save-file record
+     * @param line escaped, pipe-delimited save-file record.
      * @return the unescaped fields in record order
      */
     private List<String> splitFields(String line) {
@@ -188,8 +190,8 @@ public class Storage {
     /**
      * Appends a character following an escape marker to the current field.
      *
-     * @param character character following the escape marker
-     * @param field field being reconstructed
+     * @param character character following the escape marker.
+     * @param field field being reconstructed.
      */
     private static void appendEscapedCharacter(char character, StringBuilder field) {
         if (character == '|' || character == '\\') {
@@ -202,8 +204,8 @@ public class Storage {
     /**
      * Validates that a record contains the field count required for its task type.
      *
-     * @param fields fields extracted from a record
-     * @param expectedCount required number of fields
+     * @param fields fields extracted from a record.
+     * @param expectedCount required number of fields.
      * @throws IllegalArgumentException if the count differs
      */
     private void checkFieldCount(List<String> fields, int expectedCount) {
@@ -215,9 +217,9 @@ public class Storage {
     /**
      * Extracts a required non-blank field from a parsed record.
      *
-     * @param fields fields extracted from a record
-     * @param index zero-based index of the required field
-     * @param fieldName name used in a validation error
+     * @param fields fields extracted from a record.
+     * @param index zero-based index of the required field.
+     * @param fieldName name used in a validation error.
      * @return the requested non-blank field value
      * @throws IllegalArgumentException if the field is absent or blank
      */
@@ -229,10 +231,10 @@ public class Storage {
     }
 
     /**
-     * Result of loading tasks together with warnings for skipped records.
+     * Contains loaded tasks together with warnings for skipped records.
      *
-     * @param tasks successfully reconstructed tasks
-     * @param warnings explanations for records that could not be loaded
+     * @param tasks successfully reconstructed tasks.
+     * @param warnings explanations for records that could not be loaded.
      */
     public record LoadResult(ArrayList<Task> tasks, ArrayList<String> warnings) {
     }

@@ -8,14 +8,16 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-/** Starts the FXML-based JavaFX interface for Drax. */
+/**
+ * Starts the FXML-based JavaFX interface for Drax.
+ */
 public class Main extends Application {
     private final Drax drax = new Drax();
 
     /**
      * Loads the main window, injects Drax into its controller, and displays it.
      *
-     * @param stage primary JavaFX stage
+     * @param stage primary JavaFX stage.
      * @throws IOException if the main-window FXML resource cannot be loaded
      */
     @Override

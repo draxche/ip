@@ -420,7 +420,7 @@ Godspeed. Hope to see ya again soon!
 
 **Command**
 ```bash
-source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && ./gradlew shadowJar >/dev/null && jar tf build/libs/duke.jar | grep -E '^(drax/(Launcher|Main|MainWindow|DialogBox)\.class|images/(DaUser|DaDrax|sendbutton)\.png|view/(MainWindow|DialogBox)\.fxml)$' | sort
+source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use java 25.0.3.fx-zulu >/dev/null && ./gradlew shadowJar >/dev/null && jar tf build/libs/drax.jar | grep -E '^(drax/(Launcher|Main|MainWindow|DialogBox)\.class|images/(DaUser|DaDrax|sendbutton)\.png|view/(MainWindow|DialogBox)\.fxml)$' | sort
 ```
 
 **Console input**

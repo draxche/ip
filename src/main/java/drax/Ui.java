@@ -2,7 +2,9 @@ package drax;
 
 import java.util.Scanner;
 
-/** Handles terminal input and presents response strings produced by Drax. */
+/**
+ * Handles terminal input and presents response strings produced by Drax.
+ */
 public class Ui {
     private static final String BANNER = """
             ██████╗ ██████╗  █████╗ ██╗  ██╗
@@ -22,7 +24,7 @@ public class Ui {
     /**
      * Adds console-only branding to the interface-neutral greeting.
      *
-     * @param greeting greeting supplied by Drax
+     * @param greeting greeting supplied by Drax.
      * @return the banner and greeting formatted for the terminal
      */
     public String getConsoleGreeting(String greeting) {
@@ -50,7 +52,7 @@ public class Ui {
     /**
      * Displays a message on standard output.
      *
-     * @param message message to display
+     * @param message message to display.
      */
     public void show(String message) {
         System.out.println(message);

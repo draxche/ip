@@ -21,7 +21,7 @@ public class TaskHistory {
     /**
      * Records a snapshot as the current state and discards redo history.
      *
-     * @param memento snapshot of the initial state or a newly applied change
+     * @param memento snapshot of the initial state or a newly applied change.
      */
     public void addMemento(TaskMemento memento) {
         clearUndoneMementos();

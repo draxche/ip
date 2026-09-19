@@ -17,7 +17,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 
-/** Displays one chat message together with its speaker's profile image. */
+/**
+ * Displays one chat message together with its speaker's profile image.
+ */
 public class DialogBox extends HBox {
     private static final double DEFAULT_AVATAR_SIZE = 64;
     private static final double DEFAULT_FONT_SIZE = 13;
@@ -31,9 +33,9 @@ public class DialogBox extends HBox {
     /**
      * Loads the dialog layout and supplies its message and profile image.
      *
-     * @param message message to display
-     * @param image profile image of the speaker
-     * @param contentScale scale derived from the size of the main window
+     * @param message message to display.
+     * @param image profile image of the speaker.
+     * @param contentScale scale derived from the size of the main window.
      */
     private DialogBox(String message, Image image, ObservableDoubleValue contentScale) {
         FXMLLoader fxmlLoader = new FXMLLoader(MainWindow.class.getResource("/view/DialogBox.fxml"));
@@ -53,7 +55,7 @@ public class DialogBox extends HBox {
     /**
      * Keeps the message text and avatar proportional to the available window space.
      *
-     * @param contentScale scale derived from the size of the main window
+     * @param contentScale scale derived from the size of the main window.
      */
     private void bindContentSize(ObservableDoubleValue contentScale) {
         dialog.fontProperty().bind(Bindings.createObjectBinding(() ->
@@ -76,9 +78,9 @@ public class DialogBox extends HBox {
     /**
      * Creates a dialog with the user's profile image on the right.
      *
-     * @param message message entered by the user
-     * @param image user's profile image
-     * @param contentScale scale derived from the size of the main window
+     * @param message message entered by the user.
+     * @param image user's profile image.
+     * @param contentScale scale derived from the size of the main window.
      * @return dialog configured for a user message
      */
     public static DialogBox getUserDialog(String message, Image image, ObservableDoubleValue contentScale) {
@@ -108,10 +110,10 @@ public class DialogBox extends HBox {
     /**
      * Creates a dialog with Drax's profile image on the left.
      *
-     * @param message response returned by Drax
-     * @param image Drax's profile image
-     * @param commandType type of command that produced the response
-     * @param contentScale scale derived from the size of the main window
+     * @param message response returned by Drax.
+     * @param image Drax's profile image.
+     * @param commandType type of command that produced the response.
+     * @param contentScale scale derived from the size of the main window.
      * @return dialog configured for a Drax response
      */
     public static DialogBox getDraxDialog(

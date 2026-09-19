@@ -192,7 +192,8 @@ Here are the matching tasks in your list:
 1.[D][ ] submit report (by: Sep 20 2026 6:30 PM)
 ```
 
-> [!IMPORTANT]
+> **❗ Important**
+>
 > The numbers in search results identify positions within the results only. Run `list` to get the task number to
 > use with `mark`, `unmark`, or `delete`.
 
@@ -257,7 +258,8 @@ manually.
 Data is stored in `data/drax.txt`, relative to the folder from which Drax was launched. To transfer your tasks to
 another computer, copy this file into the `data` folder beside the other copy of `drax.jar`.
 
-> [!CAUTION]
+> **⚠️ Caution**
+>
 > Edit `data/drax.txt` only if you understand Drax's storage format. Invalid lines are skipped when Drax starts.
 > Back up the file before editing it manually.
 

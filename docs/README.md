@@ -3,7 +3,7 @@
 Drax is a desktop task manager for organizing todos, deadlines, and events using simple text commands. 
 It combines the efficiency of a command-line workflow with the convenience of a graphical chat interface.
 
-![Ui.png](../../../Ui.png)
+<img width="897" height="932" alt="Ui" src="https://github.com/user-attachments/assets/40b369e8-7ed0-489a-82ff-2b31d16235b8" />
 
 ## Table of contents
 

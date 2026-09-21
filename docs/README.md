@@ -73,6 +73,25 @@ Task entries use the following symbols:
 | `[ ]` | Incomplete task |
 | `[X]` | Completed task |
 
+
+
+## Command summary
+
+| Action | Format | Example |
+| --- | --- | --- |
+| Add a todo | `todo DESCRIPTION` | `todo read book` |
+| Add a deadline | `deadline DESCRIPTION /by DATE_TIME` | `deadline submit report /by 20/9/2026 1830` |
+| Add an event | `event DESCRIPTION /from START_DATE_TIME /to END_DATE_TIME` | `event meeting /from 21/9/2026 1400 /to 21/9/2026 1530` |
+| List tasks | `list` | `list` |
+| Mark as complete | `mark INDEX` | `mark 2` |
+| Mark as incomplete | `unmark INDEX` | `unmark 2` |
+| Find tasks | `find KEYWORD` | `find report` |
+| Delete a task | `delete INDEX` | `delete 1` |
+| Undo a change | `undo` | `undo` |
+| Redo a change | `redo` | `redo` |
+| Exit Drax | `bye` | `bye` |
+
+
 ### Adding a todo: `todo`
 
 Adds a task without a date or time.
@@ -283,24 +302,3 @@ starts again.
 ### How do I transfer my data to another computer?
 
 Exit Drax, copy `data/drax.txt` to the `data` folder used by Drax on the other computer, and then start Drax there.
-
-## Known limitations
-
-- Search-result numbers cannot be used as task indices. Run `list` before using `mark`, `unmark`, or `delete`.
-- Dates and times must use one of the supported numeric formats; natural-language dates are not accepted.
-
-## Command summary
-
-| Action | Format | Example |
-| --- | --- | --- |
-| Add a todo | `todo DESCRIPTION` | `todo read book` |
-| Add a deadline | `deadline DESCRIPTION /by DATE_TIME` | `deadline submit report /by 20/9/2026 1830` |
-| Add an event | `event DESCRIPTION /from START_DATE_TIME /to END_DATE_TIME` | `event meeting /from 21/9/2026 1400 /to 21/9/2026 1530` |
-| List tasks | `list` | `list` |
-| Mark as complete | `mark INDEX` | `mark 2` |
-| Mark as incomplete | `unmark INDEX` | `unmark 2` |
-| Find tasks | `find KEYWORD` | `find report` |
-| Delete a task | `delete INDEX` | `delete 1` |
-| Undo a change | `undo` | `undo` |
-| Redo a change | `redo` | `redo` |
-| Exit Drax | `bye` | `bye` |
